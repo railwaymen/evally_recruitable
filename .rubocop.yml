@@ -1,0 +1,72 @@
+require:
+  - rubocop-rails
+
+Rails/UnknownEnv:
+  Environments:
+    - production
+    - development
+    - test
+    - staging
+
+Style/Encoding:
+  Enabled: false
+
+Style/Documentation:
+  Enabled: false
+
+Style/HashEachMethods:
+  Enabled: true
+
+Style/HashTransformKeys:
+  Enabled: true
+
+Style/HashTransformValues:
+  Enabled: true
+
+Layout/LineLength:
+  Max: 100
+
+Bundler/OrderedGems:
+  Enabled: false
+
+Rails:
+  Enabled: true
+
+Metrics/BlockLength:
+  Exclude:
+    - spec/**/*
+
+Lint/AmbiguousBlockAssociation:
+  Enabled: false
+
+Rails/SkipsModelValidations:
+  Enabled: false
+
+Rails/ApplicationRecord:
+  Enabled: false
+
+Metrics/AbcSize:
+  Exclude:
+    - app/controllers/**/*
+
+AllCops:
+  TargetRubyVersion: 2.7
+  Exclude:
+    - lib/tasks/*
+    - config/initializers/*
+    - config/routes*
+    - Guardfile
+    - db/**/*
+    - vendor/**/*
+    - static/**/*
+    - bin/**/*
+    - config.ru
+    - config/boot.rb
+    - config/environment.rb
+    - config/application.rb
+    - config/environments/**
+    - config/routes.rb
+    - spec/rails_helper.rb
+    - Rakefile
+    - node_modules/**/*
+  CacheRootDirectory: tmp/
