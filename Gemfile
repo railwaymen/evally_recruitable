@@ -11,7 +11,6 @@ gem 'puma', '~> 4.3'
 gem 'rack-cors', '~> 1.0', '>= 1.0.2'
 gem 'bootsnap', '>= 1.1.0', require: false
 gem 'blueprinter', '~> 0.22.0'
-gem 'devise', '~> 4.7'
 gem 'jwt', '~> 2.2'
 
 group :development, :test do
