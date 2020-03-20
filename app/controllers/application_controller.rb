@@ -2,6 +2,7 @@
 
 class ApplicationController < ActionController::API
   before_action :authenticate!
+  before_action :set_locale
 
   rescue_from ErrorResponderService, with: :render_error_response
 
@@ -17,5 +18,9 @@ class ApplicationController < ActionController::API
 
   def token
     request.headers.fetch('Token', '').split(' ').last
+  end
+
+  def set_locale
+    I18n.locale = params[:locale] || I18n.default_locale
   end
 end

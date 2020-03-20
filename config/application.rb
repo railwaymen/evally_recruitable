@@ -39,5 +39,14 @@ module EvallyRecruitable
     # Middleware like session, flash, cookies can be added back manually.
     # Skip views, helpers and assets when generating a new resource.
     config.api_only = true
+
+    # Whitelist locales available for the application
+    config.i18n.available_locales = %i[en pl]
+
+    # Set default locale to something other than :en
+    config.i18n.default_locale = :en
+
+    # Set i18n fallbacks
+    config.i18n.fallbacks = true
   end
 end
