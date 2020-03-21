@@ -27,7 +27,7 @@ class AuthenticationService
   end
 
   def payload_api_key
-    payload.fetch('api_key', '')
+    payload.fetch('api_key')
   end
 
   def unauthorized!
