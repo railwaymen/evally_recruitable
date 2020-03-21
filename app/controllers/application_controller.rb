@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class ApplicationController < ActionController::API
+  include Authenticable
+
   before_action :authenticate!
   before_action :set_locale
 
@@ -8,16 +10,8 @@ class ApplicationController < ActionController::API
 
   private
 
-  def authenticate!
-    AuthenticationService.new(token).call
-  end
-
   def render_error_response(error)
     render json: V2::Errors::Serializer.render(error), status: error.status
-  end
-
-  def token
-    request.headers.fetch('Token', '').split(' ').last
   end
 
   def set_locale

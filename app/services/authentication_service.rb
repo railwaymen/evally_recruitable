@@ -1,15 +1,18 @@
 # frozen_string_literal: true
 
 class AuthenticationService
+  attr_reader :current_user
+
   def initialize(token)
     @token = token
+    @current_user = nil
   end
 
   def call
-    payload_api_key = JwtService.decode(@token).fetch('api_key', '')
+    unauthorized! if payload_api_key.blank? || payload_api_key != api_key
 
-    (payload_api_key.present? && payload_api_key == api_key) || unauthorized!
-  rescue ::JWT::ExpiredSignature, ::JWT::VerificationError, ::JWT::DecodeError
+    @current_user = User.new(id: payload.fetch('id'), role: payload.fetch('role'))
+  rescue ::JWT::ExpiredSignature, ::JWT::VerificationError, ::JWT::DecodeError, KeyError
     unauthorized!
   end
 
@@ -17,6 +20,14 @@ class AuthenticationService
 
   def api_key
     Rails.application.credentials.evally.fetch(:api_key)
+  end
+
+  def payload
+    @payload ||= JwtService.decode(@token)
+  end
+
+  def payload_api_key
+    payload.fetch('api_key', '')
   end
 
   def unauthorized!

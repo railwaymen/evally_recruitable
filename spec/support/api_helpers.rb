@@ -5,10 +5,8 @@ module ApiHelpers
     JSON.parse(response.body)
   end
 
-  def sign_in
-    request.headers['Token'] = JwtService.encode(
-      Rails.application.credentials.evally.fetch(:api_key)
-    )
+  def sign_in(user)
+    request.headers['Token'] = JwtService.encode(user)
   end
 end
 
