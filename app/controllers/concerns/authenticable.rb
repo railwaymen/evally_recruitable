@@ -15,7 +15,7 @@ module Authenticable
     end
 
     def authentication_service
-      @authencication_service ||= AuthenticationService.new(token)
+      @authentication_service ||= AuthenticationService.new(token)
     end
 
     def current_user
