@@ -17,7 +17,8 @@ module JsonSpecHelpers
       received_at: recruit_document.received_at.to_s,
       source: recruit_document.source,
       accept_current_processing: recruit_document.accept_current_processing,
-      accept_future_processing: recruit_document.accept_future_processing
+      accept_future_processing: recruit_document.accept_future_processing,
+      public_recruit_id: Digest::SHA256.hexdigest(recruit_document.email)
     }.to_json
   end
 end
