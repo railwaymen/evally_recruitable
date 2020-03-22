@@ -17,4 +17,8 @@ class RecruitDocument < ApplicationRecord
   enum status: {
     received: 'received'
   }
+
+  def public_recruit_id
+    Digest::SHA256.hexdigest(email)
+  end
 end

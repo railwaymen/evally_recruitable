@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# rubocop:disable Metrics/MethodLength
+# rubocop:disable Metrics/MethodLength, Metrics/AbcSize
 
 module JsonSpecHelpers
   def recruit_document_schema(recruit_document)
@@ -23,7 +23,7 @@ module JsonSpecHelpers
   end
 end
 
-# rubocop:enable Metrics/MethodLength
+# rubocop:enable Metrics/MethodLength, Metrics/AbcSize
 
 RSpec.configure do |config|
   config.include JsonSpecHelpers, type: :controller

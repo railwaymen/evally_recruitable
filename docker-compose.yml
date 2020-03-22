@@ -7,8 +7,8 @@ services:
       - postgres:/var/lib/postgresql/data
 
   app:
-    env_file:
-      - ./docker/docker.env
+    environment:
+      - RAILS_ENV=development
     build:
       context: .
       dockerfile: ./docker/Dockerfile
@@ -18,6 +18,7 @@ services:
     volumes:
       - .:/app
       - ./docker/database.yml:/app/config/database.yml
+      - ./docker/env.yml:/app/config/env.yml
     ports:
       - '3030:3030'
     depends_on:
@@ -26,4 +27,10 @@ services:
 volumes:
   postgres:
 
+networks:
+  default:
+    external:
+      name: evally_network
+
+# docker network create evally_network --subnet 172.24.24.0/24
 # CURRENT_USER=$(id -u):$(id -g) add to .bashrc / .zshrc to run container as non-root user

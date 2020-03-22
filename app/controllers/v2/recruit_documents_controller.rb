@@ -54,14 +54,16 @@ module V2
     def create_form
       @create_form ||= V2::RecruitDocuments::BasicForm.new(
         RecruitDocument.new,
-        params: recruit_document_params
+        params: recruit_document_params,
+        user: current_user
       )
     end
 
     def update_form
       @update_form ||= V2::RecruitDocuments::BasicForm.new(
         recruit_document,
-        params: recruit_document_params
+        params: recruit_document_params,
+        user: current_user
       )
     end
 

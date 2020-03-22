@@ -25,3 +25,4 @@ coverage/
 .vscode/
 
 docker.env
+env.yml
