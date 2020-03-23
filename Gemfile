@@ -12,6 +12,7 @@ gem 'rack-cors', '~> 1.0', '>= 1.0.2'
 gem 'bootsnap', '>= 1.1.0', require: false
 gem 'blueprinter', '~> 0.22.0'
 gem 'jwt', '~> 2.2'
+gem 'faraday'
 
 group :development, :test do
   gem 'brakeman', '~> 4.3.1', require: false
@@ -26,6 +27,7 @@ group :development, :test do
   gem 'simplecov', '~> 0.16.1'
   gem 'rubocop', '~> 0.80.0', require: false
   gem 'rubocop-rails', require: false
+  gem 'webmock'
   gem 'travis'
 end
 

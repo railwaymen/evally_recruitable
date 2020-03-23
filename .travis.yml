@@ -1,0 +1,27 @@
+language: ruby
+cache:
+  - bundler
+rvm:
+  - 2.7.0
+
+env:
+  - RAILS_ENV=test DB_USERNAME=postgres DB_HOST=localhost DB_PASSWORD=''
+
+sudo: required
+
+addons:
+  postgresql: "9.6"
+  chrome: stable
+
+
+script: [
+  'bundle exec rake',
+]
+
+before_install:
+  - gem install bundler:2.1.4
+
+before_script:
+  - cp config/database.ci.yml config/database.yml
+  - cp config/env.ci.yml config/env.yml
+  - bundle exec rake db:create
