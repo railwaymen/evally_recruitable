@@ -5,7 +5,7 @@ require 'rails_helper'
 RSpec.describe V2::RecruitDocumentsController, type: :controller do
   let(:admin) { User.new(id: 1, role: :admin) }
 
-  def stub_webhook_request(user, request_body)
+  def stub_webhook_request(user, request_body) # rubocop:disable Metrics/MethodLength
     stub_request(:post, 'http://app.testhost/v2/recruits/webhook')
       .with(
         body: JSON.generate(request_body),
@@ -14,7 +14,7 @@ RSpec.describe V2::RecruitDocumentsController, type: :controller do
           'Accept-Encoding' => 'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
           'Content-Type' => 'application/json',
           'Token' => JwtService.encode(user),
-          'User-Agent'=>'Faraday v0.17.3'
+          'User-Agent' => 'Faraday v0.17.3'
         }
       )
       .to_return(status: 200, body: '', headers: {})
