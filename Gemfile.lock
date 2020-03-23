@@ -241,7 +241,7 @@ GEM
       sprockets (>= 3.0.0)
     thor (1.0.1)
     thread_safe (0.3.6)
-    travis (1.8.11)
+    travis (1.8.10)
       backports
       faraday (~> 0.9)
       faraday_middleware (~> 0.9, >= 0.9.1)
@@ -293,7 +293,7 @@ DEPENDENCIES
   simplecov (~> 0.16.1)
   spring
   spring-watcher-listen (~> 2.0.0)
-  travis
+  travis (= 1.8.10)
   webmock
 
 RUBY VERSION
