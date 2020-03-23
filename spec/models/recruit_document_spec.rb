@@ -23,9 +23,7 @@ RSpec.describe RecruitDocument, type: :model do
     it do
       is_expected.to(
         define_enum_for(:status)
-          .with_values(
-            received: 'received'
-          )
+          .with_values(RecruitDocuments::StatusesManagerService.enum)
           .backed_by_column_of_type(:string)
       )
     end

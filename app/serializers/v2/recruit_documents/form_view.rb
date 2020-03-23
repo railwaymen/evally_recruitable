@@ -3,7 +3,9 @@
 module V2
   module RecruitDocuments
     class FormView < Blueprinter::Base
-      fields :groups, :positions, :statuses
+      association :statuses, blueprint: V2::RecruitDocuments::StatusSerializer, default: []
+
+      fields :groups, :positions
     end
   end
 end

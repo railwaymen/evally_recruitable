@@ -14,9 +14,7 @@ class RecruitDocument < ApplicationRecord
 
   # # Enums
   #
-  enum status: {
-    received: 'received'
-  }
+  enum status: RecruitDocuments::StatusesManagerService.enum
 
   def public_recruit_id
     Digest::SHA256.hexdigest(email)
