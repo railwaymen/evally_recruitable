@@ -8,7 +8,7 @@ class ApiClientService
 
   def post(url, params)
     connection.post(url) do |request|
-      request.params = params
+      request.body = JSON.generate(params)
     end
   end
 

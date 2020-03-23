@@ -5,6 +5,21 @@ require 'rails_helper'
 RSpec.describe V2::RecruitDocumentsController, type: :controller do
   let(:admin) { User.new(id: 1, role: :admin) }
 
+  def stub_webhook_request(user, request_body)
+    stub_request(:post, 'http://app.testhost/v2/recruits/webhook')
+      .with(
+        body: JSON.generate(request_body),
+        headers: {
+          'Accept' => 'application/json',
+          'Accept-Encoding' => 'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
+          'Content-Type' => 'application/json',
+          'Token' => JwtService.encode(user),
+          'User-Agent'=>'Faraday v0.17.3'
+        }
+      )
+      .to_return(status: 200, body: '', headers: {})
+  end
+
   describe '#index' do
     context 'when unauthorized' do
       it 'responds with 401 error' do
@@ -88,8 +103,10 @@ RSpec.describe V2::RecruitDocumentsController, type: :controller do
     context 'when authorized' do
       it 'responds with new document' do
         params = { recruit_document: FactoryBot.attributes_for(:recruit_document) }
+        public_recruit_id = Digest::SHA256.hexdigest(params.dig(:recruit_document, :email))
 
         sign_in admin
+        stub_webhook_request(admin, recruit: { public_recruit_id: public_recruit_id })
 
         expect do
           post :create, params: params
@@ -103,6 +120,7 @@ RSpec.describe V2::RecruitDocumentsController, type: :controller do
         params = { recruit_document: FactoryBot.attributes_for(:recruit_document, email: '') }
 
         sign_in admin
+        stub_webhook_request(admin, params)
 
         expect do
           post :create, params: params
@@ -142,6 +160,7 @@ RSpec.describe V2::RecruitDocumentsController, type: :controller do
         }
 
         sign_in admin
+        stub_webhook_request(admin, recruit: { public_recruit_id: document.public_recruit_id })
 
         expect do
           put :update, params: params
