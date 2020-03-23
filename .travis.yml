@@ -4,7 +4,7 @@ cache:
 rvm:
   - 2.7.0
 env:
-  - RAILS_ENV=test DB_USERNAME=postgres DB_HOST=localhost DB_PASSWORD=''
+  - RAILS_ENV=test
 sudo: required
 addons:
   postgresql: '9.6'
@@ -12,11 +12,8 @@ addons:
 script:
   - bundle exec rake
 before_install:
-  - openssl aes-256-cbc -K $encrypted_d426b2ef3022_key -iv $encrypted_d426b2ef3022_iv
-  -in ./config/credentials.ci.yml.enc -out ./config/credentials.ci.yml -d
   - gem install bundler:2.1.4
 before_script:
-  - cp config/credentials.ci.yml.enc config/credentials.yml.enc
   - cp config/database.ci.yml config/database.yml
   - cp config/env.ci.yml config/env.yml
   - bundle exec rake db:create

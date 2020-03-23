@@ -21,7 +21,7 @@ class AuthenticationService
   private
 
   def api_key
-    Rails.application.credentials.evally.fetch(:api_key)
+    Rails.application.config.env.fetch(:evally_api_key)
   end
 
   def payload
