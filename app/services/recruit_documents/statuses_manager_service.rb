@@ -114,6 +114,10 @@ module RecruitDocuments
       def enum
         statuses.collect { |status| [status.value, status.value.to_s] }.to_h
       end
+
+      def find(value)
+        statuses.find { |status| status.value == value.to_sym }
+      end
     end
   end
 end
