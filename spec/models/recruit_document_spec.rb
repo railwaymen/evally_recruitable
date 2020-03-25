@@ -23,11 +23,56 @@ RSpec.describe RecruitDocument, type: :model do
     it do
       is_expected.to(
         define_enum_for(:status)
-          .with_values(
-            received: 'received'
-          )
+          .with_values(RecruitDocuments::StatusesManagerService.enum)
           .backed_by_column_of_type(:string)
+          .with_suffix
       )
+    end
+  end
+
+  describe 'required fields dependent on status' do
+    context 'task_sent_at validation' do
+      subject { FactoryBot.build(:recruit_document, status: :recruitment_task) }
+
+      it { is_expected.to validate_presence_of(:task_sent_at) }
+    end
+
+    context 'call_scheduled_at validation' do
+      subject { FactoryBot.build(:recruit_document, status: :phone_call) }
+
+      it { is_expected.to validate_presence_of(:call_scheduled_at) }
+    end
+
+    context 'interview_scheduled_at validation' do
+      subject { FactoryBot.build(:recruit_document, status: :office_interview) }
+
+      it { is_expected.to validate_presence_of(:interview_scheduled_at) }
+    end
+
+    context 'decision_made_at validation' do
+      subject { FactoryBot.build(:recruit_document, status: :awaiting_response) }
+
+      it { is_expected.to validate_presence_of(:decision_made_at) }
+
+      subject { FactoryBot.build(:recruit_document, status: :rejected) }
+
+      it { is_expected.to validate_presence_of(:decision_made_at) }
+    end
+
+    context 'recruit_accepted_at validation' do
+      subject { FactoryBot.build(:recruit_document, status: :hired) }
+
+      it { is_expected.to validate_presence_of(:recruit_accepted_at) }
+    end
+
+    context 'rejection_reason validation' do
+      subject { FactoryBot.build(:recruit_document, status: :rejected) }
+
+      it { is_expected.to validate_presence_of(:rejection_reason) }
+
+      subject { FactoryBot.build(:recruit_document, status: :black_list) }
+
+      it { is_expected.to validate_presence_of(:rejection_reason) }
     end
   end
 end

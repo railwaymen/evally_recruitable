@@ -93,7 +93,13 @@ RSpec.describe V2::RecruitDocumentsController, type: :controller do
   describe '#create' do
     context 'when unauthorized' do
       it 'responds with 401 error' do
-        params = { recruit_document: FactoryBot.attributes_for(:recruit_document) }
+        params = {
+          recruit_document: {
+            **FactoryBot.attributes_for(:recruit_document),
+            email: 'random@example.com',
+            status: { value: 'received' }
+          }
+        }
 
         post :create, params: params
         expect(response).to have_http_status 401
@@ -102,8 +108,15 @@ RSpec.describe V2::RecruitDocumentsController, type: :controller do
 
     context 'when authorized' do
       it 'responds with new document' do
-        params = { recruit_document: FactoryBot.attributes_for(:recruit_document) }
-        public_recruit_id = Digest::SHA256.hexdigest(params.dig(:recruit_document, :email))
+        params = {
+          recruit_document: {
+            **FactoryBot.attributes_for(:recruit_document),
+            email: 'random@example.com',
+            status: { value: 'received' }
+          }
+        }
+
+        public_recruit_id = Digest::SHA256.hexdigest('random@example.com')
 
         sign_in admin
         stub_webhook_request(admin, recruit: { public_recruit_id: public_recruit_id })
@@ -117,7 +130,13 @@ RSpec.describe V2::RecruitDocumentsController, type: :controller do
       end
 
       it 'responds with 422 error if params invalid' do
-        params = { recruit_document: FactoryBot.attributes_for(:recruit_document, email: '') }
+        params = {
+          recruit_document: {
+            **FactoryBot.attributes_for(:recruit_document),
+            email: '',
+            status: { value: 'received' }
+          }
+        }
 
         sign_in admin
         stub_webhook_request(admin, params)

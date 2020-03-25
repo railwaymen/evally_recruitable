@@ -6,7 +6,7 @@ module JsonSpecHelpers
   def recruit_document_schema(recruit_document)
     {
       id: recruit_document.id,
-      status: recruit_document.status,
+      status: status_schema(recruit_document.status),
       first_name: recruit_document.first_name,
       last_name: recruit_document.last_name,
       gender: recruit_document.gender,
@@ -18,8 +18,34 @@ module JsonSpecHelpers
       source: recruit_document.source,
       accept_current_processing: recruit_document.accept_current_processing,
       accept_future_processing: recruit_document.accept_future_processing,
-      public_recruit_id: Digest::SHA256.hexdigest(recruit_document.email)
+      public_recruit_id: Digest::SHA256.hexdigest(recruit_document.email),
+      task_sent_at: recruit_document.task_sent_at,
+      call_scheduled_at: recruit_document.call_scheduled_at,
+      interview_scheduled_at: recruit_document.interview_scheduled_at,
+      decision_made_at: recruit_document.decision_made_at,
+      recruit_accepted_at: recruit_document.recruit_accepted_at,
+      rejection_reason: recruit_document.rejection_reason
     }.to_json
+  end
+
+  def required_field_schema(field)
+    {
+      value: field.value,
+      label: field.label,
+      type: field.type
+    }
+  end
+
+  def status_schema(status)
+    status_item = RecruitDocuments::StatusesManagerService.find(status)
+
+    {
+      value: status_item.value,
+      color: status_item.color,
+      label: status_item.label,
+      disabled: status_item.disabled,
+      required_fields: status_item.required_fields.map(&method(:required_field_schema))
+    }
   end
 end
 

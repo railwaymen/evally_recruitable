@@ -4,7 +4,7 @@ module V2
   module RecruitDocuments
     class FormPresenter
       def statuses
-        RecruitDocument.statuses.keys
+        ::RecruitDocuments::StatusesManagerService.statuses
       end
 
       def groups

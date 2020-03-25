@@ -41,7 +41,7 @@ module V2
     private
 
     def recruit_documents_scope
-      RecruitDocument.all
+      RecruitDocument.order(updated_at: :desc)
     end
 
     def recruit_document
@@ -70,7 +70,9 @@ module V2
     def recruit_document_params
       params.require(:recruit_document).permit(
         :first_name, :last_name, :gender, :email, :phone, :position, :group, :received_at, :source,
-        :status, :accept_current_processing, :accept_future_processing
+        :accept_current_processing, :accept_future_processing, :task_sent_at, :call_scheduled_at,
+        :interview_scheduled_at, :decision_made_at, :recruit_accepted_at, :rejection_reason,
+        status: :value
       )
     end
   end
