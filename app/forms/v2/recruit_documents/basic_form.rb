@@ -9,7 +9,10 @@ module V2
         @recruit_document = recruit_document
         @user = user
 
-        @recruit_document.assign_attributes(params)
+        @recruit_document.assign_attributes(
+          status: params.dig('status', 'value') || recruit_document.status,
+          **params.except('status')
+        )
       end
 
       def save

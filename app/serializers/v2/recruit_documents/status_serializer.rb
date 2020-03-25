@@ -3,7 +3,7 @@
 module V2
   module RecruitDocuments
     class StatusSerializer < Blueprinter::Base
-      fields :value, :label, :color
+      fields :value, :label, :color, :disabled
 
       association :required_fields, blueprint: V2::RecruitDocuments::RequiredFieldSerializer,
                                     default: []

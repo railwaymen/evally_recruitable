@@ -9,7 +9,7 @@ module RecruitDocuments
       end
     end
 
-    Status = Struct.new(:value, :color, :required_fields) do
+    Status = Struct.new(:value, :color, :disabled, :required_fields) do
       def label
         value.to_s.titleize
       end
@@ -18,48 +18,57 @@ module RecruitDocuments
     class << self
       def statuses # rubocop:disable Metrics/AbcSize
         [
+          Status.new(:recruitment_in_progress, '#FFFFFF', true, []),
           Status.new(
             :received,
-            '#EF5350',
+            '#00838F',
+            false,
             []
           ),
           Status.new(
             :verified,
             '#AB47BC',
+            false,
             []
           ),
           Status.new(
             :documents_review,
             '#5C6BC0',
+            false,
             []
           ),
           Status.new(
             :incomplete_documents,
-            '#29B6F6',
+            '#FFCA28',
+            false,
             []
           ),
           Status.new(
             :code_review,
             '#26A69A',
+            false,
             []
           ),
           Status.new(
             :recruitment_task,
-            '#66BB6A',
+            '#4527A0',
+            false,
             [
               RequiredField.new(:task_sent_at, :datetime)
             ]
           ),
           Status.new(
             :phone_call,
-            '#D4E157',
+            '#AD1457',
+            false,
             [
               RequiredField.new(:call_scheduled_at, :datetime)
             ]
           ),
           Status.new(
             :office_interview,
-            '#FFCA28',
+            '#29B6F6',
+            false,
             [
               RequiredField.new(:interview_scheduled_at, :datetime)
             ]
@@ -67,23 +76,28 @@ module RecruitDocuments
           Status.new(
             :evaluation,
             '#FF7043',
+            false,
             []
           ),
           Status.new(
             :supervisor_decision,
             '#78909C',
+            false,
             []
           ),
+          Status.new(:recruitment_completed, '#FFFFFF', true, []),
           Status.new(
             :awaiting_response,
-            '#AD1457',
+            '#D4E157',
+            false,
             [
               RequiredField.new(:decision_made_at, :datetime)
             ]
           ),
           Status.new(
             :hired,
-            '#4527A0',
+            '#66BB6A',
+            false,
             [
               RequiredField.new(:recruit_accepted_at, :datetime)
             ]
@@ -91,19 +105,22 @@ module RecruitDocuments
           Status.new(
             :on_hold,
             '#1565C0',
+            false,
             []
           ),
           Status.new(
             :rejected,
-            '#00838F',
+            '#EF5350',
+            false,
             [
-              RequiredField.new(:decistion_made_at, :datetime),
+              RequiredField.new(:decision_made_at, :datetime),
               RequiredField.new(:rejection_reason, :text)
             ]
           ),
           Status.new(
             :black_list,
-            '#2E7D32',
+            '#000000',
+            false,
             [
               RequiredField.new(:rejection_reason, :text)
             ]
@@ -112,7 +129,10 @@ module RecruitDocuments
       end
 
       def enum
-        statuses.collect { |status| [status.value, status.value.to_s] }.to_h
+        statuses
+          .reject(&:disabled)
+          .collect { |status| [status.value, status.value.to_s] }
+          .to_h
       end
 
       def find(value)

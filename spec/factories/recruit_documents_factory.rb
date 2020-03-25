@@ -13,5 +13,6 @@ FactoryBot.define do
     accept_future_processing    { false }
     source                      { 'railwaymen' }
     received_at                 { 1.minute.ago }
+    status                      { 'received' }
   end
 end
