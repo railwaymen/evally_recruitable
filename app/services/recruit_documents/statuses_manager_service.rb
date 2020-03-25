@@ -85,7 +85,7 @@ module RecruitDocuments
             :hired,
             '#4527A0',
             [
-              RequiredField.new(:recruit_acceptance_at, :datetime)
+              RequiredField.new(:recruit_accepted_at, :datetime)
             ]
           ),
           Status.new(
@@ -98,14 +98,14 @@ module RecruitDocuments
             '#00838F',
             [
               RequiredField.new(:decistion_made_at, :datetime),
-              RequiredField.new(:rejection_reason, :string)
+              RequiredField.new(:rejection_reason, :text)
             ]
           ),
           Status.new(
             :black_list,
             '#2E7D32',
             [
-              RequiredField.new(:rejection_reason, :string)
+              RequiredField.new(:rejection_reason, :text)
             ]
           )
         ]

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_03_20_210556) do
+ActiveRecord::Schema.define(version: 2020_03_25_100012) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -30,6 +30,12 @@ ActiveRecord::Schema.define(version: 2020_03_20_210556) do
     t.datetime "received_at", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.datetime "task_sent_at"
+    t.datetime "call_scheduled_at"
+    t.datetime "interview_scheduled_at"
+    t.datetime "decision_made_at"
+    t.datetime "recruit_accepted_at"
+    t.text "rejection_reason"
   end
 
 end
