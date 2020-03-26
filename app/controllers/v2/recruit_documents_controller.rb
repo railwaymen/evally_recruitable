@@ -11,7 +11,9 @@ module V2
     end
 
     def show
-      render json: V2::RecruitDocuments::Serializer.render(recruit_document), status: :ok
+      presenter = V2::RecruitDocuments::ShowPresenter.new(recruit_document)
+
+      render json: V2::RecruitDocuments::ShowView.render(presenter), status: :ok
     end
 
     def form

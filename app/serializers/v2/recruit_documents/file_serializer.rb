@@ -3,6 +3,8 @@
 module V2
   module RecruitDocuments
     class FileSerializer < Blueprinter::Base
+      identifier :id
+
       fields :content_type
 
       field :filename do |file|
