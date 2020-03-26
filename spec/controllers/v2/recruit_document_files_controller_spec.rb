@@ -15,18 +15,16 @@ RSpec.describe V2::RecruitDocumentFilesController, type: :controller do
 
     context 'when authorized' do
       it 'responds with newest file' do
-        document = FactoryBot.create(:recruit_document)
+        document = FactoryBot.create(:recruit_document, :with_file)
 
         file = fixture_file_upload(
-          Rails.root.join('spec/fixtures/sample_resume.pdf'),
-          'application/pdf'
+          Rails.root.join('spec/fixtures/sample_image.jpg'),
+          'image/jpeg'
         )
 
         params = {
           recruit_document_id: document.id,
-          recruit_document: {
-            files: [file]
-          }
+          files: [file]
         }
 
         sign_in admin
@@ -37,7 +35,7 @@ RSpec.describe V2::RecruitDocumentFilesController, type: :controller do
         end.to(change { document.files.attachments.count }.by(1))
 
         expect(response).to have_http_status 201
-        expect(response.body).to be_json_eql file_schema(document.files.last)
+        expect(response.body).to have_json_size(2)
       end
 
       it 'responds with 404 error if recruit document not found' do
@@ -48,9 +46,7 @@ RSpec.describe V2::RecruitDocumentFilesController, type: :controller do
 
         params = {
           recruit_document_id: 1,
-          recruit_document: {
-            files: [file]
-          }
+          files: [file]
         }
 
         sign_in admin
