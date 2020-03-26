@@ -72,7 +72,7 @@ module V2
         :first_name, :last_name, :gender, :email, :phone, :position, :group, :received_at, :source,
         :accept_current_processing, :accept_future_processing, :task_sent_at, :call_scheduled_at,
         :interview_scheduled_at, :decision_made_at, :recruit_accepted_at, :rejection_reason,
-        status: :value
+        files: [], status: :value
       )
     end
   end

@@ -1,6 +1,10 @@
 # frozen_string_literal: true
 
 class RecruitDocument < ApplicationRecord
+  # # Associations
+  #
+  has_many_attached :files
+
   # # Scopes
   #
   scope :by_group, proc { |val| where(group: val) if val.present? }
@@ -25,6 +29,10 @@ class RecruitDocument < ApplicationRecord
 
   def public_recruit_id
     Digest::SHA256.hexdigest(email)
+  end
+
+  def attached_files
+    files.attachments
   end
 
   private

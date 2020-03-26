@@ -139,13 +139,41 @@ RSpec.describe V2::RecruitDocumentsController, type: :controller do
         }
 
         sign_in admin
-        stub_webhook_request(admin, params)
 
         expect do
           post :create, params: params
         end.not_to(change { RecruitDocument.count })
 
         expect(response).to have_http_status 422
+      end
+
+      it 'expects to upload file' do
+        file = fixture_file_upload(
+          Rails.root.join('spec/fixtures/sample_resume.pdf'),
+          'application/pdf'
+        )
+
+        params = {
+          recruit_document: {
+            **FactoryBot.attributes_for(:recruit_document),
+            email: 'random@example.com',
+            status: { value: 'received' },
+            files: [file]
+          }
+        }
+
+        sign_in admin
+
+        public_recruit_id = Digest::SHA256.hexdigest('random@example.com')
+        stub_webhook_request(admin, recruit: { public_recruit_id: public_recruit_id })
+        allow_any_instance_of(ActiveStorage::Blob).to receive(:service_url).and_return ''
+
+        expect do
+          post :create, params: params
+        end.to(change { ActiveStorage::Attachment.count }.by(1))
+
+        expect(response).to have_http_status 201
+        expect(response.body).to be_json_eql recruit_document_schema(RecruitDocument.last)
       end
     end
   end
