@@ -10,8 +10,6 @@ module V2
              :public_recruit_id, :task_sent_at, :call_scheduled_at, :interview_scheduled_at,
              :decision_made_at, :recruit_accepted_at, :rejection_reason
 
-      association :attached_files, blueprint: V2::RecruitDocuments::FileSerializer, default: []
-
       field :status do |recruit_document|
         status_item = ::RecruitDocuments::StatusesManagerService.find(recruit_document.status)
 

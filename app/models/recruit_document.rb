@@ -31,10 +31,6 @@ class RecruitDocument < ApplicationRecord
     Digest::SHA256.hexdigest(email)
   end
 
-  def attached_files
-    files.attachments
-  end
-
   private
 
   def decision_was_made?
