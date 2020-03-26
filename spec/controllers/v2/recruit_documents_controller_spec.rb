@@ -57,7 +57,7 @@ RSpec.describe V2::RecruitDocumentsController, type: :controller do
         get :show, params: { id: document.id }
 
         expect(response).to have_http_status 200
-        expect(response.body).to be_json_eql recruit_document_schema(document)
+        expect(json_response.keys).to contain_exactly('recruit_document', 'files')
       end
 
       it 'responds with 404 error if document not found' do
@@ -93,15 +93,7 @@ RSpec.describe V2::RecruitDocumentsController, type: :controller do
   describe '#create' do
     context 'when unauthorized' do
       it 'responds with 401 error' do
-        params = {
-          recruit_document: {
-            **FactoryBot.attributes_for(:recruit_document),
-            email: 'random@example.com',
-            status: { value: 'received' }
-          }
-        }
-
-        post :create, params: params
+        post :create, params: {}
         expect(response).to have_http_status 401
       end
     end
@@ -119,10 +111,12 @@ RSpec.describe V2::RecruitDocumentsController, type: :controller do
         public_recruit_id = Digest::SHA256.hexdigest('random@example.com')
 
         sign_in admin
-        stub_webhook_request(admin, recruit: { public_recruit_id: public_recruit_id })
 
         expect do
-          post :create, params: params
+          freeze_time do
+            stub_webhook_request(admin, recruit: { public_recruit_id: public_recruit_id })
+            post :create, params: params
+          end
         end.to(change { RecruitDocument.count }.by(1))
 
         expect(response).to have_http_status 201
@@ -165,11 +159,13 @@ RSpec.describe V2::RecruitDocumentsController, type: :controller do
         sign_in admin
 
         public_recruit_id = Digest::SHA256.hexdigest('random@example.com')
-        stub_webhook_request(admin, recruit: { public_recruit_id: public_recruit_id })
         allow_any_instance_of(ActiveStorage::Blob).to receive(:service_url).and_return ''
 
         expect do
-          post :create, params: params
+          freeze_time do
+            stub_webhook_request(admin, recruit: { public_recruit_id: public_recruit_id })
+            post :create, params: params
+          end
         end.to(change { ActiveStorage::Attachment.count }.by(1))
 
         expect(response).to have_http_status 201
@@ -207,10 +203,13 @@ RSpec.describe V2::RecruitDocumentsController, type: :controller do
         }
 
         sign_in admin
-        stub_webhook_request(admin, recruit: { public_recruit_id: document.public_recruit_id })
 
         expect do
-          put :update, params: params
+          freeze_time do
+            stub_webhook_request(admin, recruit: { public_recruit_id: document.public_recruit_id })
+            put :update, params: params
+          end
+
           document.reload
         end.to(change { document.first_name }.to('Szczepan'))
 
