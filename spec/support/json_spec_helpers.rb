@@ -24,8 +24,18 @@ module JsonSpecHelpers
       interview_scheduled_at: recruit_document.interview_scheduled_at,
       decision_made_at: recruit_document.decision_made_at,
       recruit_accepted_at: recruit_document.recruit_accepted_at,
-      rejection_reason: recruit_document.rejection_reason
+      rejection_reason: recruit_document.rejection_reason,
+      attached_files: recruit_document.attached_files.map(&method(:file_schema))
     }.to_json
+  end
+
+  def file_schema(file)
+    {
+      content_type: file.content_type,
+      filename: file.filename.to_s,
+      kilobyte_size: "#{(file.byte_size.to_f / 1.kilobyte).round(2)}kB",
+      path: ''
+    }
   end
 
   def required_field_schema(field)
