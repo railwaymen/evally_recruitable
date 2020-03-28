@@ -232,4 +232,46 @@ RSpec.describe V2::RecruitDocumentsController, type: :controller do
       end
     end
   end
+
+  describe '#destroy' do
+    context 'when unauthorized' do
+      it 'responds with 401 error' do
+        delete :destroy, params: { id: 1 }
+        expect(response).to have_http_status 401
+      end
+    end
+
+    context 'when authorized' do
+      it 'removes recruit document' do
+        document = FactoryBot.create(:recruit_document)
+
+        sign_in admin
+
+        expect do
+          delete :destroy, params: { id: document.id }
+        end.to(change { RecruitDocument.count }.by(-1))
+
+        expect(response).to have_http_status 204
+      end
+
+      it 'removes attachment too' do
+        document = FactoryBot.create(:recruit_document, :with_attachment)
+
+        sign_in admin
+
+        expect do
+          delete :destroy, params: { id: document.id }
+        end.to(change { ActiveStorage::Attachment.count }.by(-1))
+
+        expect(response).to have_http_status 204
+      end
+
+      it 'responds with 404 errir if recruit document not found' do
+        sign_in admin
+        delete :destroy, params: { id: 1 }
+
+        expect(response).to have_http_status 404
+      end
+    end
+  end
 end

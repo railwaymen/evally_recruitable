@@ -15,7 +15,7 @@ FactoryBot.define do
     received_at                 { 1.minute.ago }
     status                      { 'received' }
 
-    trait :with_file do
+    trait :with_attachment do
       after(:create) do |document|
         document.files.attach(
           io: File.open('spec/fixtures/sample_resume.pdf'),

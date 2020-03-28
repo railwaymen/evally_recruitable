@@ -15,7 +15,7 @@ RSpec.describe V2::AttachmentsController, type: :controller do
 
     context 'when authorized' do
       it 'responds with newest file' do
-        document = FactoryBot.create(:recruit_document, :with_file)
+        document = FactoryBot.create(:recruit_document, :with_attachment)
 
         file = fixture_file_upload(
           Rails.root.join('spec/fixtures/sample_image.jpg'),
@@ -67,7 +67,7 @@ RSpec.describe V2::AttachmentsController, type: :controller do
 
     context 'when authorized' do
       it 'removes file and responds with 204' do
-        document = FactoryBot.create(:recruit_document, :with_file)
+        document = FactoryBot.create(:recruit_document, :with_attachment)
         file = document.files.last
 
         sign_in admin
