@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe V2::RecruitDocumentFilesController, type: :controller do
+RSpec.describe V2::AttachmentsController, type: :controller do
   let(:admin) { User.new(id: 1, role: :admin) }
 
   describe '#create' do
