@@ -31,9 +31,9 @@ module JsonSpecHelpers
   def file_schema(file)
     {
       content_type: file.content_type,
-      filename: file.filename.to_s,
-      kilobyte_size: "#{(file.byte_size.to_f / 1.kilobyte).round(2)}kB",
-      path: ''
+      name: file.filename.to_s,
+      size: "#{(file.byte_size.to_f / 1.kilobyte).round(2)}kB",
+      url: ''
     }.to_json
   end
 

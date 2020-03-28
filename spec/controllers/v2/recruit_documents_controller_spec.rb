@@ -57,7 +57,9 @@ RSpec.describe V2::RecruitDocumentsController, type: :controller do
         get :show, params: { id: document.id }
 
         expect(response).to have_http_status 200
-        expect(json_response.keys).to contain_exactly('recruit_document', 'files')
+        expect(json_response.keys).to contain_exactly(
+          'recruit_document', 'attachments', 'positions', 'statuses', 'groups'
+        )
       end
 
       it 'responds with 404 error if document not found' do
@@ -65,27 +67,6 @@ RSpec.describe V2::RecruitDocumentsController, type: :controller do
         get :show, params: { id: 1 }
 
         expect(response).to have_http_status 404
-      end
-    end
-  end
-
-  describe '#form' do
-    context 'when unauthorized' do
-      it 'responds with 401 error' do
-        get :form
-        expect(response).to have_http_status 401
-      end
-    end
-
-    context 'when authorized' do
-      it 'responds with 401 error' do
-        FactoryBot.create(:recruit_document)
-
-        sign_in admin
-        get :form
-
-        expect(response).to have_http_status 200
-        expect(json_response.keys).to contain_exactly('statuses', 'positions', 'groups')
       end
     end
   end

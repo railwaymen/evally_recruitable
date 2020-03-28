@@ -57,5 +57,10 @@ module EvallyRecruitable
 
     # Set i18n fallbacks
     config.i18n.fallbacks = true
+
+    # Default headers
+    config.action_dispatch.default_headers = {
+      'X-Frame-Options' => 'ALLOWALL',
+    }
   end
 end
