@@ -34,6 +34,12 @@ module V2
       )
     end
 
+    def destroy
+      recruit_document.destroy
+
+      head :no_content
+    end
+
     private
 
     def recruit_documents_scope
