@@ -98,7 +98,7 @@ RSpec.describe V2::RecruitDocumentsController, type: :controller do
 
     context 'when access granted' do
       it 'responds with form data' do
-        document = FactoryBot.create(:recruit_document)
+        FactoryBot.create(:recruit_document)
 
         sign_in admin
         get :form
