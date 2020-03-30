@@ -40,7 +40,7 @@ module V2
         return if @recruit_document.persisted? && !@recruit_document.evaluator_id_changed?
 
         RecruitDocument
-          .where('id != ? AND email = ?', @recruit_document.id, @recruit_document.email)
+          .where('email = ?', @recruit_document.email)
           .update_all(evaluator_id: @recruit_document.evaluator_id)
       end
 

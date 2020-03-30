@@ -71,6 +71,29 @@ RSpec.describe V2::RecruitDocumentsController, type: :controller do
     end
   end
 
+  describe '#form' do
+    context 'when unauthorized' do
+      it 'responds with 401 error' do
+        get :form
+        expect(response).to have_http_status 401
+      end
+    end
+
+    context 'when authorized' do
+      it 'responds with form data' do
+        document = FactoryBot.create(:recruit_document)
+
+        sign_in admin
+        get :form
+
+        expect(response).to have_http_status 200
+        expect(json_response.keys).to contain_exactly(
+          'recruit_document', 'attachments', 'positions', 'statuses', 'groups'
+        )
+      end
+    end
+  end
+
   describe '#create' do
     context 'when unauthorized' do
       it 'responds with 401 error' do
