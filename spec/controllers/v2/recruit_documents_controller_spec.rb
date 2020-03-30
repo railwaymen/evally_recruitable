@@ -85,17 +85,23 @@ RSpec.describe V2::RecruitDocumentsController, type: :controller do
           recruit_document: {
             **FactoryBot.attributes_for(:recruit_document),
             email: 'random@example.com',
+            evaluator_id: 1,
             status: { value: 'received' }
           }
         }
 
-        public_recruit_id = Digest::SHA256.hexdigest('random@example.com')
+        stubbed_body = {
+          recruit: {
+            public_recruit_id: Digest::SHA256.hexdigest('random@example.com'),
+            evaluator_id: 1
+          }
+        }
 
         sign_in admin
 
         expect do
           freeze_time do
-            stub_webhook_request(admin, recruit: { public_recruit_id: public_recruit_id })
+            stub_webhook_request(admin, stubbed_body)
             post :create, params: params
           end
         end.to(change { RecruitDocument.count }.by(1))
@@ -137,14 +143,20 @@ RSpec.describe V2::RecruitDocumentsController, type: :controller do
           }
         }
 
+        stubbed_body = {
+          recruit: {
+            public_recruit_id: Digest::SHA256.hexdigest('random@example.com'),
+            evaluator_id: nil
+          }
+        }
+
         sign_in admin
 
-        public_recruit_id = Digest::SHA256.hexdigest('random@example.com')
         allow_any_instance_of(ActiveStorage::Blob).to receive(:service_url).and_return ''
 
         expect do
           freeze_time do
-            stub_webhook_request(admin, recruit: { public_recruit_id: public_recruit_id })
+            stub_webhook_request(admin, stubbed_body)
             post :create, params: params
           end
         end.to(change { ActiveStorage::Attachment.count }.by(1))
@@ -174,7 +186,7 @@ RSpec.describe V2::RecruitDocumentsController, type: :controller do
 
     context 'when authorized' do
       it 'responds with updated document' do
-        document = FactoryBot.create(:recruit_document)
+        document = FactoryBot.create(:recruit_document, evaluator_id: 1)
 
         params = {
           id: document.id,
@@ -183,11 +195,18 @@ RSpec.describe V2::RecruitDocumentsController, type: :controller do
           }
         }
 
+        stubbed_body = {
+          recruit: {
+            public_recruit_id: document.public_recruit_id,
+            evaluator_id: 1
+          }
+        }
+
         sign_in admin
 
         expect do
           freeze_time do
-            stub_webhook_request(admin, recruit: { public_recruit_id: document.public_recruit_id })
+            stub_webhook_request(admin, stubbed_body)
             put :update, params: params
           end
 
