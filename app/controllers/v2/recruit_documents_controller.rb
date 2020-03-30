@@ -2,6 +2,8 @@
 
 module V2
   class RecruitDocumentsController < ApplicationController
+    before_action :authorize!
+
     def index
       presenter = V2::RecruitDocuments::IndexPresenter.new(
         recruit_documents_scope.by_group(params.dig(:group)).by_status(params.dig(:status))
@@ -48,12 +50,16 @@ module V2
 
     private
 
+    def authorize!
+      authorize([:v2, RecruitDocument])
+    end
+
     def recruit_documents_scope
-      RecruitDocument.order(updated_at: :desc)
+      policy_scope([:v2, RecruitDocument]).order(updated_at: :desc)
     end
 
     def recruit_document
-      @recruit_document ||= RecruitDocument.find_by(id: params[:id])
+      @recruit_document ||= recruit_documents_scope.find_by(id: params[:id])
       raise ErrorResponderService.new(:record_not_found, 404) unless @recruit_document
 
       @recruit_document
@@ -76,6 +82,8 @@ module V2
     end
 
     def recruit_document_params
+      return params.require(:recruit_document).permit(status: :value) if current_user.evaluator?
+
       params.require(:recruit_document).permit(
         :first_name, :last_name, :gender, :email, :phone, :position, :group, :received_at, :source,
         :accept_current_processing, :accept_future_processing, :task_sent_at, :call_scheduled_at,

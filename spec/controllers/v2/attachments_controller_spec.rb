@@ -4,16 +4,36 @@ require 'rails_helper'
 
 RSpec.describe V2::AttachmentsController, type: :controller do
   let(:admin) { User.new(id: 1, role: :admin) }
+  let(:evaluator) { User.new(id: 2, role: :evaluator) }
 
   describe '#create' do
-    context 'when unauthorized' do
+    context 'when access denied' do
       it 'responds with 401 error' do
         post :create, params: { recruit_document_id: 1 }
         expect(response).to have_http_status 401
       end
+
+      it 'respond with 403 error' do
+        document = FactoryBot.create(:recruit_document, evaluator_id: evaluator.id)
+
+        file = fixture_file_upload(
+          Rails.root.join('spec/fixtures/sample_image.jpg'),
+          'image/jpeg'
+        )
+
+        params = {
+          recruit_document_id: document.id,
+          files: [file]
+        }
+
+        sign_in evaluator
+        post :create, params: params
+
+        expect(response).to have_http_status 403
+      end
     end
 
-    context 'when authorized' do
+    context 'when access granted' do
       it 'responds with newest file' do
         document = FactoryBot.create(:recruit_document, :with_attachment)
 
@@ -58,14 +78,29 @@ RSpec.describe V2::AttachmentsController, type: :controller do
   end
 
   describe '#destroy' do
-    context 'when unauthorized' do
+    context 'when access denied' do
       it 'responds with 401 error' do
         delete :destroy, params: { recruit_document_id: 1, id: 1 }
         expect(response).to have_http_status 401
       end
+
+      it 'responds with 403 error' do
+        document = FactoryBot.create(
+          :recruit_document,
+          :with_attachment,
+          evaluator_id: evaluator.id
+        )
+
+        file = document.files.last
+
+        sign_in evaluator
+        delete :destroy, params: { recruit_document_id: document.id, id: file.id }
+
+        expect(response).to have_http_status 403
+      end
     end
 
-    context 'when authorized' do
+    context 'when access granted' do
       it 'removes file and responds with 204' do
         document = FactoryBot.create(:recruit_document, :with_attachment)
         file = document.files.last
