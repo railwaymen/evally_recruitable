@@ -2,6 +2,8 @@
 
 module V2
   class AttachmentsController < ApplicationController
+    before_action :authorize!
+
     def create
       recruit_document.files.attach(params[:files])
 
@@ -18,6 +20,10 @@ module V2
     end
 
     private
+
+    def authorize!
+      authorize([:v2, recruit_document])
+    end
 
     def attachment
       @attachment ||= recruit_document.files.find_by(id: params[:id])

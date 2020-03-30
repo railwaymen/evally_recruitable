@@ -26,12 +26,6 @@ module RecruitDocuments
             []
           ),
           Status.new(
-            :verified,
-            '#AB47BC',
-            false,
-            []
-          ),
-          Status.new(
             :documents_review,
             '#5C6BC0',
             false,
@@ -46,6 +40,12 @@ module RecruitDocuments
           Status.new(
             :code_review,
             '#26A69A',
+            false,
+            []
+          ),
+          Status.new(
+            :verified,
+            '#AB47BC',
             false,
             []
           ),

@@ -18,8 +18,12 @@ module V2
       def save
         validate_recruit_document!
 
-        synchronize_recruit
-        @recruit_document.save!
+        ActiveRecord::Base.transaction do
+          assign_evaluator_to_other_recruit_documents
+          @recruit_document.save!
+
+          synchronize_recruit
+        end
       end
 
       private
@@ -32,11 +36,20 @@ module V2
         )
       end
 
+      def assign_evaluator_to_other_recruit_documents
+        return if @recruit_document.persisted? && !@recruit_document.evaluator_id_changed?
+
+        RecruitDocument
+          .where('email = ?', @recruit_document.email)
+          .update_all(evaluator_id: @recruit_document.evaluator_id)
+      end
+
       def synchronize_recruit
         resp = core_api_client.post(
           '/v2/recruits/webhook',
           recruit: {
-            public_recruit_id: @recruit_document.public_recruit_id
+            public_recruit_id: @recruit_document.public_recruit_id,
+            evaluator_id: @recruit_document.evaluator_id
           }
         )
 
