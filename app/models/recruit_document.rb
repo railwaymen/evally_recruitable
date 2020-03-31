@@ -5,6 +5,9 @@ class RecruitDocument < ApplicationRecord
   #
   has_many_attached :files
 
+  has_many :status_changes, -> { where(context: 'status') },
+           as: :changeable, class_name: 'Change', inverse_of: :changeable
+
   # # Scopes
   #
   scope :by_group, proc { |val| where(group: val) if val.present? }
