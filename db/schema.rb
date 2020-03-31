@@ -38,7 +38,7 @@ ActiveRecord::Schema.define(version: 2020_03_31_120629) do
 
   create_table "changes", force: :cascade do |t|
     t.string "context", null: false
-    t.string "from", null: false
+    t.string "from"
     t.string "to", null: false
     t.jsonb "details", default: {}, null: false
     t.string "changeable_type", null: false

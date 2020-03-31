@@ -20,6 +20,8 @@ module V2
 
         ActiveRecord::Base.transaction do
           assign_evaluator_to_other_recruit_documents
+          status_commentator.call if @recruit_document.status_change_commentable?
+
           @recruit_document.save!
 
           synchronize_recruit
@@ -42,6 +44,11 @@ module V2
         RecruitDocument
           .where('email = ?', @recruit_document.email)
           .update_all(evaluator_id: @recruit_document.evaluator_id)
+      end
+
+      def status_commentator
+        @status_commentator ||=
+          ::RecruitDocuments::StatusCommentatorService.new(@recruit_document, @user)
       end
 
       def synchronize_recruit
