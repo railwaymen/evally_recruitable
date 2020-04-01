@@ -1,0 +1,6 @@
+en:
+  change:
+    status:
+      to: 'Status set to **%{to}**.'
+      from_to: 'Status changed from **%{from}** to **%{to}**'
+      detail: '* %{label}: %{value}'

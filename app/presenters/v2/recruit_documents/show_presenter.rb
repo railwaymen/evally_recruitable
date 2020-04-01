@@ -10,7 +10,7 @@ module V2
       end
 
       def statuses
-        ::RecruitDocuments::StatusesManagerService.statuses
+        V2::RecruitDocuments::StatusManagerService.statuses
       end
 
       def groups

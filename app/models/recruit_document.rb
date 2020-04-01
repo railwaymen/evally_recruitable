@@ -5,6 +5,9 @@ class RecruitDocument < ApplicationRecord
   #
   has_many_attached :files
 
+  has_many :status_changes, -> { where(context: 'status') },
+           as: :changeable, class_name: 'Change', inverse_of: :changeable
+
   # # Scopes
   #
   scope :by_group, proc { |val| where(group: val) if val.present? }
@@ -25,10 +28,20 @@ class RecruitDocument < ApplicationRecord
 
   # # Enums
   #
-  enum status: RecruitDocuments::StatusesManagerService.enum, _suffix: true
+  enum status: V2::RecruitDocuments::StatusManagerService.enum, _suffix: true
 
   def public_recruit_id
     Digest::SHA256.hexdigest(email)
+  end
+
+  def status_change_commentable?
+    persisted? && (
+      changes.keys &
+        %w[
+          status task_sent_at call_scheduled_at interview_scheduled_at decision_made_at
+          recruit_accepted_at rejection_reason
+        ]
+    ).any?
   end
 
   private

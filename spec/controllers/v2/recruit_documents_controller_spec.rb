@@ -6,19 +6,11 @@ RSpec.describe V2::RecruitDocumentsController, type: :controller do
   let(:admin) { User.new(id: 1, role: :admin) }
   let(:evaluator) { User.new(id: 2, role: :evaluator) }
 
-  def stub_webhook_request(user, request_body) # rubocop:disable Metrics/MethodLength
-    stub_request(:post, 'http://app.testhost/v2/recruits/webhook')
-      .with(
-        body: JSON.generate(request_body),
-        headers: {
-          'Accept' => 'application/json',
-          'Accept-Encoding' => 'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
-          'Content-Type' => 'application/json',
-          'Token' => JwtService.encode(user),
-          'User-Agent' => 'Faraday v0.17.3'
-        }
-      )
-      .to_return(status: 200, body: '', headers: {})
+  # Mock external requests
+  before(:each) do
+    allow_any_instance_of(ApiClientService).to(
+      receive(:post).and_return(OpenStruct.new(status: 204))
+    )
   end
 
   describe '#index' do
@@ -146,20 +138,10 @@ RSpec.describe V2::RecruitDocumentsController, type: :controller do
           }
         }
 
-        stubbed_body = {
-          recruit: {
-            public_recruit_id: Digest::SHA256.hexdigest('random@example.com'),
-            evaluator_id: 1
-          }
-        }
-
         sign_in admin
 
         expect do
-          freeze_time do
-            stub_webhook_request(admin, stubbed_body)
-            post :create, params: params
-          end
+          post :create, params: params
         end.to(change { RecruitDocument.count }.by(1))
 
         expect(response).to have_http_status 201
@@ -199,22 +181,12 @@ RSpec.describe V2::RecruitDocumentsController, type: :controller do
           }
         }
 
-        stubbed_body = {
-          recruit: {
-            public_recruit_id: Digest::SHA256.hexdigest('random@example.com'),
-            evaluator_id: nil
-          }
-        }
-
         sign_in admin
 
         allow_any_instance_of(ActiveStorage::Blob).to receive(:service_url).and_return ''
 
         expect do
-          freeze_time do
-            stub_webhook_request(admin, stubbed_body)
-            post :create, params: params
-          end
+          post :create, params: params
         end.to(change { ActiveStorage::Attachment.count }.by(1))
 
         expect(response).to have_http_status 201
@@ -242,7 +214,7 @@ RSpec.describe V2::RecruitDocumentsController, type: :controller do
 
     context 'when access granted' do
       it 'responds with updated document' do
-        document = FactoryBot.create(:recruit_document, evaluator_id: 1)
+        document = FactoryBot.create(:recruit_document, evaluator_id: admin.id)
 
         params = {
           id: document.id,
@@ -251,20 +223,10 @@ RSpec.describe V2::RecruitDocumentsController, type: :controller do
           }
         }
 
-        stubbed_body = {
-          recruit: {
-            public_recruit_id: document.public_recruit_id,
-            evaluator_id: 1
-          }
-        }
-
         sign_in admin
 
         expect do
-          freeze_time do
-            stub_webhook_request(admin, stubbed_body)
-            put :update, params: params
-          end
+          put :update, params: params
 
           document.reload
         end.to(change { document.first_name }.to('Szczepan'))
@@ -304,6 +266,28 @@ RSpec.describe V2::RecruitDocumentsController, type: :controller do
         put :update, params: params
 
         expect(response).to have_http_status 404
+      end
+    end
+
+    context 'status change' do
+      it 'creates status change record' do
+        document = FactoryBot.create(:recruit_document, status: 'verified')
+
+        params = {
+          id: document.id,
+          recruit_document: {
+            call_scheduled_at: 3.days.from_now,
+            status: { value: 'phone_call' }
+          }
+        }
+
+        sign_in admin
+
+        expect do
+          put :update, params: params
+        end.to(change { document.status_changes.count }.by(1))
+
+        expect(response).to have_http_status 200
       end
     end
   end
