@@ -40,7 +40,7 @@ ActiveRecord::Schema.define(version: 2020_03_31_120629) do
     t.string "context", null: false
     t.string "from"
     t.string "to", null: false
-    t.jsonb "details", default: {}, null: false
+    t.jsonb "details", default: {}
     t.string "changeable_type", null: false
     t.bigint "changeable_id", null: false
     t.datetime "created_at", precision: 6, null: false

@@ -6,8 +6,11 @@ RSpec.describe V2::RecruitDocumentsController, type: :controller do
   let(:admin) { User.new(id: 1, role: :admin) }
   let(:evaluator) { User.new(id: 2, role: :evaluator) }
 
-  def stub_sync_request(response: OpenStruct.new(status: 200))
-    allow_any_instance_of(ApiClientService).to receive(:post).and_return response
+  # Mock external requests
+  before(:each) do
+    allow_any_instance_of(ApiClientService).to(
+      receive(:post).and_return(OpenStruct.new(status: 204))
+    )
   end
 
   describe '#index' do
@@ -136,7 +139,6 @@ RSpec.describe V2::RecruitDocumentsController, type: :controller do
         }
 
         sign_in admin
-        stub_sync_request(response: OpenStruct.new(status: 204))
 
         expect do
           post :create, params: params
@@ -181,7 +183,6 @@ RSpec.describe V2::RecruitDocumentsController, type: :controller do
 
         sign_in admin
 
-        stub_sync_request(response: OpenStruct.new(status: 204))
         allow_any_instance_of(ActiveStorage::Blob).to receive(:service_url).and_return ''
 
         expect do
@@ -223,7 +224,6 @@ RSpec.describe V2::RecruitDocumentsController, type: :controller do
         }
 
         sign_in admin
-        stub_sync_request(response: OpenStruct.new(status: 204))
 
         expect do
           put :update, params: params
@@ -282,7 +282,6 @@ RSpec.describe V2::RecruitDocumentsController, type: :controller do
         }
 
         sign_in admin
-        stub_sync_request(response: OpenStruct.new(status: 204))
 
         expect do
           put :update, params: params

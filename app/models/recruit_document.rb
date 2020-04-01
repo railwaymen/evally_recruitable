@@ -28,20 +28,14 @@ class RecruitDocument < ApplicationRecord
 
   # # Enums
   #
-  enum status: RecruitDocuments::StatusesManagerService.enum, _suffix: true
-
-  def detail(field)
-    value = send(field.to_sym)
-
-    value.is_a?(ActiveSupport::TimeWithZone) ? value.strftime('%Y-%m-%d %H:%M') : value.to_s
-  end
+  enum status: V2::RecruitDocuments::StatusManagerService.enum, _suffix: true
 
   def public_recruit_id
     Digest::SHA256.hexdigest(email)
   end
 
   def status_change_commentable?
-    (
+    persisted? && (
       changes.keys &
         %w[
           status task_sent_at call_scheduled_at interview_scheduled_at decision_made_at

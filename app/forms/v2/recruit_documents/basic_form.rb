@@ -20,12 +20,13 @@ module V2
 
         ActiveRecord::Base.transaction do
           assign_evaluator_to_other_recruit_documents
-          status_commentator.call if @recruit_document.status_change_commentable?
+          status_change_logger.save! if @recruit_document.status_change_commentable?
 
           @recruit_document.save!
-
-          synchronize_recruit
         end
+
+        recruit_sync.perform
+        status_change_sync.perform
       end
 
       private
@@ -46,29 +47,18 @@ module V2
           .update_all(evaluator_id: @recruit_document.evaluator_id)
       end
 
-      def status_commentator
-        @status_commentator ||=
-          ::RecruitDocuments::StatusCommentatorService.new(@recruit_document, @user)
+      def status_change_logger
+        @status_change_logger ||=
+          V2::RecruitDocuments::StatusChangeLoggerService.new(@recruit_document)
       end
 
-      def synchronize_recruit
-        resp = core_api_client.post(
-          '/v2/recruits/webhook',
-          recruit: {
-            public_recruit_id: @recruit_document.public_recruit_id,
-            evaluator_id: @recruit_document.evaluator_id
-          }
-        )
-
-        Rails.logger.debug(
-          "\e[35mRecruit Sync  |  #{resp.status}  |  #{@recruit_document.public_recruit_id}\e[0m"
-        )
+      def recruit_sync
+        @recruit_sync ||= V2::Sync::RecruitSyncService.new(@recruit_document, @user)
       end
 
-      def core_api_client
-        @core_api_client ||= ApiClientService.new(
-          @user, Rails.application.config.env.fetch(:core_host)
-        )
+      def status_change_sync
+        @status_change_sync ||=
+          V2::Sync::StatusChangeSyncService.new(status_change_logger.status_change, @user)
       end
     end
   end

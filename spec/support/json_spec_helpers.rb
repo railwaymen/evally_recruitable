@@ -47,7 +47,7 @@ module JsonSpecHelpers
   end
 
   def status_schema(status)
-    status_item = RecruitDocuments::StatusesManagerService.find(status)
+    status_item = V2::RecruitDocuments::StatusManagerService.find(status)
 
     {
       value: status_item.value,

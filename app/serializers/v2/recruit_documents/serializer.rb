@@ -11,7 +11,7 @@ module V2
              :decision_made_at, :recruit_accepted_at, :rejection_reason, :evaluator_id
 
       field :status do |recruit_document|
-        status_item = ::RecruitDocuments::StatusesManagerService.find(recruit_document.status)
+        status_item = V2::RecruitDocuments::StatusManagerService.find(recruit_document.status)
 
         V2::RecruitDocuments::StatusSerializer.render_as_hash(status_item)
       end

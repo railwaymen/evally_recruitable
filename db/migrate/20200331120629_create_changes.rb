@@ -4,7 +4,7 @@ class CreateChanges < ActiveRecord::Migration[6.0]
       t.string :context, null: false
       t.string :from
       t.string :to, null: false
-      t.jsonb :details, null: false, default: {}
+      t.jsonb :details, default: {}
       t.references :changeable, polymorphic: true, null: false
 
       t.timestamps null: false
