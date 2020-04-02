@@ -82,13 +82,11 @@ module V2
     end
 
     def recruit_document_params
-      return params.require(:recruit_document).permit(status: :value) if current_user.evaluator?
-
       params.require(:recruit_document).permit(
         :first_name, :last_name, :gender, :email, :phone, :position, :group, :received_at, :source,
         :accept_current_processing, :accept_future_processing, :task_sent_at, :call_scheduled_at,
         :interview_scheduled_at, :decision_made_at, :recruit_accepted_at, :rejection_reason,
-        :evaluator_id, files: [], status: :value
+        :evaluator_id, status: :value, files: []
       )
     end
   end
