@@ -7,11 +7,12 @@ module V2
 
       def initialize(recruit_document, params:, user:)
         @recruit_document = recruit_document
+        @files = params.fetch('files', [])
         @user = user
 
         @recruit_document.assign_attributes(
           status: params.dig('status', 'value') || recruit_document.status,
-          **params.except('status')
+          **params.except('files', 'status')
         )
       end
 
@@ -23,6 +24,7 @@ module V2
           status_change_logger.save! if @recruit_document.status_change_commentable?
 
           @recruit_document.save!
+          @recruit_document.files.attach(@files) if @files.present?
         end
 
         recruit_sync.perform
