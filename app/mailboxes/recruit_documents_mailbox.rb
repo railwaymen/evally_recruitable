@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class RecruitDocumentsMailbox < ActionMailbox::Base
-  MATCHER = /^jobs_(.+)@.+$/i
+  MATCHER = /^jobs_(.+)@.+$/i.freeze
 
   def process
     RecruitDocuments::MailParserService.new(mail, source: source).perform

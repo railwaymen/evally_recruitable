@@ -115,20 +115,20 @@ RSpec.describe RecruitDocuments::MailParserService do
 
         text_part do
           body <<~BODY
-          *Jak Nowak* is applying for *Junior RoR Developer
-          <https://example.com>
-          *in* Kraków*
+            *Jak Nowak* is applying for *Junior RoR Developer
+            <https://example.com>
+            *in* Kraków*
 
-          *Candidate email*: jnowak@example.com
-          *Message from candidate*:
-          https://github.com/schodevio
+            *Candidate email*: jnowak@example.com
+            *Message from candidate*:
+            https://github.com/schodevio
 
-          Lorem ipsum
+            Lorem ipsum
 
-          *✓ Processing data in future recruitment*
-          I agree to the processing of my personal data by Railwaymen located in
+            *✓ Processing data in future recruitment*
+            I agree to the processing of my personal data by Railwaymen located in
 
-          Kraków for the purpose of future recruitment processes.
+            Kraków for the purpose of future recruitment processes.
           BODY
         end
 
@@ -170,20 +170,20 @@ RSpec.describe RecruitDocuments::MailParserService do
 
         text_part do
           body <<~BODY
-          *Jak Nowak* is applying for *Junior RoR Developer
-          <https://example.com>
-          *in* Kraków*
+            *Jak Nowak* is applying for *Junior RoR Developer
+            <https://example.com>
+            *in* Kraków*
 
-          *Candidate email*: jnowak@example.com
-          *Message from candidate*:
-          https://github.com/schodevio
+            *Candidate email*: jnowak@example.com
+            *Message from candidate*:
+            https://github.com/schodevio
 
-          Lorem ipsum
+            Lorem ipsum
 
-          *✓ Processing data in future recruitment*
-          I agree to the processing of my personal data by Railwaymen located in
+            *✓ Processing data in future recruitment*
+            I agree to the processing of my personal data by Railwaymen located in
 
-          Kraków for the purpose of future recruitment processes.
+            Kraków for the purpose of future recruitment processes.
           BODY
         end
 
@@ -217,16 +217,16 @@ RSpec.describe RecruitDocuments::MailParserService do
 
         text_part do
           body <<~BODY
-          *Will Smith* właśnie zaaplikował na stanowisko *Project Manager
-          <https://example.com>
-          *w miejscowości* Kraków*
+            *Will Smith* właśnie zaaplikował na stanowisko *Project Manager
+            <https://example.com>
+            *w miejscowości* Kraków*
 
-          *Email kandydata*: wsmith@example.com
-          *Wiadomość od kandydata*:
-          Lorem ipsum ...
+            *Email kandydata*: wsmith@example.com
+            *Wiadomość od kandydata*:
+            Lorem ipsum ...
 
-          *✓ Zgoda na wykorzystanie danych na potrzebę przyszłych rekrutacji*
-          Wyrażam zgodę na przetwarzanie moich danych osobowych dla celów przyszłych rekrutacji.
+            *✓ Zgoda na wykorzystanie danych na potrzebę przyszłych rekrutacji*
+            Wyrażam zgodę na przetwarzanie moich danych osobowych dla celów przyszłych rekrutacji.
           BODY
         end
 
@@ -268,16 +268,16 @@ RSpec.describe RecruitDocuments::MailParserService do
 
         text_part do
           body <<~BODY
-          *Will Smith* właśnie zaaplikował na stanowisko *Project Manager
-          <https://example.com>
-          *w miejscowości* Kraków*
+            *Will Smith* właśnie zaaplikował na stanowisko *Project Manager
+            <https://example.com>
+            *w miejscowości* Kraków*
 
-          *Email kandydata*: wsmith@example.com
-          *Wiadomość od kandydata*:
-          Lorem ipsum ...
+            *Email kandydata*: wsmith@example.com
+            *Wiadomość od kandydata*:
+            Lorem ipsum ...
 
-          *✓ Zgoda na wykorzystanie danych na potrzebę przyszłych rekrutacji*
-          Wyrażam zgodę na przetwarzanie moich danych osobowych dla celów przyszłych rekrutacji.
+            *✓ Zgoda na wykorzystanie danych na potrzebę przyszłych rekrutacji*
+            Wyrażam zgodę na przetwarzanie moich danych osobowych dla celów przyszłych rekrutacji.
           BODY
         end
 

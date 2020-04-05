@@ -8,7 +8,7 @@ module RecruitDocuments
       @context = context
     end
 
-    def perform
+    def perform # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
       return unless recruit_document.received_status?
 
       first_name, last_name = fullname.split(' ')
@@ -61,7 +61,8 @@ module RecruitDocuments
     end
 
     def accept_future_processing
-      value = encoded_body
+      value =
+        encoded_body
         .scan(/Zgoda\s+na\s+wykorzystanie\s+danych\s+na\s+potrzebę\s+przyszłych\s+rekrutacji\*/iu)
         .flatten
         .first
@@ -76,7 +77,7 @@ module RecruitDocuments
 
         recruit_document.files.attach(io: file, filename: attachment.filename)
       end
-    rescue => e
+    rescue StandardError => e
       Rails.logger.error "\e[31mFile cannot be attached due to error: #{e.message}\e[0m"
     end
 
@@ -89,7 +90,7 @@ module RecruitDocuments
 
         recruit_document.files.attach(io: file, filename: filename, content_type: 'text/plain')
       end
-    rescue => e
+    rescue StandardError => e
       Rails.logger.error "\e[31mMail body cannot be saved due to error: #{e.message}\e[0m"
     end
   end
