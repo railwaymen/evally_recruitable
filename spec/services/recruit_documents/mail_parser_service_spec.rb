@@ -57,8 +57,6 @@ RSpec.describe RecruitDocuments::MailParserService do
         received_at: mail_datetime,
         message_id: 'this_is_test_message_id@example.com'
       )
-
-
     end
 
     it 'raises an error and do not save attachments' do
@@ -91,6 +89,108 @@ RSpec.describe RecruitDocuments::MailParserService do
       end
 
       service = described_class.new(mail, source: 'rwm')
+
+      allow_any_instance_of(Tempfile).to receive(:rewind).and_raise(StandardError)
+      expect(Rails.logger).to receive(:error).twice.and_call_original
+
+      expect do
+        service.perform
+      end.to(change { RecruitDocument.count }.by(1))
+
+      recruit_document = RecruitDocument.last
+      expect(recruit_document.files.attachments.count).to eq 0
+    end
+  end
+
+  describe 'justjoinit mail parser' do
+    it 'adds new recruit document' do
+      mail_datetime = Time.current.round
+
+      mail = Mail.new do
+        to          'jobs_justjoinit@example.com'
+        from        'jobs@example.com'
+        subject     'Jan Nowak is applying for Junior RoR Developer'
+        message_id  '<this_is_test_message_id@example.com>'
+        date        mail_datetime
+
+        text_part do
+          body <<~BODY
+          *Jak Nowak* is applying for *Junior RoR Developer
+          <https://example.com>
+          *in* Kraków*
+
+          *Candidate email*: jnowak@example.com
+          *Message from candidate*:
+          https://github.com/schodevio
+
+          Lorem ipsum
+
+          *✓ Processing data in future recruitment*
+          I agree to the processing of my personal data by Railwaymen located in
+
+          Kraków for the purpose of future recruitment processes.
+          BODY
+        end
+
+        add_file 'spec/fixtures/sample_file.txt'
+      end
+
+      service = described_class.new(mail, source: 'justjoinit')
+
+      expect do
+        service.perform
+      end.to(change { RecruitDocument.count }.by(1))
+
+      recruit_document = RecruitDocument.last
+      expect(recruit_document.files.attachments.count).to eq 2
+
+      expect(recruit_document).to have_attributes(
+        first_name: 'Jan',
+        last_name: 'Nowak',
+        email: 'jnowak@example.com',
+        phone: nil,
+        position: 'Junior RoR Developer',
+        group: 'Unknown',
+        accept_current_processing: true,
+        accept_future_processing: true,
+        received_at: mail_datetime,
+        message_id: 'this_is_test_message_id@example.com'
+      )
+    end
+
+    it 'raises an error and do not save attachments' do
+      mail_datetime = Time.current.round
+
+      mail = Mail.new do
+        to          'jobs_justjoinit@example.com'
+        from        'jobs@example.com'
+        subject     'Jan Nowak is applying for Junior RoR Developer'
+        message_id  '<this_is_test_message_id@example.com>'
+        date        mail_datetime
+
+        text_part do
+          body <<~BODY
+          *Jak Nowak* is applying for *Junior RoR Developer
+          <https://example.com>
+          *in* Kraków*
+
+          *Candidate email*: jnowak@example.com
+          *Message from candidate*:
+          https://github.com/schodevio
+
+          Lorem ipsum
+
+          *✓ Processing data in future recruitment*
+          I agree to the processing of my personal data by Railwaymen located in
+
+          Kraków for the purpose of future recruitment processes.
+          BODY
+        end
+
+        add_file 'spec/fixtures/sample_file.txt'
+      end
+
+      service = described_class.new(mail, source: 'justjoinit')
 
       allow_any_instance_of(Tempfile).to receive(:rewind).and_raise(StandardError)
       expect(Rails.logger).to receive(:error).twice.and_call_original
@@ -142,14 +242,20 @@ RSpec.describe RecruitDocuments::MailParserService do
 
   describe 'already parsed mails' do
     it 'skips parsing action' do
-      FactoryBot.create(:recruit_document, message_id: 'this_is_test_message_id@example.com')
+      mail_datetime = Time.current.round
+
+      FactoryBot.create(
+        :recruit_document,
+        message_id: 'this_is_test_message_id@example.com',
+        received_at: mail_datetime
+      )
 
       mail = Mail.new do
         to          'jobs_rwm@example.com'
         from        'jobs@example.com'
         subject     'Notifications: New applicant for RoR Developer.'
         message_id  '<this_is_test_message_id@example.com>'
-        date        Time.current.round
+        date        mail_datetime
 
         text_part do
           body <<~BODY

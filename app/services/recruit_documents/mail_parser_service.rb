@@ -9,7 +9,11 @@ module RecruitDocuments
       @source = source.to_s.downcase
 
       @user = User.new(id: 1, role: :admin)
-      @recruit_document = RecruitDocument.find_or_initialize_by(message_id: mail.message_id)
+
+      @recruit_document = RecruitDocument.find_or_initialize_by(
+        message_id: mail.message_id,
+        received_at: mail.date
+      )
     end
 
     def perform

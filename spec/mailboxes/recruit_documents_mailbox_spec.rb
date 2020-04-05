@@ -12,5 +12,14 @@ RSpec.describe RecruitDocumentsMailbox, type: :mailbox do
         to: 'jobs_rwm@example.com'
       )
     end
+
+    it 'expects to call justjoinit mail parser service' do
+      expect_any_instance_of(RecruitDocuments::JustjoinitMailParserService).to receive(:perform)
+
+      receive_inbound_email_from_mail(
+        from: 'jobs@example.com',
+        to: 'jobs_justjoinit@example.com'
+      )
+    end
   end
 end
