@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module RecruitDocuments
-  class RwmMailParserService
+  class RocketjobsMailParserService
     delegate :mail, :source, :recruit_document, to: :@context
 
     def initialize(context)
@@ -17,10 +17,10 @@ module RecruitDocuments
         first_name: first_name&.strip,
         last_name: last_name&.strip,
         email: email,
-        phone: phone,
+        phone: nil,
         position: position,
         group: 'Unknown',
-        source: 'RWM Website',
+        source: 'JustJoinIT',
         received_at: mail.date,
         accept_current_processing: true,
         accept_future_processing: accept_future_processing
@@ -28,7 +28,7 @@ module RecruitDocuments
 
       return unless recruit_document.save
 
-      Rails.logger.info("\e[44mRWM Parser  |  Done!  |  #{mail.message_id}\e[0m")
+      Rails.logger.info("\e[44mRocketJobs Parser  |  Done!  |  #{mail.message_id}\e[0m")
 
       save_mail_body
       mail.attachments.each(&method(:save_attachment))
@@ -49,27 +49,24 @@ module RecruitDocuments
     end
 
     def fullname
-      encoded_body.scan(/Name:\s+(.+)\s/i).flatten.first&.strip
-    end
-
-    def phone
-      encoded_body.scan(/Phone number:\s+(.+)\s/i).flatten.first&.strip
+      encoded_subject.scan(/^Fwd:\s+(.+)\s+aplikuje\s+na/iu).flatten.first&.strip
     end
 
     def email
-      encoded_body.scan(/Email:\s+(.+@.+)\s/i).flatten.first&.strip
+      encoded_body.scan(/\*Email\s+kandydata\*:\s+(.+@.+)\b/iu).flatten.first&.strip
     end
 
     def position
-      # encoded_body.scan(/Position:\s+(.+)\s/i).flatten.first&.strip
-
-      encoded_subject.scan(/New applicant for\s+(.+)\./i).flatten.first&.strip
+      encoded_subject.scan(/aplikuje\s+na\s+(.+)$/iu).flatten.first&.strip
     end
 
     def accept_future_processing
-      value = encoded_body.scan(/future processing data:\s+(true|false)\s/).flatten.first
+      value = encoded_body
+        .scan(/Zgoda\s+na\s+wykorzystanie\s+danych\s+na\s+potrzebę\s+przyszłych\s+rekrutacji\*/iu)
+        .flatten
+        .first
 
-      value == 'true'
+      value.present?
     end
 
     def save_attachment(attachment)
@@ -87,7 +84,7 @@ module RecruitDocuments
       filename = 'message.txt'
 
       Tempfile.open(filename, '/tmp', encoding: 'ascii-8bit') do |file|
-        file << plain_text.body.to_s
+        file << encoded_body
         file.rewind
 
         recruit_document.files.attach(io: file, filename: filename, content_type: 'text/plain')

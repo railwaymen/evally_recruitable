@@ -40,20 +40,28 @@ module RecruitDocuments
       @plain_text ||= mail.find_first_mime_type('text/plain')
     end
 
+    def encoded_body
+      @encoded_body ||= plain_text.body.to_s.force_encoding(Encoding::UTF_8)
+    end
+
+    def encoded_subject
+      @encoded_subject ||= mail.subject.to_s.force_encoding(Encoding::UTF_8)
+    end
+
     def fullname
-      mail.subject.to_s.scan(/^(.+)\s+is\s+applying\s+for/i).flatten.first&.strip
+      encoded_subject.scan(/^Fwd:\s+(.+)\s+is\s+applying\s+for/i).flatten.first&.strip
     end
 
     def email
-      plain_text.body.to_s.scan(/\*Candidate\s+email\*:\s+(.+@.+)\b/i).flatten.first&.strip
+      encoded_body.scan(/\*Candidate\s+email\*:\s+(.+@.+)\b/i).flatten.first&.strip
     end
 
     def position
-      mail.subject.to_s.scan(/is\s+applying\s+for\s+(.+)$/i).flatten.first&.strip
+      encoded_subject.scan(/is\s+applying\s+for\s+(.+)$/i).flatten.first&.strip
     end
 
     def accept_future_processing
-      value = plain_text.body.to_s.scan(/\*.+Processing data in future recruitment\*/).flatten.first
+      value = encoded_body.scan(/\*.+Processing data in future recruitment\*/).flatten.first
 
       value.present?
     end

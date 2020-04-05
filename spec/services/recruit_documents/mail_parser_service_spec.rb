@@ -13,7 +13,7 @@ RSpec.describe RecruitDocuments::MailParserService do
       mail = Mail.new do
         to          'jobs_rwm@example.com'
         from        'jobs@example.com'
-        subject     'Notifications: New applicant for RoR Developer.'
+        subject     'Fwd: Notifications: New applicant for RoR Developer.'
         message_id  '<this_is_test_message_id@example.com>'
         date        mail_datetime
 
@@ -65,7 +65,7 @@ RSpec.describe RecruitDocuments::MailParserService do
       mail = Mail.new do
         to          'jobs_rwm@example.com'
         from        'jobs@example.com'
-        subject     'Notifications: New applicant for RoR Developer.'
+        subject     'Fwd: Notifications: New applicant for RoR Developer.'
         message_id  '<this_is_test_message_id@example.com>'
         date        mail_datetime
 
@@ -109,7 +109,7 @@ RSpec.describe RecruitDocuments::MailParserService do
       mail = Mail.new do
         to          'jobs_justjoinit@example.com'
         from        'jobs@example.com'
-        subject     'Jan Nowak is applying for Junior RoR Developer'
+        subject     'Fwd: Jan Nowak is applying for Junior RoR Developer'
         message_id  '<this_is_test_message_id@example.com>'
         date        mail_datetime
 
@@ -164,7 +164,7 @@ RSpec.describe RecruitDocuments::MailParserService do
       mail = Mail.new do
         to          'jobs_justjoinit@example.com'
         from        'jobs@example.com'
-        subject     'Jan Nowak is applying for Junior RoR Developer'
+        subject     'Fwd: Jan Nowak is applying for Junior RoR Developer'
         message_id  '<this_is_test_message_id@example.com>'
         date        mail_datetime
 
@@ -204,12 +204,106 @@ RSpec.describe RecruitDocuments::MailParserService do
     end
   end
 
+  describe 'rocketjobs mail parser' do
+    it 'adds new recruit document' do
+      mail_datetime = Time.current.round
+
+      mail = Mail.new do
+        to          'jobs_rocketjobs@example.com'
+        from        'jobs@example.com'
+        subject     'Fwd: Will Smith aplikuje na Project Manager'
+        message_id  '<this_is_test_message_id@example.com>'
+        date        mail_datetime
+
+        text_part do
+          body <<~BODY
+          *Will Smith* właśnie zaaplikował na stanowisko *Project Manager
+          <https://example.com>
+          *w miejscowości* Kraków*
+
+          *Email kandydata*: wsmith@example.com
+          *Wiadomość od kandydata*:
+          Lorem ipsum ...
+
+          *✓ Zgoda na wykorzystanie danych na potrzebę przyszłych rekrutacji*
+          Wyrażam zgodę na przetwarzanie moich danych osobowych dla celów przyszłych rekrutacji.
+          BODY
+        end
+
+        add_file 'spec/fixtures/sample_file.txt'
+      end
+
+      service = described_class.new(mail, source: 'rocketjobs')
+
+      expect do
+        service.perform
+      end.to(change { RecruitDocument.count }.by(1))
+
+      recruit_document = RecruitDocument.last
+      expect(recruit_document.files.attachments.count).to eq 2
+
+      expect(recruit_document).to have_attributes(
+        first_name: 'Will',
+        last_name: 'Smith',
+        email: 'wsmith@example.com',
+        phone: nil,
+        position: 'Project Manager',
+        group: 'Unknown',
+        accept_current_processing: true,
+        accept_future_processing: true,
+        received_at: mail_datetime,
+        message_id: 'this_is_test_message_id@example.com'
+      )
+    end
+
+    it 'raises an error and do not save attachments' do
+      mail_datetime = Time.current.round
+
+      mail = Mail.new do
+        to          'jobs_rocketjobs@example.com'
+        from        'jobs@example.com'
+        subject     'Fwd: Will Smith aplikuje na Project Manager'
+        message_id  '<this_is_test_message_id@example.com>'
+        date        mail_datetime
+
+        text_part do
+          body <<~BODY
+          *Will Smith* właśnie zaaplikował na stanowisko *Project Manager
+          <https://example.com>
+          *w miejscowości* Kraków*
+
+          *Email kandydata*: wsmith@example.com
+          *Wiadomość od kandydata*:
+          Lorem ipsum ...
+
+          *✓ Zgoda na wykorzystanie danych na potrzebę przyszłych rekrutacji*
+          Wyrażam zgodę na przetwarzanie moich danych osobowych dla celów przyszłych rekrutacji.
+          BODY
+        end
+
+        add_file 'spec/fixtures/sample_file.txt'
+      end
+
+      service = described_class.new(mail, source: 'rocketjobs')
+
+      allow_any_instance_of(Tempfile).to receive(:rewind).and_raise(StandardError)
+      expect(Rails.logger).to receive(:error).twice.and_call_original
+
+      expect do
+        service.perform
+      end.to(change { RecruitDocument.count }.by(1))
+
+      recruit_document = RecruitDocument.last
+      expect(recruit_document.files.attachments.count).to eq 0
+    end
+  end
+
   describe 'unknown mails' do
     it 'skips parsing action' do
       mail = Mail.new do
         to          'jobs_unknown@example.com'
         from        'jobs@example.com'
-        subject     'Notifications: New applicant for RoR Developer.'
+        subject     'Fwd: Notifications: New applicant for RoR Developer.'
         message_id  '<this_is_test_message_id@example.com>'
         date        Time.current.round
 
@@ -253,7 +347,7 @@ RSpec.describe RecruitDocuments::MailParserService do
       mail = Mail.new do
         to          'jobs_rwm@example.com'
         from        'jobs@example.com'
-        subject     'Notifications: New applicant for RoR Developer.'
+        subject     'Fwd: Notifications: New applicant for RoR Developer.'
         message_id  '<this_is_test_message_id@example.com>'
         date        mail_datetime
 
