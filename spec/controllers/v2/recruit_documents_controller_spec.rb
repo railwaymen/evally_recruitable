@@ -7,11 +7,7 @@ RSpec.describe V2::RecruitDocumentsController, type: :controller do
   let(:evaluator) { User.new(id: 2, role: :evaluator) }
 
   # Mock external requests
-  before(:each) do
-    allow_any_instance_of(ApiClientService).to(
-      receive(:post).and_return(OpenStruct.new(status: 204))
-    )
-  end
+  before(:each) { stub_api_client_service }
 
   describe '#index' do
     context 'when access denied' do

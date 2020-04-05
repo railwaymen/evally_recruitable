@@ -16,7 +16,7 @@ class RecruitDocument < ApplicationRecord
   # # Validations
   #
   validates :email, presence: true, format: URI::MailTo::EMAIL_REGEXP
-  validates :first_name, :last_name, :status, :position, :group, :received_at,
+  validates :first_name, :status, :position, :group, :received_at,
             :accept_current_processing, presence: true
 
   validates :task_sent_at, presence: true, if: :recruitment_task_status?

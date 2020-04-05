@@ -16,7 +16,7 @@ module V2
           }
         )
 
-        Rails.logger.debug(
+        Rails.logger.info(
           "\e[35mRecruit Sync  |  #{resp.status}  |  #{public_recruit_id}\e[0m"
         )
       end

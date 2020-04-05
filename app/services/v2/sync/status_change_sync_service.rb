@@ -17,7 +17,7 @@ module V2
           }
         )
 
-        Rails.logger.debug(
+        Rails.logger.info(
           "\e[36mStatus Change Sync  |  #{resp.status}  |  #{id}\e[0m"
         )
       end
