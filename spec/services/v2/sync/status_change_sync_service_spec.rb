@@ -9,7 +9,7 @@ RSpec.describe V2::Sync::StatusChangeSyncService do
       status_change = FactoryBot.create(:recruit_document_status_change, changeable: document)
       user = User.new(id: 1, role: :admin)
 
-      stub_request(:post, "http://app.testhost/v2/recruits/#{document.public_recruit_id}/comments/webhook") # rubocop:disable Layout/LineLength
+      stub_request(:post, "http://testhost/v2/recruits/#{document.public_recruit_id}/comments/webhook") # rubocop:disable Layout/LineLength
         .with(
           body: {
             comment: {
