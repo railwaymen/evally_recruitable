@@ -16,7 +16,7 @@ class Change < ApplicationRecord
   #
 
   def comment_body
-    [comment_beginning, *listed_details].join('\n ')
+    [comment_beginning, listed_details].compact.join
   end
 
   def recruit_document_type?
@@ -36,14 +36,18 @@ class Change < ApplicationRecord
   end
 
   def listed_details
-    details.map do |k, v|
+    return if details.blank?
+
+    list_items = details.map do |k, v|
       I18n.t("change.#{context}.detail", label: k.titleize, value: formatted_detail_value(v))
     end
+
+    "<ul>#{list_items.join}</ul>"
   end
 
   def formatted_detail_value(val)
     return val.to_s unless val.is_a?(ActiveSupport::TimeWithZone)
 
-    val.localtime.strftime('%Y-%m-%d %H:%M %Z')
+    val.localtime.strftime("%H:%M #{val.day.ordinalize} %b %Y %Z")
   end
 end

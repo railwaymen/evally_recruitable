@@ -5,8 +5,8 @@ module V2
     class StatusChangeSyncService < BaseSyncService
       delegate :id, :comment_body, :created_at, :recruit_document, to: :context
 
-      def perform # rubocop:disable Metrics/MethodLength
-        return unless context.persisted?
+      def perform # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
+        return unless context.persisted? && recruit_document.present?
 
         resp = core_api_client.post(
           "/v2/recruits/#{recruit_document.public_recruit_id}/comments/webhook",
