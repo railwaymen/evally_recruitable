@@ -14,7 +14,7 @@ module V2
 
       def core_api_client
         @core_api_client ||= ApiClientService.new(
-          @user, Rails.application.config.env.fetch(:core_host)
+          @user, Rails.application.config.env.fetch(:core).fetch(:host)
         )
       end
     end

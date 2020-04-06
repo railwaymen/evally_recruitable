@@ -1,9 +1,9 @@
 default: &default
   adapter: postgresql
   encoding: utf8
-  host: <%= Rails.application.config.env.fetch(:database).fetch(:host) %>
-  username: <%= Rails.application.config.env.fetch(:database).fetch(:username) %>
-  password: <%= Rails.application.config.env.fetch(:database).fetch(:password) %>
+  host: <%= Rails.application.config.env.fetch(:recruitable).fetch(:database).fetch(:host) %>
+  username: <%= Rails.application.config.env.fetch(:recruitable).fetch(:database).fetch(:username) %>
+  password: <%= Rails.application.config.env.fetch(:recruitable).fetch(:database).fetch(:password) %>
   pool: <%= ENV.fetch('RAILS_MAX_THREADS') { 5 } %>
 
 development:
@@ -13,3 +13,7 @@ development:
 test:
   <<: *default
   database: evally_recruitable_test
+
+production:
+  <<: *default
+  database: evally_recruitable_production
