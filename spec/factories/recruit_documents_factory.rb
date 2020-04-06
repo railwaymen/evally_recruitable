@@ -14,5 +14,15 @@ FactoryBot.define do
     source                      { 'railwaymen' }
     received_at                 { 1.minute.ago }
     status                      { 'received' }
+    evaluator_id                { nil }
+
+    trait :with_attachment do
+      after(:create) do |document|
+        document.files.attach(
+          io: File.open('spec/fixtures/sample_resume.pdf'),
+          filename: 'sample.pdf'
+        )
+      end
+    end
   end
 end

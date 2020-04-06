@@ -1,37 +1,37 @@
 # frozen_string_literal: true
 
-# module V2
-#   class RecruitDocumentPolicy < ApplicationPolicy
-#     class Scope < Scope
-#       def resolve
-#         return scope.all if user.admin? || user.recruiter?
+module V2
+  class RecruitDocumentPolicy < ApplicationPolicy
+    class Scope < Scope
+      def resolve
+        return scope.all if user.admin? || user.recruiter?
 
-#         user.recruit_documents
-#       end
-#     end
+        scope.where(evaluator_id: user.id)
+      end
+    end
 
-#     def index?
-#       true
-#     end
+    def index?
+      true
+    end
 
-#     def show?
-#       true
-#     end
+    def show?
+      true
+    end
 
-#     def create?
-#       user.admin? || user.recruiter?
-#     end
+    def create?
+      user.admin? || user.recruiter?
+    end
 
-#     def new?
-#       create?
-#     end
+    def form?
+      create?
+    end
 
-#     def update?
-#       user.admin? || user.recruiter?
-#     end
+    def update?
+      true
+    end
 
-#     def edit?
-#       update?
-#     end
-#   end
-# end
+    def destroy?
+      create?
+    end
+  end
+end

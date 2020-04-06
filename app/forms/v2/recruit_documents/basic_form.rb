@@ -7,19 +7,28 @@ module V2
 
       def initialize(recruit_document, params:, user:)
         @recruit_document = recruit_document
+        @files = params.fetch('files', [])
         @user = user
 
         @recruit_document.assign_attributes(
           status: params.dig('status', 'value') || recruit_document.status,
-          **params.except('status')
+          **params.except('files', 'status')
         )
       end
 
       def save
         validate_recruit_document!
 
-        synchronize_recruit
-        @recruit_document.save!
+        ActiveRecord::Base.transaction do
+          assign_evaluator_to_other_recruit_documents
+          status_change_logger.save! if @recruit_document.status_change_commentable?
+
+          @recruit_document.save!
+          @recruit_document.files.attach(@files) if @files.present?
+        end
+
+        recruit_sync.perform
+        status_change_sync.perform
       end
 
       private
@@ -32,23 +41,26 @@ module V2
         )
       end
 
-      def synchronize_recruit
-        resp = core_api_client.post(
-          '/v2/recruits/webhook',
-          recruit: {
-            public_recruit_id: @recruit_document.public_recruit_id
-          }
-        )
+      def assign_evaluator_to_other_recruit_documents
+        return if @recruit_document.persisted? && !@recruit_document.evaluator_id_changed?
 
-        Rails.logger.debug(
-          "\e[35mRecruit Sync  |  #{resp.status}  |  #{@recruit_document.public_recruit_id}\e[0m"
-        )
+        RecruitDocument
+          .where('email = ?', @recruit_document.email)
+          .update_all(evaluator_id: @recruit_document.evaluator_id)
       end
 
-      def core_api_client
-        @core_api_client ||= ApiClientService.new(
-          @user, Rails.application.config.env.fetch(:core_host)
-        )
+      def status_change_logger
+        @status_change_logger ||=
+          V2::RecruitDocuments::StatusChangeLoggerService.new(@recruit_document)
+      end
+
+      def recruit_sync
+        @recruit_sync ||= V2::Sync::RecruitSyncService.new(@recruit_document, @user)
+      end
+
+      def status_change_sync
+        @status_change_sync ||=
+          V2::Sync::StatusChangeSyncService.new(status_change_logger.status_change, @user)
       end
     end
   end

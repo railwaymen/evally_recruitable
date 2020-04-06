@@ -10,10 +10,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_03_25_210833) do
+ActiveRecord::Schema.define(version: 2020_04_03_065911) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "action_mailbox_inbound_emails", force: :cascade do |t|
+    t.integer "status", default: 0, null: false
+    t.string "message_id", null: false
+    t.string "message_checksum", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["message_id", "message_checksum"], name: "index_action_mailbox_inbound_emails_uniqueness", unique: true
+  end
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
@@ -34,6 +43,18 @@ ActiveRecord::Schema.define(version: 2020_03_25_210833) do
     t.string "checksum", null: false
     t.datetime "created_at", null: false
     t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
+  end
+
+  create_table "changes", force: :cascade do |t|
+    t.string "context", null: false
+    t.string "from"
+    t.string "to", null: false
+    t.jsonb "details", default: {}
+    t.string "changeable_type", null: false
+    t.bigint "changeable_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["changeable_type", "changeable_id"], name: "index_changes_on_changeable_type_and_changeable_id"
   end
 
   create_table "recruit_documents", force: :cascade do |t|
@@ -57,6 +78,8 @@ ActiveRecord::Schema.define(version: 2020_03_25_210833) do
     t.datetime "decision_made_at"
     t.datetime "recruit_accepted_at"
     t.text "rejection_reason"
+    t.integer "evaluator_id"
+    t.string "message_id"
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"

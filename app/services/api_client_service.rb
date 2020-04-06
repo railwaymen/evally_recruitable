@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# :nocov:
 class ApiClientService
   def initialize(user, base_url)
     @user = user
@@ -25,3 +26,4 @@ class ApiClientService
     )
   end
 end
+# :nocov:

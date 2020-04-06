@@ -25,17 +25,17 @@ module JsonSpecHelpers
       decision_made_at: recruit_document.decision_made_at,
       recruit_accepted_at: recruit_document.recruit_accepted_at,
       rejection_reason: recruit_document.rejection_reason,
-      attached_files: recruit_document.attached_files.map(&method(:file_schema))
+      evaluator_id: recruit_document.evaluator_id
     }.to_json
   end
 
   def file_schema(file)
     {
       content_type: file.content_type,
-      filename: file.filename.to_s,
-      kilobyte_size: "#{(file.byte_size.to_f / 1.kilobyte).round(2)}kB",
-      path: ''
-    }
+      name: file.filename.to_s,
+      size: "#{(file.byte_size.to_f / 1.kilobyte).round(2)}kB",
+      url: ''
+    }.to_json
   end
 
   def required_field_schema(field)
@@ -47,7 +47,7 @@ module JsonSpecHelpers
   end
 
   def status_schema(status)
-    status_item = RecruitDocuments::StatusesManagerService.find(status)
+    status_item = V2::RecruitDocuments::StatusManagerService.find(status)
 
     {
       value: status_item.value,
