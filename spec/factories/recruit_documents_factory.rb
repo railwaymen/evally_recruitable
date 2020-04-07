@@ -15,6 +15,7 @@ FactoryBot.define do
     received_at                 { 1.minute.ago }
     status                      { 'received' }
     evaluator_id                { nil }
+    social_links                { ['http://github.com/railwaymen'] }
 
     trait :with_attachment do
       after(:create) do |document|

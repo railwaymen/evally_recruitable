@@ -12,7 +12,8 @@ module V2
 
         @recruit_document.assign_attributes(
           status: params.dig('status', 'value') || recruit_document.status,
-          **params.except('files', 'status')
+          social_links: params.fetch('social_links', '').split(','),
+          **params.except('files', 'status', 'social_links')
         )
       end
 

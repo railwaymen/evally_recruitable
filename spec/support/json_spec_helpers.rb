@@ -25,7 +25,8 @@ module JsonSpecHelpers
       decision_made_at: recruit_document.decision_made_at,
       recruit_accepted_at: recruit_document.recruit_accepted_at,
       rejection_reason: recruit_document.rejection_reason,
-      evaluator_id: recruit_document.evaluator_id
+      evaluator_id: recruit_document.evaluator_id,
+      social_links: recruit_document.social_links
     }.to_json
   end
 

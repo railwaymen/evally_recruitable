@@ -8,7 +8,8 @@ module V2
       fields :first_name, :last_name, :gender, :email, :phone, :group, :position, :source,
              :received_at, :accept_current_processing, :accept_future_processing,
              :public_recruit_id, :task_sent_at, :call_scheduled_at, :interview_scheduled_at,
-             :decision_made_at, :recruit_accepted_at, :rejection_reason, :evaluator_id
+             :decision_made_at, :recruit_accepted_at, :rejection_reason, :evaluator_id,
+             :social_links
 
       field :status do |recruit_document|
         status_item = V2::RecruitDocuments::StatusManagerService.find(recruit_document.status)
