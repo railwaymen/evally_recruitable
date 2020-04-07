@@ -130,7 +130,8 @@ RSpec.describe V2::RecruitDocumentsController, type: :controller do
             **FactoryBot.attributes_for(:recruit_document),
             email: 'random@example.com',
             evaluator_id: 1,
-            status: { value: 'received' }
+            status: { value: 'received' },
+            social_links: 'http://github.com/railwaymen,https://linkedin.com/in/railwaymen'
           }
         }
 

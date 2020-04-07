@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_04_03_065911) do
+ActiveRecord::Schema.define(version: 2020_04_07_135111) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -80,6 +80,7 @@ ActiveRecord::Schema.define(version: 2020_04_03_065911) do
     t.text "rejection_reason"
     t.integer "evaluator_id"
     t.string "message_id"
+    t.jsonb "social_links", default: [], null: false
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
