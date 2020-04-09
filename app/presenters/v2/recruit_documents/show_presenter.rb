@@ -21,6 +21,10 @@ module V2
         RecruitDocument.distinct(:position).order(:position).pluck(:position)
       end
 
+      def sources
+        RecruitDocument.distinct(:source).order(:source).pluck(:source)
+      end
+
       def attachments
         @recruit_document.files.attachments if @recruit_document.present?
       end

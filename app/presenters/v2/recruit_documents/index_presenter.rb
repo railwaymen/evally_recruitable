@@ -16,10 +16,6 @@ module V2
       def groups
         RecruitDocument.distinct(:group).order(:group).pluck(:group)
       end
-
-      def positions
-        RecruitDocument.distinct(:position).order(:position).pluck(:position)
-      end
     end
   end
 end

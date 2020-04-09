@@ -47,7 +47,7 @@ RSpec.describe V2::RecruitDocumentsController, type: :controller do
 
         expect(response).to have_http_status 200
         expect(json_response.keys).to contain_exactly(
-          'recruit_document', 'attachments', 'positions', 'statuses', 'groups'
+          'recruit_document', 'attachments', 'positions', 'statuses', 'groups', 'sources'
         )
       end
 
@@ -93,7 +93,7 @@ RSpec.describe V2::RecruitDocumentsController, type: :controller do
 
         expect(response).to have_http_status 200
         expect(json_response.keys).to contain_exactly(
-          'recruit_document', 'attachments', 'positions', 'statuses', 'groups'
+          'recruit_document', 'attachments', 'positions', 'statuses', 'groups', 'sources'
         )
       end
     end

@@ -55,7 +55,7 @@ module V2
     end
 
     def recruit_documents_scope
-      policy_scope([:v2, RecruitDocument]).order(updated_at: :desc)
+      policy_scope([:v2, RecruitDocument]).order(received_at: :desc)
     end
 
     def recruit_document
