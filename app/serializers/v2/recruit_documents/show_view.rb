@@ -3,7 +3,7 @@
 module V2
   module RecruitDocuments
     class ShowView < Blueprinter::Base
-      fields :positions, :groups
+      fields :positions, :groups, :sources
 
       association :recruit_document, blueprint: V2::RecruitDocuments::Serializer, default: {}
 

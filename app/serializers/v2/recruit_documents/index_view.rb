@@ -3,7 +3,7 @@
 module V2
   module RecruitDocuments
     class IndexView < Blueprinter::Base
-      fields :groups, :positions
+      fields :groups
 
       association :recruit_documents, blueprint: V2::RecruitDocuments::Serializer, default: []
 
