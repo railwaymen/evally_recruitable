@@ -48,6 +48,6 @@ class Change < ApplicationRecord
   def formatted_detail_value(val)
     return val.to_s unless val.is_a?(ActiveSupport::TimeWithZone)
 
-    val.localtime.strftime("%H:%M #{val.day.ordinalize} %b %Y %Z")
+    val.localtime.strftime('%d %b %Y, %H:%M %Z')
   end
 end
