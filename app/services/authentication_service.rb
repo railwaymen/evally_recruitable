@@ -10,9 +10,7 @@ class AuthenticationService
 
   # rubocop:disable Lint/ShadowedException
   def call
-    unauthorized! if payload_api_key.blank? || payload_api_key != api_key
-
-    @current_user = User.new(id: payload.fetch('id'), role: payload.fetch('role'))
+    unauthorized! if payload_api_key.blank? || payload_api_key != api_key || !find_current_user
   rescue ::JWT::ExpiredSignature, ::JWT::VerificationError, ::JWT::DecodeError, KeyError
     unauthorized!
   end
@@ -22,6 +20,10 @@ class AuthenticationService
 
   def api_key
     Rails.application.config.env.fetch(:api_key)
+  end
+
+  def find_current_user
+    @current_user = User.find_by(email: payload.fetch('email'))
   end
 
   def payload

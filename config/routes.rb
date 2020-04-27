@@ -10,6 +10,12 @@ Rails.application.routes.draw do
 
         resources :attachments, only: %i[create destroy]
       end
+
+      resources :users, only: [] do
+        collection do
+          post :webhook
+        end
+      end
     end
 
     root 'welcome#index'

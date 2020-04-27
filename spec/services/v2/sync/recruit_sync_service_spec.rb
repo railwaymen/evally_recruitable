@@ -6,7 +6,7 @@ RSpec.describe V2::Sync::RecruitSyncService do
   describe '.perform' do
     it 'expects to make a post request' do
       document = FactoryBot.create(:recruit_document, evaluator_id: 1)
-      user = User.new(id: 1, role: :admin)
+      user = FactoryBot.create(:user, role: :admin)
 
       stub_request(:post, 'http://testhost/v2/recruits/webhook')
         .with(

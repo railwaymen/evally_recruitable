@@ -8,7 +8,7 @@ module V2
       def perform # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
         return unless context.persisted? && recruit_document.present?
 
-        resp = core_api_client.post(
+        resp = api_client.post(
           "/v2/recruits/#{recruit_document.public_recruit_id}/comments/webhook",
           comment: {
             body: comment_body,

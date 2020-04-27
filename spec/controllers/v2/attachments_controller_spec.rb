@@ -3,8 +3,8 @@
 require 'rails_helper'
 
 RSpec.describe V2::AttachmentsController, type: :controller do
-  let(:admin) { User.new(id: 1, role: :admin) }
-  let(:evaluator) { User.new(id: 2, role: :evaluator) }
+  let(:admin) { FactoryBot.create(:user, role: :admin) }
+  let(:evaluator) { FactoryBot.create(:user, role: :evaluator) }
 
   describe '#create' do
     context 'when access denied' do

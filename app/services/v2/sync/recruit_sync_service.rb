@@ -8,7 +8,7 @@ module V2
       def perform # rubocop:disable Metrics/MethodLength
         return unless context.persisted?
 
-        resp = core_api_client.post(
+        resp = api_client.post(
           '/v2/recruits/webhook',
           recruit: {
             public_recruit_id: public_recruit_id,

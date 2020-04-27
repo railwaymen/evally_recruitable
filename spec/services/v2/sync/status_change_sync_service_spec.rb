@@ -7,7 +7,7 @@ RSpec.describe V2::Sync::StatusChangeSyncService do
     it 'expects to make a post request' do
       document = FactoryBot.create(:recruit_document)
       status_change = FactoryBot.create(:recruit_document_status_change, changeable: document)
-      user = User.new(id: 1, role: :admin)
+      user = FactoryBot.create(:user, role: :admin)
 
       stub_request(:post, "http://testhost/v2/recruits/#{document.public_recruit_id}/comments/webhook") # rubocop:disable Layout/LineLength
         .with(
