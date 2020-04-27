@@ -1,30 +1,14 @@
 # frozen_string_literal: true
 
-class User
-  attr_reader :id, :role
+class User < ApplicationRecord
+  # # Validation
+  #
+  validates :email, presence: true, uniqueness: true, format: URI::MailTo::EMAIL_REGEXP
 
-  def initialize(id:, role:)
-    @id = id.to_i
-    @role = role.to_s
-  end
+  validates :first_name, :last_name, :role, :status, presence: true
 
-  def present?
-    id.positive?
-  end
-
-  def blank?
-    id.zero?
-  end
-
-  def admin?
-    role == 'admin'
-  end
-
-  def recruiter?
-    role == 'recruiter'
-  end
-
-  def evaluator?
-    role == 'evaluator'
-  end
+  # # Enums
+  #
+  enum role: { admin: 'admin', evaluator: 'evaluator', recruiter: 'recruiter' }
+  enum status: { active: 'active', inactive: 'inactive' }
 end

@@ -5,9 +5,9 @@ require 'rails_helper'
 RSpec.describe V2::RecruitDocumentPolicy, type: :policy do
   describe 'scope' do
     it 'returns correct scope' do
-      admin = User.new(id: 1, role: 'admin')
-      recruiter = User.new(id: 2, role: 'recruiter')
-      evaluator = User.new(id: 3, role: 'evaluator')
+      admin = FactoryBot.create(:user, role: :admin)
+      recruiter = FactoryBot.create(:user, role: :recruiter)
+      evaluator = FactoryBot.create(:user, role: :evaluator)
 
       document1 = FactoryBot.create(:recruit_document)
       document2 = FactoryBot.create(:recruit_document, evaluator_id: evaluator.id)

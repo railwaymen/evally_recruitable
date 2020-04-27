@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe WelcomeController, type: :controller do
-  let(:admin) { User.new(id: 1, role: :admin) }
+  let(:admin) { FactoryBot.create(:user, role: :admin) }
 
   describe 'when unauthorized' do
     it 'responds with 401 error' do
@@ -27,6 +27,7 @@ RSpec.describe WelcomeController, type: :controller do
       sign_in admin
 
       get :index
+
       expect(subject.send(:current_user)).to be_admin
     end
   end

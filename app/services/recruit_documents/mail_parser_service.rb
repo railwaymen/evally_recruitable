@@ -8,7 +8,7 @@ module RecruitDocuments
       @mail = mail
       @source = source.to_s.downcase
 
-      @user = User.new(id: 1, role: :admin)
+      @user = User.admin.first
 
       @recruit_document = RecruitDocument.find_or_initialize_by(
         message_id: mail.message_id,

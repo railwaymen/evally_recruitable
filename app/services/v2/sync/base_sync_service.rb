@@ -5,16 +5,18 @@ module V2
     class BaseSyncService
       attr_reader :context
 
-      def initialize(context, user)
+      def initialize(context, user, service: :core)
         @context = context
         @user = user
+
+        @service = service.to_sym
       end
 
       private
 
-      def core_api_client
-        @core_api_client ||= ApiClientService.new(
-          @user, Rails.application.config.env.fetch(:core).fetch(:host)
+      def api_client
+        @api_client ||= ApiClientService.new(
+          @user, Rails.application.config.env.fetch(@service).fetch(:host)
         )
       end
     end
