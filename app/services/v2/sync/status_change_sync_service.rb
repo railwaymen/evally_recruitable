@@ -13,7 +13,8 @@ module V2
           comment: {
             body: comment_body,
             created_at: created_at,
-            change_id: id
+            change_id: id,
+            recruit_document_id: recruit_document.id
           }
         )
 
