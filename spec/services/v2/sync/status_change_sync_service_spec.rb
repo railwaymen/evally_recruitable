@@ -15,7 +15,8 @@ RSpec.describe V2::Sync::StatusChangeSyncService do
             comment: {
               body: status_change.comment_body,
               created_at: status_change.created_at.to_s,
-              change_id: status_change.id
+              change_id: status_change.id,
+              recruit_document_id: document.id
             }
           },
           headers: {
