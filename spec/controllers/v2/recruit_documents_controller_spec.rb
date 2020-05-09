@@ -6,9 +6,6 @@ RSpec.describe V2::RecruitDocumentsController, type: :controller do
   let(:admin) { FactoryBot.create(:user, role: :admin) }
   let(:evaluator) { FactoryBot.create(:user, role: :evaluator) }
 
-  # Mock external requests
-  before(:each) { stub_api_client_service }
-
   describe '#index' do
     context 'when access denied' do
       it 'responds with 401 error' do
@@ -138,6 +135,7 @@ RSpec.describe V2::RecruitDocumentsController, type: :controller do
         sign_in admin
 
         expect do
+          stub_api_client_service
           post :create, params: params
         end.to(change { RecruitDocument.count }.by(1))
 
@@ -183,6 +181,7 @@ RSpec.describe V2::RecruitDocumentsController, type: :controller do
         allow_any_instance_of(ActiveStorage::Blob).to receive(:service_url).and_return ''
 
         expect do
+          stub_api_client_service
           post :create, params: params
         end.to(change { ActiveStorage::Attachment.count }.by(1))
 
@@ -223,6 +222,7 @@ RSpec.describe V2::RecruitDocumentsController, type: :controller do
         sign_in admin
 
         expect do
+          stub_api_client_service
           put :update, params: params
 
           document.reload
@@ -281,10 +281,30 @@ RSpec.describe V2::RecruitDocumentsController, type: :controller do
         sign_in admin
 
         expect do
+          stub_api_client_service
           put :update, params: params
         end.to(change { document.status_changes.count }.by(1))
 
         expect(response).to have_http_status 200
+      end
+
+      it 'perform background job for synchronization' do
+        document = FactoryBot.create(:recruit_document, status: 'verified')
+
+        params = {
+          id: document.id,
+          recruit_document: {
+            call_scheduled_at: 3.days.from_now,
+            status: { value: 'phone_call' }
+          }
+        }
+
+        sign_in admin
+
+        expect do
+          stub_api_client_service
+          put :update, params: params
+        end.to(have_enqueued_job(V2::Sync::StatusChangesJob))
       end
     end
   end

@@ -8,4 +8,22 @@ RSpec.describe Change, type: :model do
 
     it { is_expected.to validate_presence_of(:to) }
   end
+
+  describe 'methods' do
+    context '.comment_body' do
+      it 'renders comment body properly with details' do
+        status_change = FactoryBot.create(
+          :recruit_document_status_change,
+          to: :phone_call,
+          details: {
+            call_scheduled_at: Time.zone.parse('2020-05-01 12:00:00')
+          }
+        )
+
+        expect(status_change.comment_body).to eq(
+          '<p>Status changed from <strong>Received</strong> to <strong>Phone Call</strong></p><ul><li>Call Scheduled At: <strong>01 May 2020, 14:00 CEST</strong></li></ul>' # rubocop:disable Layout/LineLength
+        )
+      end
+    end
+  end
 end

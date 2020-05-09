@@ -62,5 +62,13 @@ module EvallyRecruitable
     config.action_dispatch.default_headers = {
       'X-Frame-Options' => 'ALLOWALL',
     }
+
+    # Active Job settings
+    config.active_job.queue_adapter = :sidekiq
+
+    logger = ActiveSupport::Logger.new(Rails.root.join('log', "active_job_#{Rails.env}.log"))
+    logger.formatter = Logger::Formatter.new
+
+    config.active_job.logger = ActiveSupport::TaggedLogging.new(logger)
   end
 end

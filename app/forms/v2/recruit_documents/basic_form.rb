@@ -29,7 +29,7 @@ module V2
         end
 
         recruit_sync.perform
-        status_change_sync.perform
+        synchronize_status_change
       end
 
       private
@@ -59,9 +59,8 @@ module V2
         @recruit_sync ||= V2::Sync::RecruitSyncService.new(@recruit_document, @user)
       end
 
-      def status_change_sync
-        @status_change_sync ||=
-          V2::Sync::StatusChangeSyncService.new(status_change_logger.status_change, @user)
+      def synchronize_status_change
+        V2::Sync::StatusChangesJob.perform_later(status_change_logger.status_change.id, @user.id)
       end
     end
   end
