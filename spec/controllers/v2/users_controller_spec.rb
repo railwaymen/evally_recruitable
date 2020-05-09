@@ -40,6 +40,7 @@ RSpec.describe V2::UsersController, type: :controller do
 
         params = {
           user: {
+            id: user.id,
             email: user.email,
             role: 'recruiter'
           }

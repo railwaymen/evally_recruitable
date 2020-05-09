@@ -14,6 +14,8 @@ gem 'blueprinter', '~> 0.22.0'
 gem 'jwt', '~> 2.2'
 gem 'pundit', '~> 2.1'
 gem 'faraday'
+gem 'redis-namespace', '~> 1.7'
+gem 'sidekiq', '~> 6.0.7'
 
 group :development, :test do
   gem 'brakeman', '~> 4.3.1', require: false
