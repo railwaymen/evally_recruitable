@@ -4,10 +4,14 @@ before_script:
   - cp config/env.example.yml config/env.yml
 
 production:
+  only:
+    - master
   script:
     - bundle exec cap production deploy
 
 staging:
   stage: deploy
+  only:
+    - develop
   script:
     - bundle exec cap staging deploy
