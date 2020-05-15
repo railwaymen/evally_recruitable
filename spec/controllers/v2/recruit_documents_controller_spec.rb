@@ -359,4 +359,54 @@ RSpec.describe V2::RecruitDocumentsController, type: :controller do
       end
     end
   end
+
+  describe '#search' do
+    context 'when access denied' do
+      it 'responds with 401 error' do
+        get :search
+        expect(response).to have_http_status 401
+      end
+    end
+
+    context 'when access granted' do
+      it 'expects to responds with latest recruit documents by public recruit ids' do
+        recruit1_document1 = FactoryBot.create(
+          :recruit_document,
+          email: 'recruit1@example.com',
+          received_at: 1.year.ago
+        )
+
+        recruit1_document2 = FactoryBot.create(
+          :recruit_document,
+          email: 'recruit1@example.com',
+          received_at: 1.month.ago
+        )
+
+        recruit2_document1 = FactoryBot.create(
+          :recruit_document,
+          email: 'recruit2@example.com',
+          received_at: 1.week.ago
+        )
+
+        public_recruit_ids = [recruit1_document1, recruit2_document1].map(&:public_recruit_id)
+
+        sign_in admin
+        get :search, params: { public_recruit_ids: public_recruit_ids }
+
+        expect(response).to have_http_status 200
+
+        expect(json_response.map { |r| r['id'] }).to include(
+          recruit1_document2.id, recruit2_document1.id
+        )
+      end
+
+      it 'expects to respond with empty yarray' do
+        sign_in admin
+        get :search, params: { public_recruit_ids: [] }
+
+        expect(response).to have_http_status 200
+        expect(json_response).to eq []
+      end
+    end
+  end
 end

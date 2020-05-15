@@ -33,5 +33,9 @@ module V2
     def destroy?
       create?
     end
+
+    def search?
+      true
+    end
   end
 end

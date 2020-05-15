@@ -17,7 +17,7 @@ class RecruitDocument < ApplicationRecord
   #
   validates :email, presence: true, format: URI::MailTo::EMAIL_REGEXP
   validates :first_name, :status, :position, :group, :received_at,
-            :accept_current_processing, presence: true
+            :accept_current_processing, :public_recruit_id, presence: true
 
   validates :task_sent_at, presence: true, if: :recruitment_task_status?
   validates :call_scheduled_at, presence: true, if: :phone_call_status?
@@ -30,9 +30,9 @@ class RecruitDocument < ApplicationRecord
   #
   enum status: V2::RecruitDocuments::StatusManagerService.enum, _suffix: true
 
-  def public_recruit_id
-    Digest::SHA256.hexdigest(email)
-  end
+  # # Callbacks
+  #
+  before_validation :set_public_recruit_id
 
   def status_change_commentable?
     persisted? && (
@@ -52,5 +52,9 @@ class RecruitDocument < ApplicationRecord
 
   def rejection_reason_required?
     %w[rejected black_list].include? status
+  end
+
+  def set_public_recruit_id
+    self.public_recruit_id = Digest::SHA256.hexdigest(email.to_s)
   end
 end

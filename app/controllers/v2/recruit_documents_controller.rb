@@ -48,6 +48,14 @@ module V2
       head :no_content
     end
 
+    def search
+      recruit_documents = V2::RecruitDocuments::SearchQuery.call(
+        recruit_documents_scope, params: params
+      )
+
+      render json: V2::RecruitDocuments::SearchView.render(recruit_documents), status: :ok
+    end
+
     private
 
     def authorize!
