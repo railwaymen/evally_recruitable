@@ -6,6 +6,7 @@ Rails.application.routes.draw do
       resources :recruit_documents do
         collection do
           get :form
+          get :search
         end
 
         resources :attachments, only: %i[create destroy]

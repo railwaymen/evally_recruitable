@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_04_24_204539) do
+ActiveRecord::Schema.define(version: 2020_05_14_121038) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -81,6 +81,8 @@ ActiveRecord::Schema.define(version: 2020_04_24_204539) do
     t.integer "evaluator_id"
     t.string "message_id"
     t.jsonb "social_links", default: [], null: false
+    t.string "public_recruit_id", null: false
+    t.index ["public_recruit_id"], name: "index_recruit_documents_on_public_recruit_id"
   end
 
   create_table "users", force: :cascade do |t|
