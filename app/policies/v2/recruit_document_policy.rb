@@ -37,5 +37,9 @@ module V2
     def search?
       true
     end
+
+    def overview?
+      create?
+    end
   end
 end
