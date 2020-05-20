@@ -55,6 +55,12 @@ module V2
       render json: V2::RecruitDocuments::SearchView.render(recruit_documents), status: :ok
     end
 
+    def overview
+      presenter = V2::RecruitDocuments::OverviewPresenter.new(params[:date])
+
+      render json: V2::RecruitDocuments::OverviewView.render(presenter), status: :ok
+    end
+
     private
 
     def authorize!

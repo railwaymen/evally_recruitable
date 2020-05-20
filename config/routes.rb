@@ -7,6 +7,7 @@ Rails.application.routes.draw do
         collection do
           get :form
           get :search
+          get :overview
         end
 
         resources :attachments, only: %i[create destroy]

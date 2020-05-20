@@ -409,4 +409,33 @@ RSpec.describe V2::RecruitDocumentsController, type: :controller do
       end
     end
   end
+
+  describe '#overview' do
+    context 'when access denied' do
+      it 'responds with 401 error' do
+        get :overview
+        expect(response).to have_http_status 401
+      end
+
+      it 'responds with 401 error' do
+        sign_in evaluator
+
+        get :overview
+        expect(response).to have_http_status 403
+      end
+    end
+
+    context 'when access granted' do
+      it 'expects to return analytics data' do
+        sign_in admin
+        get :overview
+
+        expect(response).to have_http_status 200
+        expect(json_response.keys).to contain_exactly(
+          'months', 'groups', 'groups_monthly_chart_data', 'groups_yearly_chart_data',
+          'sources', 'sources_monthly_chart_data', 'sources_yearly_chart_data'
+        )
+      end
+    end
+  end
 end
