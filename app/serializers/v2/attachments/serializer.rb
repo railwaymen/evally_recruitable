@@ -16,7 +16,9 @@ module V2
       end
 
       field :url do |file|
-        ActiveStorage::Current.set(host: 'http://localhost:3030') do
+        active_storage_host = Rails.application.config.env.fetch(:recruitable).fetch(:host)
+
+        ActiveStorage::Current.set(host: active_storage_host) do
           file.service_url
         end
       end
