@@ -6,7 +6,7 @@ module V2
       delegate :public_recruit_id, :evaluator_id, to: :context
 
       def perform # rubocop:disable Metrics/MethodLength
-        return unless context.persisted?
+        return unless context&.persisted?
 
         resp = api_client.post(
           '/v2/recruits/webhook',

@@ -6,7 +6,7 @@ module V2
       delegate :id, :comment_body, :created_at, :recruit_document, to: :context
 
       def perform # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
-        return unless context.persisted? && recruit_document.present?
+        return unless context&.persisted? && recruit_document.present?
 
         resp = api_client.post(
           "/v2/recruits/#{recruit_document.public_recruit_id}/comments/webhook",
