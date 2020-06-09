@@ -22,8 +22,7 @@ module JsonSpecHelpers
       task_sent_at: recruit_document.task_sent_at,
       call_scheduled_at: recruit_document.call_scheduled_at,
       interview_scheduled_at: recruit_document.interview_scheduled_at,
-      decision_made_at: recruit_document.decision_made_at,
-      recruit_accepted_at: recruit_document.recruit_accepted_at,
+      incomplete_details: recruit_document.incomplete_details,
       rejection_reason: recruit_document.rejection_reason,
       evaluator_id: recruit_document.evaluator_id,
       social_links: recruit_document.social_links

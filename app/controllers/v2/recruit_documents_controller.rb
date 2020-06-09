@@ -98,8 +98,8 @@ module V2
       params.require(:recruit_document).permit(
         :first_name, :last_name, :gender, :email, :phone, :position, :group, :received_at, :source,
         :accept_current_processing, :accept_future_processing, :task_sent_at, :call_scheduled_at,
-        :interview_scheduled_at, :decision_made_at, :recruit_accepted_at, :rejection_reason,
-        :evaluator_id, :social_links, status: :value, files: []
+        :interview_scheduled_at, :incomplete_details, :rejection_reason, :evaluator_id,
+        :social_links, status: :value, files: []
       )
     end
   end

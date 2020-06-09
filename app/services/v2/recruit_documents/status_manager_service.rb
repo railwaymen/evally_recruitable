@@ -36,17 +36,19 @@ module V2
               :incomplete_documents,
               '#FFCA28',
               false,
+              [
+                RequiredField.new(:incomplete_details, :text)
+              ]
+            ),
+            Status.new(
+              :verified,
+              '#AB47BC',
+              false,
               []
             ),
             Status.new(
               :code_review,
               '#26A69A',
-              false,
-              []
-            ),
-            Status.new(
-              :verified,
-              '#AB47BC',
               false,
               []
             ),
@@ -81,6 +83,12 @@ module V2
               []
             ),
             Status.new(
+              :on_hold,
+              '#1565C0',
+              false,
+              []
+            ),
+            Status.new(
               :supervisor_decision,
               '#78909C',
               false,
@@ -88,24 +96,20 @@ module V2
             ),
             Status.new(:recruitment_completed, '#FFFFFF', true, []),
             Status.new(
-              :awaiting_response,
+              :send_feedback,
               '#D4E157',
               false,
-              [
-                RequiredField.new(:decision_made_at, :datetime)
-              ]
+              []
             ),
             Status.new(
               :hired,
               '#66BB6A',
               false,
-              [
-                RequiredField.new(:recruit_accepted_at, :datetime)
-              ]
+              []
             ),
             Status.new(
-              :on_hold,
-              '#1565C0',
+              :stand_by,
+              '#FF8F00',
               false,
               []
             ),
@@ -114,7 +118,6 @@ module V2
               '#EF5350',
               false,
               [
-                RequiredField.new(:decision_made_at, :datetime),
                 RequiredField.new(:rejection_reason, :text)
               ]
             ),

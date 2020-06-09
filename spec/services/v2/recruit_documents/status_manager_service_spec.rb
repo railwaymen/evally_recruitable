@@ -5,7 +5,7 @@ require 'rails_helper'
 RSpec.describe V2::RecruitDocuments::StatusManagerService do
   describe '.statuses' do
     it 'expects to return 17 statuses' do
-      expect(described_class.statuses.count).to eq 17
+      expect(described_class.statuses.count).to eq 18
     end
   end
 

@@ -47,20 +47,10 @@ RSpec.describe RecruitDocument, type: :model do
       it { is_expected.to validate_presence_of(:interview_scheduled_at) }
     end
 
-    context 'decision_made_at validation' do
-      subject { FactoryBot.build(:recruit_document, status: :awaiting_response) }
+    context 'incomplete_details validation' do
+      subject { FactoryBot.build(:recruit_document, status: :incomplete_documents) }
 
-      it { is_expected.to validate_presence_of(:decision_made_at) }
-
-      subject { FactoryBot.build(:recruit_document, status: :rejected) }
-
-      it { is_expected.to validate_presence_of(:decision_made_at) }
-    end
-
-    context 'recruit_accepted_at validation' do
-      subject { FactoryBot.build(:recruit_document, status: :hired) }
-
-      it { is_expected.to validate_presence_of(:recruit_accepted_at) }
+      it { is_expected.to validate_presence_of(:incomplete_details) }
     end
 
     context 'rejection_reason validation' do

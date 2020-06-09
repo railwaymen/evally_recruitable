@@ -19,11 +19,10 @@ class RecruitDocument < ApplicationRecord
   validates :first_name, :status, :position, :group, :received_at,
             :accept_current_processing, :public_recruit_id, presence: true
 
+  validates :incomplete_details, presence: true, if: :incomplete_documents_status?
   validates :task_sent_at, presence: true, if: :recruitment_task_status?
   validates :call_scheduled_at, presence: true, if: :phone_call_status?
   validates :interview_scheduled_at, presence: true, if: :office_interview_status?
-  validates :decision_made_at, presence: true, if: :decision_was_made?
-  validates :recruit_accepted_at, presence: true, if: :hired_status?
   validates :rejection_reason, presence: true, if: :rejection_reason_required?
 
   # # Enums
@@ -38,17 +37,13 @@ class RecruitDocument < ApplicationRecord
     persisted? && (
       changes.keys &
         %w[
-          status task_sent_at call_scheduled_at interview_scheduled_at decision_made_at
-          recruit_accepted_at rejection_reason
+          status task_sent_at call_scheduled_at interview_scheduled_at incomplete_details
+          rejection_reason
         ]
     ).any?
   end
 
   private
-
-  def decision_was_made?
-    %w[awaiting_response rejected].include? status
-  end
 
   def rejection_reason_required?
     %w[rejected black_list].include? status
