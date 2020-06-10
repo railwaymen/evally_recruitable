@@ -108,7 +108,7 @@ module V2
               []
             ),
             Status.new(
-              :stand_by,
+              :standby,
               '#FF8F00',
               false,
               []
