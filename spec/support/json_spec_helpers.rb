@@ -25,7 +25,14 @@ module JsonSpecHelpers
       incomplete_details: recruit_document.incomplete_details,
       rejection_reason: recruit_document.rejection_reason,
       evaluator_id: recruit_document.evaluator_id,
-      social_links: recruit_document.social_links
+      social_links: recruit_document.social_links,
+      salary: recruit_document.salary,
+      availability: recruit_document.availability,
+      available_since: recruit_document.available_since.to_s,
+      location: recruit_document.location,
+      contract_type: recruit_document.contract_type,
+      work_type: recruit_document.work_type,
+      message: recruit_document.message
     }.to_json
   end
 
