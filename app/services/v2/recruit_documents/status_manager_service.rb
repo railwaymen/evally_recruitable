@@ -108,7 +108,7 @@ module V2
               []
             ),
             Status.new(
-              :standby,
+              :consider_in_future,
               '#FF8F00',
               false,
               []
