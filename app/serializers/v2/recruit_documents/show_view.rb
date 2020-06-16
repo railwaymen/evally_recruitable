@@ -5,7 +5,14 @@ module V2
     class ShowView < Blueprinter::Base
       fields :positions, :groups, :sources
 
-      association :recruit_document, blueprint: V2::RecruitDocuments::Serializer, default: {}
+      field :recruit_document, default: {} do |presenter, options|
+        next if presenter.recruit_document.blank?
+
+        V2::RecruitDocuments::Serializer.render_as_hash(
+          presenter.recruit_document,
+          user: options[:user]
+        )
+      end
 
       association :statuses, blueprint: V2::RecruitDocuments::StatusSerializer, default: []
 

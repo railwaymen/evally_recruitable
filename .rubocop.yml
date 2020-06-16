@@ -39,6 +39,9 @@ Metrics/BlockLength:
 Lint/AmbiguousBlockAssociation:
   Enabled: false
 
+Lint/ShadowedException:
+  Enabled: false
+
 Rails/SkipsModelValidations:
   Enabled: false
 
