@@ -8,10 +8,7 @@ module V2
       field :recruit_document, default: {} do |presenter, options|
         next if presenter.recruit_document.blank?
 
-        V2::RecruitDocuments::Serializer.render_as_hash(
-          presenter.recruit_document,
-          user: options[:user]
-        )
+        V2::RecruitDocuments::Serializer.render_as_hash(presenter.recruit_document, **options)
       end
 
       association :statuses, blueprint: V2::RecruitDocuments::StatusSerializer, default: []

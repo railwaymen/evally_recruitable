@@ -60,6 +60,7 @@ module JsonSpecHelpers
       value: status_item.value,
       color: status_item.color,
       label: status_item.label,
+      group: status_item.group,
       disabled: status_item.disabled,
       required_fields: status_item.required_fields.map(&method(:required_field_schema))
     }
