@@ -6,7 +6,7 @@ module V2
       def resolve
         return scope.all if user.admin? || user.recruiter?
 
-        scope.where(evaluator_id: user.id)
+        scope.where(evaluator_token: user.email_token)
       end
     end
 

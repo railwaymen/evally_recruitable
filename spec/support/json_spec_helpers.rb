@@ -24,7 +24,7 @@ module JsonSpecHelpers
       interview_scheduled_at: recruit_document.interview_scheduled_at,
       incomplete_details: recruit_document.incomplete_details,
       rejection_reason: recruit_document.rejection_reason,
-      evaluator_id: recruit_document.evaluator_id,
+      evaluator_token: recruit_document.evaluator_token,
       social_links: recruit_document.social_links,
       salary: recruit_document.salary,
       availability: recruit_document.availability,

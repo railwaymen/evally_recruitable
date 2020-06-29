@@ -3,7 +3,7 @@
 module V2
   module Sync
     class RecruitSyncService < BaseSyncService
-      delegate :public_recruit_id, :evaluator_id, to: :context
+      delegate :public_recruit_id, :evaluator_token, to: :context
 
       def perform # rubocop:disable Metrics/MethodLength
         return unless context&.persisted?
@@ -12,7 +12,7 @@ module V2
           '/v2/recruits/webhook',
           recruit: {
             public_recruit_id: public_recruit_id,
-            evaluator_id: evaluator_id
+            evaluator_token: evaluator_token
           }
         )
 

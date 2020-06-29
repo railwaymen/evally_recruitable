@@ -14,7 +14,7 @@ FactoryBot.define do
     source                      { 'railwaymen' }
     received_at                 { 1.minute.ago }
     status                      { 'received' }
-    evaluator_id                { nil }
+    evaluator_token             { nil }
     social_links                { ['http://github.com/railwaymen'] }
     salary                      { '$1000' }
     availability                { 'full time' }
