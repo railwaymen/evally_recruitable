@@ -5,15 +5,15 @@ require 'rails_helper'
 RSpec.describe V2::Sync::RecruitSyncService do
   describe '.perform' do
     it 'expects to make a post request' do
-      document = FactoryBot.create(:recruit_document, evaluator_id: 1)
       user = FactoryBot.create(:user, role: :admin)
+      document = FactoryBot.create(:recruit_document, evaluator_token: user.email_token)
 
       stub_request(:post, 'http://testhost/v2/recruits/webhook')
         .with(
           body: {
             recruit: {
               public_recruit_id: document.public_recruit_id,
-              evaluator_id: document.evaluator_id
+              evaluator_token: document.evaluator_token
             }
           },
           headers: {

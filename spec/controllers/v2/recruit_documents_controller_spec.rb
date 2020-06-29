@@ -108,7 +108,7 @@ RSpec.describe V2::RecruitDocumentsController, type: :controller do
           recruit_document: {
             **FactoryBot.attributes_for(:recruit_document),
             email: 'random@example.com',
-            evaluator_id: 1,
+            evaluator_token: 1,
             status: { value: 'received' }
           }
         }
@@ -126,7 +126,7 @@ RSpec.describe V2::RecruitDocumentsController, type: :controller do
           recruit_document: {
             **FactoryBot.attributes_for(:recruit_document),
             email: 'random@example.com',
-            evaluator_id: 1,
+            evaluator_token: 1,
             status: { value: 'received' },
             social_links: 'http://github.com/railwaymen,https://linkedin.com/in/railwaymen'
           }
@@ -210,7 +210,7 @@ RSpec.describe V2::RecruitDocumentsController, type: :controller do
 
     context 'when access granted' do
       it 'responds with updated document' do
-        document = FactoryBot.create(:recruit_document, evaluator_id: admin.id)
+        document = FactoryBot.create(:recruit_document, evaluator_token: admin.email_token)
 
         params = {
           id: document.id,

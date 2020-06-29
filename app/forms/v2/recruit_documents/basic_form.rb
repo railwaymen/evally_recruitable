@@ -43,11 +43,11 @@ module V2
       end
 
       def assign_evaluator_to_other_recruit_documents
-        return if @recruit_document.persisted? && !@recruit_document.evaluator_id_changed?
+        return if @recruit_document.persisted? && !@recruit_document.evaluator_token_changed?
 
         RecruitDocument
           .where('email = ?', @recruit_document.email)
-          .update_all(evaluator_id: @recruit_document.evaluator_id)
+          .update_all(evaluator_token: @recruit_document.evaluator_token)
       end
 
       def status_change_logger

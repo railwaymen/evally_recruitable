@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_06_12_163025) do
+ActiveRecord::Schema.define(version: 2020_06_29_093702) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -76,7 +76,6 @@ ActiveRecord::Schema.define(version: 2020_06_12_163025) do
     t.datetime "call_scheduled_at"
     t.datetime "interview_scheduled_at"
     t.text "rejection_reason"
-    t.integer "evaluator_id"
     t.string "message_id"
     t.jsonb "social_links", default: [], null: false
     t.string "public_recruit_id", null: false
@@ -88,6 +87,7 @@ ActiveRecord::Schema.define(version: 2020_06_12_163025) do
     t.string "work_type"
     t.string "location"
     t.text "message"
+    t.string "evaluator_token"
     t.index ["public_recruit_id"], name: "index_recruit_documents_on_public_recruit_id"
   end
 

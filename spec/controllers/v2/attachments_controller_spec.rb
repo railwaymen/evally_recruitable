@@ -14,7 +14,7 @@ RSpec.describe V2::AttachmentsController, type: :controller do
       end
 
       it 'respond with 403 error' do
-        document = FactoryBot.create(:recruit_document, evaluator_id: evaluator.id)
+        document = FactoryBot.create(:recruit_document, evaluator_token: evaluator.email_token)
 
         file = fixture_file_upload(
           Rails.root.join('spec/fixtures/sample_image.jpg'),
@@ -88,7 +88,7 @@ RSpec.describe V2::AttachmentsController, type: :controller do
         document = FactoryBot.create(
           :recruit_document,
           :with_attachment,
-          evaluator_id: evaluator.id
+          evaluator_token: evaluator.email_token
         )
 
         file = document.files.last

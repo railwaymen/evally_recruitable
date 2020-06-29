@@ -10,7 +10,7 @@ module V2
       fields :first_name, :last_name, :gender, :email, :phone, :group, :position, :source,
              :received_at, :accept_current_processing, :accept_future_processing,
              :public_recruit_id, :task_sent_at, :call_scheduled_at, :interview_scheduled_at,
-             :incomplete_details, :rejection_reason, :evaluator_id, :social_links,
+             :incomplete_details, :rejection_reason, :evaluator_token, :social_links,
              :availability, :available_since, :location, :work_type, :message
 
       field :status do |recruit_document|
