@@ -22,6 +22,8 @@ module V2
         return unless status_change_commentable && status_change.present?
 
         notification_recipients.map do |recipient|
+          next unless recipient.role.in?(current_status.notifiees)
+
           NotificationMailer
             .with(change: status_change, recipient: recipient, user: @user)
             .status_change

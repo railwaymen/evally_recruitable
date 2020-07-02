@@ -23,7 +23,7 @@ RSpec.describe V2::RecruitDocuments::EvaluatorAssignerService do
       user = FactoryBot.create(:user)
       recruiter = FactoryBot.create(:user, role: :recruiter)
 
-      document = FactoryBot.create(:recruit_document, email: 'jack@example.com')
+      document = FactoryBot.create(:recruit_document, email: 'jack@example.com', evaluator: nil)
       document.evaluator_token = user.email_token
 
       service = described_class.new(document, user)
