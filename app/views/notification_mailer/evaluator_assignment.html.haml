@@ -11,7 +11,7 @@
     %p.subhead-1
       %strong= @presenter.user.fullname
       has assigned
-      %strong= @presenter.evaluator.fullname
+      %strong= @presenter.evaluator == @recipient ? 'you' : @presenter.evaluator.fullname
       to recruit:
 
     %h3.title

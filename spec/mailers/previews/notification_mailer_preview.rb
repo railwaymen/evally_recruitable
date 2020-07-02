@@ -4,13 +4,31 @@
 class NotificationMailerPreview < ActionMailer::Preview
   def evaluator_assignment
     NotificationMailer
-      .with(user: User.first, recruit_document: RecruitDocument.last)
+      .with(recipient: recipient, recruit_document: recruit_document, user: user)
       .evaluator_assignment
   end
 
   def status_change
     NotificationMailer
-      .with(user: User.first, status_change: Change.find_by(context: 'status'))
+      .with(recipient: recipient, change: change, user: user)
       .status_change
+  end
+
+  private
+
+  def change
+    Change.find_by(context: 'status')
+  end
+
+  def recruit_document
+    RecruitDocument.last
+  end
+
+  def recipient
+    User.last
+  end
+
+  def user
+    User.first
   end
 end
