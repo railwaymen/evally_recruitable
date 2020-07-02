@@ -3,10 +3,11 @@
 module V2
   module Notifications
     class EvaluatorAssignmentPresenter
-      attr_reader :recruit_document
+      attr_reader :recruit_document, :user
 
-      def initialize(recruit_document)
+      def initialize(recruit_document, user)
         @recruit_document = recruit_document
+        @user = user
       end
 
       def evaluator

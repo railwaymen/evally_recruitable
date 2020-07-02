@@ -9,8 +9,10 @@
 
   .row
     %p.subhead-1
+      %strong= @presenter.user.fullname
+      has assigned
       %strong= @presenter.evaluator.fullname
-      has been assigned to recruit:
+      to recruit:
 
     %h3.title
       = link_to vue_recruit_document_url(@presenter.recruit_document), class: 'link', target: '_blank' do

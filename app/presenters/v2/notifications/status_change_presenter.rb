@@ -3,10 +3,11 @@
 module V2
   module Notifications
     class StatusChangePresenter
-      attr_reader :status_change
+      attr_reader :status_change, :user
 
-      def initialize(status_change)
+      def initialize(status_change, user)
         @status_change = status_change
+        @user = user
       end
 
       def recruit_document

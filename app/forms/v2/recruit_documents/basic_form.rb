@@ -17,19 +17,22 @@ module V2
         )
       end
 
-      def save
+      def save # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
         validate_recruit_document!
 
         ActiveRecord::Base.transaction do
-          assign_evaluator_to_other_recruit_documents
-          status_change_logger.save! if @recruit_document.status_change_commentable?
+          evaluator_assigner.call
+          status_change_logger.call
 
           @recruit_document.save!
           @recruit_document.files.attach(@files) if @files.present?
         end
 
+        evaluator_assigner.notify
+        status_change_logger.notify
+
         recruit_sync.perform
-        synchronize_status_change
+        status_change_logger.sync
       end
 
       private
@@ -42,25 +45,18 @@ module V2
         )
       end
 
-      def assign_evaluator_to_other_recruit_documents
-        return if @recruit_document.persisted? && !@recruit_document.evaluator_token_changed?
-
-        RecruitDocument
-          .where(email: @recruit_document.email)
-          .update_all(evaluator_token: @recruit_document.evaluator_token)
+      def evaluator_assigner
+        @evaluator_assigner ||=
+          V2::RecruitDocuments::EvaluatorAssignerService.new(@recruit_document, @user)
       end
 
       def status_change_logger
         @status_change_logger ||=
-          V2::RecruitDocuments::StatusChangeLoggerService.new(@recruit_document)
+          V2::RecruitDocuments::StatusChangeLoggerService.new(@recruit_document, @user)
       end
 
       def recruit_sync
         @recruit_sync ||= V2::Sync::RecruitSyncService.new(@recruit_document, @user)
-      end
-
-      def synchronize_status_change
-        V2::Sync::StatusChangesJob.perform_later(status_change_logger.status_change.id, @user.id)
       end
     end
   end

@@ -1,6 +1,11 @@
 # frozen_string_literal: true
 
 class User < ApplicationRecord
+  # # Associations
+  #
+  has_many :recruit_documents, foreign_key: :evaluator_token, primary_key: :email_token,
+                               inverse_of: :evaluator, dependent: :nullify
+
   # # Validation
   #
   validates :email, presence: true, uniqueness: true, format: URI::MailTo::EMAIL_REGEXP

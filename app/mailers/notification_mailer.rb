@@ -4,15 +4,15 @@ class NotificationMailer < ApplicationMailer
   add_template_helper VueRoutesHelper
 
   def evaluator_assignment
-    @presenter = V2::Notifications::EvaluatorAssignmentPresenter.new(recruit_document)
+    @presenter = V2::Notifications::EvaluatorAssignmentPresenter.new(recruit_document, user)
 
-    mail(to: user.mail_to, subject: 'Evaluator Assignment News')
+    mail(to: recipient.mail_to, subject: 'Evaluator Assignment News')
   end
 
   def status_change
-    @presenter = V2::Notifications::StatusChangePresenter.new(change)
+    @presenter = V2::Notifications::StatusChangePresenter.new(change, user)
 
-    mail(to: user.mail_to, subject: 'Status Change News')
+    mail(to: recipient.mail_to, subject: 'Status Change News')
   end
 
   private
@@ -22,7 +22,11 @@ class NotificationMailer < ApplicationMailer
   end
 
   def change
-    @change ||= params[:status_change]
+    @change ||= params[:change]
+  end
+
+  def recipient
+    @recipient ||= params[:recipient]
   end
 
   def user
