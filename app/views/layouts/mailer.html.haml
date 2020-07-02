@@ -1,0 +1,159 @@
+!!!
+%html
+  %head
+    %meta{ content: 'text/html; charset=utf-8', 'http-equiv' => 'Content-Type' }/
+
+    :css
+      html {
+        font-size: 75%;
+      }
+
+      body {
+        background-color: #fafafa;
+        font-family: Helvetica, sans-serif;
+        font-size: 1rem;
+        padding: 0;
+        margin: 0;
+        width: 100%;
+      }
+
+      h1, h2, h3 {
+        margin: 20px 0 10px;
+      }
+
+      p {
+        margin-bottom: .25rem;
+      }
+
+      .display-1 {
+        font-size: 3.4rem;
+        line-height: 4rem;
+        letter-spacing: 0rem;
+        font-weight: 300;
+        text-transform: inherit;
+      }
+
+      .headline {
+        font-size: 2.4rem;
+        line-height: 3.2rem;
+        letter-spacing: 0rem;
+        font-weight: 300;
+        text-transform: inherit;
+      }
+
+      .title {
+        font-size: 2rem;
+        line-height: 2.8rem;
+        letter-spacing: 0.005rem;
+        font-weight: 400;
+        text-transform: inherit;
+      }
+
+      .subhead-2 {
+        font-size: 1.5rem;
+        line-height: 2.8rem;
+        letter-spacing: 0.01rem;
+        font-weight: 400;
+        text-transform: inherit;
+      }
+
+      .subhead-1 {
+        font-size: 1.5rem;
+        line-height: 2.4rem;
+        letter-spacing: 0.01rem;
+        font-weight: 300;
+        text-transform: inherit;
+      }
+
+      .body-2 {
+        font-size: 1.3rem;
+        line-height: 2.4rem;
+        letter-spacing: 0.01rem;
+        font-weight: 400;
+        text-transform: inherit;
+      }
+
+      .body-1 {
+        font-size: 1.3rem;
+        line-height: 2rem;
+        letter-spacing: 0.01rem;
+        font-weight: 300;
+        text-transform: inherit;
+      }
+
+      .caption {
+        font-size: 1.2rem;
+        line-height: 2rem;
+        letter-spacing: 0.02rem;
+        font-weight: 300;
+        color: gray;
+        text-transform: inherit;
+      }
+
+      .label {
+        font-size: 1.2rem;
+        line-height: 2rem;
+        letter-spacing: 0.01rem;
+        font-weight: 300;
+        text-transform: inherit;
+      }
+
+      .menu {
+        font-size: 1.3rem;
+        line-height: 2rem;
+        letter-spacing: 0.01rem;
+        font-weight: 400;
+        text-transform: inherit;
+      }
+
+      .button {
+        font-size: 1.4rem;
+        line-height: 2rem;
+        letter-spacing: 0.01rem;
+        font-weight: 400;
+        text-transform: uppercase;
+      }
+
+      .link {
+        color: #4169E1;
+        text-decoration: none;
+      }
+
+      .link:hover {
+        text-decoration: underline;
+      }
+
+      .chip {
+        display: inline-block;
+        background: lightgray;
+        color: white;
+        padding: 0 .9rem;
+        border-radius: 4px;
+        font-size: 1rem;
+      }
+
+      .container {
+        background-color: white;
+        max-width: 72rem;
+        margin: 0 auto;
+        padding: 1.6rem 0;
+        text-align: center;
+      }
+
+      .row {
+        padding: 0 1.6rem;
+        margin: 1.6rem 0;
+      }
+
+      .logo {
+        width: 20rem;
+        margin: 0 auto;
+      }
+
+      .logo img {
+        width: 100%;
+        height: auto;
+      }
+
+  %body
+    = yield

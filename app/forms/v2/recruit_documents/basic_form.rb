@@ -46,7 +46,7 @@ module V2
         return if @recruit_document.persisted? && !@recruit_document.evaluator_token_changed?
 
         RecruitDocument
-          .where('email = ?', @recruit_document.email)
+          .where(email: @recruit_document.email)
           .update_all(evaluator_token: @recruit_document.evaluator_token)
       end
 

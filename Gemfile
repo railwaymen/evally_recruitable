@@ -16,6 +16,7 @@ gem 'pundit', '~> 2.1'
 gem 'faraday'
 gem 'redis-namespace', '~> 1.7'
 gem 'sidekiq', '~> 6.0.7'
+gem 'haml', '~> 5.1'
 
 group :development, :test do
   gem 'brakeman', '~> 4.3.1', require: false

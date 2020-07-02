@@ -1,0 +1,42 @@
+.container
+  .row
+    .logo
+      = image_tag 'logo_black.png'
+
+  .row
+    .header
+      %h1.headline Status Change News
+
+  .row
+    %p.subhead-1
+      %strong= @user.fullname
+      has changed status of recruit:
+
+    %h3.title
+      = link_to vue_recruit_document_url(@presenter.recruit_document), class: 'link', target: '_blank' do
+        %strong= @presenter.recruit_document.safe_recruit_name
+
+    %p.subhead-1
+      who is applying for
+      %strong= @presenter.recruit_document.position
+      position
+
+    %p.body-2
+      Status change &raquo;
+      %span.chip{ style: "background: #{@presenter.previous_status.color};" }= @presenter.previous_status.label
+      &rarr;
+      %span.chip{ style: "background: #{@presenter.current_status.color};" }= @presenter.current_status.label
+
+    - @presenter.current_status.required_fields.map do |field|
+      %p.body-2
+        #{field.label}:
+        %strong= @presenter.format_status_detail(field.value)
+
+  .row
+    %p.caption This message is generated automatically. Please do not respond to this.
+
+  .row
+    %p.subhead-1
+      Best Regards
+      %br
+      %em Evally Team &hearts;

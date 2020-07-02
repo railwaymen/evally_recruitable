@@ -33,6 +33,10 @@ class RecruitDocument < ApplicationRecord
   #
   before_validation :set_public_recruit_id
 
+  def safe_recruit_name
+    "#{first_name} #{last_name&.chr}.".gsub(/\s\./, '')
+  end
+
   def status_change_commentable?
     persisted? && (
       changes.keys &
