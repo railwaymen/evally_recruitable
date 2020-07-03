@@ -21,7 +21,7 @@ module V2
       def notify
         return unless evaluator_change && evaluator.present?
 
-        notification_recipients.map do |recipient|
+        User.active.where(id: involved_users_ids).map do |recipient|
           NotificationMailer
             .with(recruit_document: @recruit_document, recipient: recipient, user: @user)
             .evaluator_assignment
@@ -39,12 +39,8 @@ module V2
         RecruitDocument.where(email: @recruit_document.email)
       end
 
-      def notification_recipients
-        User.where(id: [evaluator&.id, *other_recruiters.ids].compact.uniq)
-      end
-
-      def other_recruiters
-        User.active_recruiter_other_than(@user.id)
+      def involved_users_ids
+        [evaluator&.id, *User.recruiter.ids].compact.uniq - [@user.id]
       end
     end
   end

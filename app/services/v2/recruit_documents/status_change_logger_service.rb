@@ -21,8 +21,8 @@ module V2
       def notify
         return unless status_change_commentable && status_change.present?
 
-        notification_recipients.map do |recipient|
-          next unless recipient.role.in?(current_status.notifiees)
+        User.active.where(id: involved_users_ids).map do |recipient|
+          next unless current_status.notify?(recipient.role)
 
           NotificationMailer
             .with(change: status_change, recipient: recipient, user: @user)
@@ -64,12 +64,8 @@ module V2
         )
       end
 
-      def notification_recipients
-        User.where(id: [evaluator&.id, *other_recruiters.ids].compact.uniq)
-      end
-
-      def other_recruiters
-        User.active_recruiter_other_than(@user.id)
+      def involved_users_ids
+        [evaluator&.id, *User.recruiter.ids].compact.uniq - [@user.id]
       end
     end
   end

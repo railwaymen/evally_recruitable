@@ -23,10 +23,15 @@ RSpec.describe V2::RecruitDocuments::EvaluatorAssignerService do
   describe '.notify' do
     it 'expects to notify involved users about new assignment' do
       user = FactoryBot.create(:user)
-      recruiter = FactoryBot.create(:user, role: :recruiter)
 
-      document = FactoryBot.create(:recruit_document, email: 'jack@example.com')
-      document.evaluator_token = user.email_token
+      recruiter = FactoryBot.create(:user, role: :recruiter)
+      evaluator = FactoryBot.create(:user, role: :evaluator)
+
+      document = FactoryBot.create(
+        :recruit_document,
+        email: 'jack@example.com'
+      )
+      document.evaluator_token = evaluator.email_token
 
       service = described_class.new(document, user)
 
@@ -39,7 +44,7 @@ RSpec.describe V2::RecruitDocuments::EvaluatorAssignerService do
       end.to(change { ActionMailer::Base.deliveries.size }.by(2))
 
       expect(ActionMailer::Base.deliveries.map(&:to).flatten).to contain_exactly(
-        user.email, recruiter.email
+        evaluator.email, recruiter.email
       )
     end
   end
