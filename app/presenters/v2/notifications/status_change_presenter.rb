@@ -33,7 +33,7 @@ module V2
       end
 
       def mail_subject
-        "#{recruit_document.safe_recruit_name} - Status Change News"
+        "#{recruit_document.safe_recruit_name} | #{recruit_document.position} | Status Change News"
       end
     end
   end
