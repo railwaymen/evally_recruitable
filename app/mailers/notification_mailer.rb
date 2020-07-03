@@ -6,13 +6,13 @@ class NotificationMailer < ApplicationMailer
   def evaluator_assignment
     @presenter = V2::Notifications::EvaluatorAssignmentPresenter.new(recruit_document, user)
 
-    mail(to: recipient.mail_to, subject: 'Evaluator Assignment News')
+    mail(to: recipient.mail_to, subject: @presenter.mail_subject)
   end
 
   def status_change
     @presenter = V2::Notifications::StatusChangePresenter.new(change, user)
 
-    mail(to: recipient.mail_to, subject: 'Status Change News')
+    mail(to: recipient.mail_to, subject: @presenter.mail_subject)
   end
 
   private

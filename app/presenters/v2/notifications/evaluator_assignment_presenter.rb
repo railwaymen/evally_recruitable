@@ -17,6 +17,10 @@ module V2
       def status
         @status ||= V2::RecruitDocuments::StatusManagerService.find(@recruit_document.status)
       end
+
+      def mail_subject
+        "#{@recruit_document.safe_recruit_name} - Evaluator Assignment News"
+      end
     end
   end
 end

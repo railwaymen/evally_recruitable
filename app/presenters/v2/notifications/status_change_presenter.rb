@@ -31,6 +31,10 @@ module V2
 
         value.localtime.strftime('%d %b %Y, %H:%M %Z')
       end
+
+      def mail_subject
+        "#{recruit_document.safe_recruit_name} - Status Change News"
+      end
     end
   end
 end
