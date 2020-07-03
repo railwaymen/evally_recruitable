@@ -14,7 +14,6 @@ FactoryBot.define do
     source                      { 'railwaymen' }
     received_at                 { 1.minute.ago }
     status                      { 'received' }
-    evaluator_token             { nil }
     social_links                { ['http://github.com/railwaymen'] }
     salary                      { '$1000' }
     availability                { 'full time' }
@@ -23,6 +22,8 @@ FactoryBot.define do
     contract_type               { 'B2B' }
     work_type                   { 'remotely' }
     message                     { 'Lorem ipsum dolor sit amet...' }
+
+    evaluator                   { nil }
 
     trait :with_attachment do
       after(:create) do |document|

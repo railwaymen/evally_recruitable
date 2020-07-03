@@ -14,7 +14,7 @@ require 'action_mailbox/engine'
 # require 'action_text/engine'
 require 'action_view/railtie'
 require 'action_cable/engine'
-# require 'sprockets/railtie'
+require 'sprockets/railtie'
 # require 'rails/test_unit/railtie'
 
 # Require the gems listed in Gemfile, including any gems
@@ -62,6 +62,10 @@ module EvallyRecruitable
     config.action_dispatch.default_headers = {
       'X-Frame-Options' => 'ALLOWALL',
     }
+
+    # Action mailer settings
+    config.action_mailer.asset_host = config.env.fetch(:recruitable).fetch(:host)
+    config.action_mailer.default_url_options = { host: config.env.fetch(:core).fetch(:host) }
 
     # Active Job settings
     config.active_job.queue_adapter = :sidekiq

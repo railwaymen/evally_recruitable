@@ -5,6 +5,8 @@ class RecruitDocument < ApplicationRecord
   #
   has_many_attached :files
 
+  belongs_to :evaluator, class_name: 'User', optional: true, inverse_of: :recruit_documents,
+                         foreign_key: :evaluator_token, primary_key: :email_token
   has_many :status_changes, -> { where(context: 'status') },
            as: :changeable, class_name: 'Change', inverse_of: :changeable
 
@@ -32,6 +34,10 @@ class RecruitDocument < ApplicationRecord
   # # Callbacks
   #
   before_validation :set_public_recruit_id
+
+  def safe_recruit_name
+    "#{first_name} #{last_name&.chr}.".gsub(/\s\./, '')
+  end
 
   def status_change_commentable?
     persisted? && (
