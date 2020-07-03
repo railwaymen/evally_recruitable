@@ -3,6 +3,8 @@
 require 'rails_helper'
 
 RSpec.describe V2::RecruitDocuments::StatusChangeLoggerService do
+  before(:each) { ActionMailer::Base.deliveries.clear }
+
   describe '.call' do
     it 'expects to log status change on status update' do
       user = FactoryBot.create(:user)

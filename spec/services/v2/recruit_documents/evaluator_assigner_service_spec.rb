@@ -3,6 +3,8 @@
 require 'rails_helper'
 
 RSpec.describe V2::RecruitDocuments::EvaluatorAssignerService do
+  before(:each) { ActionMailer::Base.deliveries.clear }
+
   describe '.call' do
     it 'expects to assign evaluator to all previous documents' do
       user = FactoryBot.create(:user)
@@ -23,14 +25,14 @@ RSpec.describe V2::RecruitDocuments::EvaluatorAssignerService do
       user = FactoryBot.create(:user)
       recruiter = FactoryBot.create(:user, role: :recruiter)
 
-      document = FactoryBot.create(:recruit_document, email: 'jack@example.com', evaluator: nil)
+      document = FactoryBot.create(:recruit_document, email: 'jack@example.com')
       document.evaluator_token = user.email_token
 
       service = described_class.new(document, user)
 
       expect do
         perform_enqueued_jobs do
-          service.call && document.save
+          service.call
 
           service.notify
         end
