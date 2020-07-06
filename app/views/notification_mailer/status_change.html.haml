@@ -21,6 +21,7 @@
       %strong= @presenter.recruit_document.position
       position
 
+  .row
     %p.body-2
       Status change &raquo;
       %span.chip{ style: "background: #{@presenter.previous_status.color};" }= @presenter.previous_status.label

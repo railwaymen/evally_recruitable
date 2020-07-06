@@ -22,6 +22,7 @@
       }
 
       p {
+        margin-top: 0;
         margin-bottom: 3px;
       }
 
@@ -153,6 +154,63 @@
       .logo img {
         width: 100%;
         height: auto;
+      }
+
+      .btn {
+        background-color: #4169E1;
+        border: none;
+        border-radius: 2px;
+        color: white;
+        display: inline-block;
+        font-size: 14px;
+        height: 36px;
+        line-height: 36px;
+        padding: 0 16px;
+        text-decoration: none;
+        text-transform: uppercase;
+        vertical-align: middle;
+      }
+
+      .btn-small {
+        height: 32px;
+        line-height: 32px;
+        font-size: 13px;
+      }
+
+      .btn:hover {
+        background-color: #3F51B5;
+        text-decoration: none;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+
+      table tr:nth-child(odd) {
+        background-color: rgba(0, 0, 0, .02);
+      }
+
+      table tr:not(:last-child) {
+        border-bottom: thin solid rgba(0, 0, 0, .12);
+      }
+
+      table tr:hover {
+        background-color: #eee;
+      }
+
+      table td {
+        padding: 12px 6px;
+        line-height: 1.2;
+      }
+
+      table a {
+        color: #000;
+        text-decoration: none;
+      }
+
+      table a:hover {
+        text-decoration: underline;
       }
 
   %body
