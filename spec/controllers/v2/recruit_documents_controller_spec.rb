@@ -24,6 +24,39 @@ RSpec.describe V2::RecruitDocumentsController, type: :controller do
         expect(response).to have_http_status 200
         expect(response.body).to have_json_size(2).at_path('recruit_documents')
       end
+
+      it 'responds with filtered list of documents' do
+        document = FactoryBot.create(
+          :recruit_document,
+          status: 'received',
+          group: 'Ruby',
+          evaluator_token: 'sample_token'
+        )
+
+        FactoryBot.create(
+          :recruit_document,
+          status: 'verified',
+          group: 'Ruby'
+        )
+
+        FactoryBot.create(
+          :recruit_document,
+          status: 'received',
+          group: 'Android'
+        )
+
+        filter_params = {
+          status: 'received',
+          group: 'Ruby',
+          evaluator_token: 'sample_token'
+        }
+
+        sign_in admin
+        get :index, params: filter_params
+
+        expect(response).to have_http_status 200
+        expect(json_response['recruit_documents'].first['id']).to eq document.id
+      end
     end
   end
 

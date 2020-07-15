@@ -25,6 +25,7 @@ module JsonSpecHelpers
       incomplete_details: recruit_document.incomplete_details,
       rejection_reason: recruit_document.rejection_reason,
       evaluator_token: recruit_document.evaluator_token,
+      evaluator_fullname: recruit_document.evaluator&.fullname,
       social_links: recruit_document.social_links,
       salary: recruit_document.salary,
       availability: recruit_document.availability,
