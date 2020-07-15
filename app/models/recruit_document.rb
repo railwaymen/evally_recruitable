@@ -10,11 +10,6 @@ class RecruitDocument < ApplicationRecord
   has_many :status_changes, -> { where(context: 'status') },
            as: :changeable, class_name: 'Change', inverse_of: :changeable
 
-  # # Scopes
-  #
-  scope :by_group, proc { |val| where(group: val) if val.present? }
-  scope :by_status, proc { |val| where(status: val) if val.present? }
-
   # # Validations
   #
   validates :email, presence: true, format: URI::MailTo::EMAIL_REGEXP

@@ -5,9 +5,8 @@ module V2
     before_action :authorize!
 
     def index
-      presenter = V2::RecruitDocuments::IndexPresenter.new(
-        recruit_documents_scope.by_group(params.dig(:group)).by_status(params.dig(:status))
-      )
+      presenter =
+        V2::RecruitDocuments::IndexPresenter.new(recruit_documents_scope, params: filter_params)
 
       render(
         json: V2::RecruitDocuments::IndexView.render(presenter, user: current_user),
@@ -38,8 +37,7 @@ module V2
 
       render(
         json: V2::RecruitDocuments::Serializer.render(
-          create_form.recruit_document,
-          user: current_user
+          create_form.recruit_document, user: current_user
         ),
         status: :created
       )
@@ -50,8 +48,7 @@ module V2
 
       render(
         json: V2::RecruitDocuments::Serializer.render(
-          update_form.recruit_document,
-          user: current_user
+          update_form.recruit_document, user: current_user
         ),
         status: :ok
       )
@@ -113,6 +110,10 @@ module V2
         params: recruit_document_params,
         user: current_user
       )
+    end
+
+    def filter_params
+      params.permit(:group, :status, :evaluator_token)
     end
 
     def recruit_document_params

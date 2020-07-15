@@ -12,6 +12,8 @@ module V2
       end
 
       association :statuses, blueprint: V2::RecruitDocuments::StatusSerializer, default: []
+
+      association :evaluators, blueprint: V2::Users::Serializer, default: []
     end
   end
 end

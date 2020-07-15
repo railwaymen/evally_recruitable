@@ -13,6 +13,10 @@ module V2
              :incomplete_details, :rejection_reason, :evaluator_token, :social_links,
              :availability, :available_since, :location, :work_type, :message
 
+      field :evaluator_fullname do |recruit_document|
+        recruit_document.evaluator&.fullname
+      end
+
       field :status do |recruit_document|
         status_item = V2::RecruitDocuments::StatusManagerService.find(recruit_document.status)
 
