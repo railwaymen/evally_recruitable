@@ -1,5 +1,8 @@
 en:
   change:
+    evaluator:
+      blank: '<p>No evaluator assigned here!</p>'
+      to: '<p><strong>%{name}</strong> is a new evaluator here!</p>'
     status:
       to: '<p>Status set to <strong>%{to}</strong></p>'
       from_to: '<p>Status changed from <strong>%{from}</strong> to <strong>%{to}</strong></p>'

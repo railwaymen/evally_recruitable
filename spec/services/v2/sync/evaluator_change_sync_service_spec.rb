@@ -2,35 +2,28 @@
 
 require 'rails_helper'
 
-RSpec.describe V2::Sync::StatusChangeSyncService do
+RSpec.describe V2::Sync::EvaluatorChangeSyncService do
   describe '.perform' do
     it 'expects to make a post request' do
+      document = FactoryBot.create(:recruit_document)
+      evaluator = FactoryBot.create(:user, role: :evaluator)
       user = FactoryBot.create(:user, role: :admin)
 
-      document = FactoryBot.create(
-        :recruit_document,
-        status: 'phone_call',
-        call_scheduled_at: '2020-06-01 12:00:00'
-      )
-
-      status_change = FactoryBot.create(
-        :recruit_document_status_change,
+      evaluator_change = FactoryBot.create(
+        :recruit_document_evaluator_change,
         changeable: document,
-        to: 'phone_call',
-        details: {
-          call_scheduled_at: document.call_scheduled_at
-        }
+        to: evaluator.email_token
       )
 
-      service = described_class.new(status_change, user)
+      service = described_class.new(evaluator_change, user)
 
       stub_request(:post, "http://testhost/v2/recruits/#{document.public_recruit_id}/comments/webhook") # rubocop:disable Layout/LineLength
         .with(
           body: {
             comment: {
               body: service.send(:comment_body),
-              created_at: status_change.created_at.to_s,
-              change_id: status_change.id,
+              created_at: evaluator_change.created_at.to_s,
+              change_id: evaluator_change.id,
               recruit_document_id: document.id
             }
           },

@@ -32,6 +32,7 @@ module V2
         status_change_logger.notify
 
         recruit_sync.perform
+        evaluator_assigner.sync
         status_change_logger.sync
       end
 
