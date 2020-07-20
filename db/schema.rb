@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_07_01_212931) do
+ActiveRecord::Schema.define(version: 2020_07_20_074702) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -54,7 +54,9 @@ ActiveRecord::Schema.define(version: 2020_07_01_212931) do
     t.bigint "changeable_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "user_token"
     t.index ["changeable_type", "changeable_id"], name: "index_changes_on_changeable_type_and_changeable_id"
+    t.index ["user_token"], name: "index_changes_on_user_token"
   end
 
   create_table "recruit_documents", force: :cascade do |t|

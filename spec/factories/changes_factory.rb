@@ -9,6 +9,7 @@ FactoryBot.define do
       details         { {} }
 
       changeable      { FactoryBot.create(:recruit_document) }
+      user
     end
 
     factory :recruit_document_status_change do
@@ -18,6 +19,7 @@ FactoryBot.define do
       details         { {} }
 
       changeable      { FactoryBot.create(:recruit_document) }
+      user
     end
   end
 end

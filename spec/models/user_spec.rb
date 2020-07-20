@@ -3,6 +3,16 @@
 require 'rails_helper'
 
 RSpec.describe User, type: :model do
+  it do
+    is_expected.to(
+      have_many(:recruit_document_changes)
+        .conditions(changeable_type: 'RecruitDocument')
+        .with_primary_key('email_token')
+        .with_foreign_key('user_token')
+        .class_name('Change')
+    )
+  end
+
   it { is_expected.to validate_presence_of(:email) }
 
   it { is_expected.to validate_presence_of(:first_name) }

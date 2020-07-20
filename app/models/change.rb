@@ -6,6 +6,8 @@ class Change < ApplicationRecord
   # Associations
   #
   belongs_to :changeable, polymorphic: true
+  belongs_to :user, foreign_key: :user_token, primary_key: :email_token,
+                    inverse_of: :recruit_document_changes
 
   # Validations
   #

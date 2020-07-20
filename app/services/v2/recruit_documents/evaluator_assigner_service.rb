@@ -47,6 +47,7 @@ module V2
 
       def evaluator_change
         @evaluator_change ||= @recruit_document.evaluator_changes.build(
+          user_token: @user.email_token,
           from: @recruit_document.evaluator_token_was,
           to: @recruit_document.evaluator_token
         )

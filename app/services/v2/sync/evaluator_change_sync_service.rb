@@ -3,7 +3,7 @@
 module V2
   module Sync
     class EvaluatorChangeSyncService < BaseSyncService
-      delegate :id, :to, :created_at, :recruit_document, to: :resource
+      delegate :id, :to, :created_at, :recruit_document, :user, to: :resource
 
       def perform # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
         return unless resource&.persisted? && recruit_document.present?
@@ -26,13 +26,17 @@ module V2
       private
 
       def comment_body
-        return I18n.t('change.evaluator.blank') if evaluator.blank?
+        return I18n.t('change.evaluator.blank', actor_name: actor_name) if evaluator.blank?
 
-        I18n.t('change.evaluator.to', name: evaluator.fullname)
+        I18n.t('change.evaluator.to', actor_name: actor_name, name: evaluator.fullname)
       end
 
       def evaluator
         @evaluator ||= User.find_by(email_token: to)
+      end
+
+      def actor_name
+        user.present? ? user.fullname : 'Somebody'
       end
     end
   end
