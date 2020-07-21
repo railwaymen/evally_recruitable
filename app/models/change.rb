@@ -6,18 +6,22 @@ class Change < ApplicationRecord
   # Associations
   #
   belongs_to :changeable, polymorphic: true
+  belongs_to :user, foreign_key: :user_token, primary_key: :email_token,
+                    inverse_of: :recruit_document_changes
 
   # Validations
   #
 
-  validates :context, :to, presence: true
+  validates :context, presence: true
+  validates :to, presence: true, if: :status_context?
+
+  # Enums
+  #
+
+  enum context: { evaluator: 'evaluator', status: 'status' }, _suffix: true
 
   # Methods
   #
-
-  def comment_body
-    [comment_beginning, listed_details].compact.join
-  end
 
   def recruit_document_type?
     changeable_type == 'RecruitDocument'
@@ -25,29 +29,5 @@ class Change < ApplicationRecord
 
   def recruit_document
     changeable if recruit_document_type?
-  end
-
-  private
-
-  def comment_beginning
-    return I18n.t("change.#{context}.to", to: to.titleize) if from.blank?
-
-    I18n.t("change.#{context}.from_to", from: from.titleize, to: to.titleize)
-  end
-
-  def listed_details
-    return if details.blank?
-
-    list_items = details.map do |k, v|
-      I18n.t("change.#{context}.detail", label: k.titleize, value: formatted_detail_value(v))
-    end
-
-    "<ul>#{list_items.join}</ul>"
-  end
-
-  def formatted_detail_value(val)
-    return val.to_s unless val.is_a?(ActiveSupport::TimeWithZone)
-
-    val.localtime.strftime('%d %b %Y, %H:%M %Z')
   end
 end

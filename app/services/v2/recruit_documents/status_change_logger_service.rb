@@ -45,6 +45,7 @@ module V2
 
       def status_change
         @status_change ||= @recruit_document.status_changes.build(
+          user_token: @user.email_token,
           from: @recruit_document.status_was,
           to: @recruit_document.status,
           details: resolve_details

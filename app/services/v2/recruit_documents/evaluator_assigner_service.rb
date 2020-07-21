@@ -13,13 +13,17 @@ module V2
       end
 
       def call
-        return unless evaluator_change
+        return unless evaluator_changed?
 
-        previous_documents.update_all(evaluator_token: @recruit_document.evaluator_token)
+        ActiveRecord::Base.transaction do
+          evaluator_change.save!
+
+          previous_documents.update_all(evaluator_token: @recruit_document.evaluator_token)
+        end
       end
 
       def notify
-        return unless evaluator_change && evaluator.present?
+        return unless evaluator_changed? && evaluator.present?
 
         User.active.where(id: involved_users_ids).map do |recipient|
           NotificationMailer
@@ -29,10 +33,24 @@ module V2
         end
       end
 
+      def sync
+        return unless evaluator_change.persisted?
+
+        V2::Sync::EvaluatorChangesJob.perform_later(evaluator_change.id, @user.id)
+      end
+
       private
 
+      def evaluator_changed?
+        @evaluator_changed ||= @recruit_document.evaluator_token_changed?
+      end
+
       def evaluator_change
-        @evaluator_change ||= @recruit_document.evaluator_token_changed?
+        @evaluator_change ||= @recruit_document.evaluator_changes.build(
+          user_token: @user.email_token,
+          from: @recruit_document.evaluator_token_was,
+          to: @recruit_document.evaluator_token
+        )
       end
 
       def previous_documents

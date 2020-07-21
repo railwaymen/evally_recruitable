@@ -3,10 +3,10 @@
 module V2
   module Sync
     class BaseSyncService
-      attr_reader :context
+      attr_reader :resource
 
-      def initialize(context, user, service: :core)
-        @context = context
+      def initialize(resource, user, service: :core)
+        @resource = resource
         @user = user
 
         @service = service.to_sym

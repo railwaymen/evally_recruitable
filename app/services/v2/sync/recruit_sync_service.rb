@@ -3,10 +3,10 @@
 module V2
   module Sync
     class RecruitSyncService < BaseSyncService
-      delegate :public_recruit_id, :evaluator_token, to: :context
+      delegate :public_recruit_id, :evaluator_token, to: :resource
 
       def perform # rubocop:disable Metrics/MethodLength
-        return unless context&.persisted?
+        return unless resource&.persisted?
 
         resp = api_client.post(
           '/v2/recruits/webhook',

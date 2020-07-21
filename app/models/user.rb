@@ -3,8 +3,23 @@
 class User < ApplicationRecord
   # # Associations
   #
-  has_many :recruit_documents, foreign_key: :evaluator_token, primary_key: :email_token,
-                               inverse_of: :evaluator, dependent: :nullify
+  has_many(
+    :recruit_document_changes,
+    -> { where(changeable_type: 'RecruitDocument') },
+    class_name: 'Change',
+    foreign_key: :user_token,
+    primary_key: :email_token,
+    inverse_of: :user,
+    dependent: :nullify
+  )
+
+  has_many(
+    :recruit_documents,
+    foreign_key: :evaluator_token,
+    primary_key: :email_token,
+    inverse_of: :evaluator,
+    dependent: :nullify
+  )
 
   # # Validation
   #

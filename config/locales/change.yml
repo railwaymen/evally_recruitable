@@ -1,6 +1,9 @@
 en:
   change:
+    evaluator:
+      blank: '<p><i>%{actor_name}</i> unassigned an evaluator</p>'
+      to: '<p><i>%{actor_name}</i> assigned <strong>%{name}</strong> as a new evaluator</p>'
     status:
-      to: '<p>Status set to <strong>%{to}</strong></p>'
-      from_to: '<p>Status changed from <strong>%{from}</strong> to <strong>%{to}</strong></p>'
+      to: '<p><i>%{actor_name}</i> set status to <strong>%{to}</strong></p>'
+      from_to: '<p><i>%{actor_name}</i> changed status: <strong>%{from}</strong> &rarr; <strong>%{to}</strong></p>'
       detail: '<li>%{label}: <strong>%{value}</strong></li>'
