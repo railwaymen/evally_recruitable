@@ -23,7 +23,8 @@ module RecruitDocuments
         source: 'JustJoinIT',
         received_at: mail.date,
         accept_current_processing: true,
-        accept_future_processing: accept_future_processing
+        accept_future_processing: accept_future_processing,
+        social_links: social_links
       )
 
       return unless recruit_document.save
@@ -41,7 +42,7 @@ module RecruitDocuments
     end
 
     def encoded_body
-      @encoded_body ||= plain_text.body.to_s.force_encoding(Encoding::UTF_8)
+      @encoded_body ||= plain_text.body.to_s.force_encoding(Encoding::UTF_8).gsub(/(\r|\n)/, ' ')
     end
 
     def encoded_subject
@@ -53,11 +54,15 @@ module RecruitDocuments
     end
 
     def email
-      encoded_body.scan(/\*Email\s+kandydata\*:\s+(.+@.+)\b/iu).flatten.first&.strip
+      encoded_body.scan(/\*Email\s+kandydata\*:\s+(\S+@\S+)\s/iu).flatten.first&.strip
     end
 
     def position
       encoded_subject.scan(/aplikuje\s+na\s+(.+)$/iu).flatten.first&.strip
+    end
+
+    def message_from_candidate
+      encoded_body.scan(/\*Wiadomość\sod\skandydata\*:(.+)Copyright\s©/).flatten.first
     end
 
     def accept_future_processing
@@ -68,6 +73,10 @@ module RecruitDocuments
         .first
 
       value.present?
+    end
+
+    def social_links
+      URI.extract(message_from_candidate, /http(s)?/).uniq
     end
 
     def save_attachment(attachment)
