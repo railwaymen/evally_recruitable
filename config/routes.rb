@@ -3,6 +3,8 @@
 Rails.application.routes.draw do
   scope '(:locale)', locale: /en|pl/ do
     namespace :v2 do
+      resources :inbound_emails, only: :index
+
       resources :recruit_documents do
         collection do
           get :form

@@ -23,7 +23,8 @@ module RecruitDocuments
         source: 'RWM Website',
         received_at: mail.date,
         accept_current_processing: true,
-        accept_future_processing: accept_future_processing
+        accept_future_processing: accept_future_processing,
+        social_links: social_links
       )
 
       return unless recruit_document.save
@@ -41,7 +42,7 @@ module RecruitDocuments
     end
 
     def encoded_body
-      @encoded_body ||= plain_text.body.to_s.force_encoding(Encoding::UTF_8)
+      @encoded_body ||= plain_text.body.to_s.force_encoding(Encoding::UTF_8).gsub(/(\r|\n)/, ' ')
     end
 
     def encoded_subject
@@ -53,16 +54,14 @@ module RecruitDocuments
     end
 
     def phone
-      encoded_body.scan(/Phone number:\s+(.+)\s/i).flatten.first&.strip
+      encoded_body.scan(/Phone\snumber:\s+(.+)\s+Linkedin/).flatten.first&.strip
     end
 
     def email
-      encoded_body.scan(/Email:\s+(.+@.+)\s/i).flatten.first&.strip
+      encoded_body.scan(/Email:\s(\S+@\S+)\s/i).flatten.first&.strip
     end
 
     def position
-      # encoded_body.scan(/Position:\s+(.+)\s/i).flatten.first&.strip
-
       encoded_subject.scan(/New applicant for\s+(.+)\./i).flatten.first&.strip
     end
 
@@ -70,6 +69,14 @@ module RecruitDocuments
       value = encoded_body.scan(/future processing data:\s+(true|false)\s/).flatten.first
 
       value == 'true'
+    end
+
+    def initial_message_body
+      encoded_body.scan(/Hi\sAdmin,(.+)Railwaymen\sDev\sTeam/).flatten.first
+    end
+
+    def social_links
+      URI.extract(initial_message_body, /http(s)?/).uniq
     end
 
     def save_attachment(attachment)

@@ -1,7 +1,15 @@
 # frozen_string_literal: true
 
 class RecruitDocumentsMailbox < ActionMailbox::Base
-  MATCHER = /^jobs_(.+)@.+$/i.freeze
+  MATCHER = Regexp.new(
+    Rails
+      .application
+      .config
+      .env
+      .fetch(:recruitable)
+      .fetch(:mailboxes)
+      .fetch(:recruit_documents_matcher)
+  )
 
   def process
     RecruitDocuments::MailParserService.new(mail, source: source).perform

@@ -11,7 +11,7 @@ RSpec.describe RecruitDocuments::MailParserService do
       mail_datetime = Time.current.round
 
       mail = Mail.new do
-        to          'jobs_rwm@example.com'
+        to          'evallyrecruitable+rwm@example.com'
         from        'jobs@example.com'
         subject     'Fwd: Notifications: New applicant for RoR Developer.'
         message_id  '<this_is_test_message_id@example.com>'
@@ -19,7 +19,7 @@ RSpec.describe RecruitDocuments::MailParserService do
 
         text_part do
           body <<~BODY
-            Hi,
+            Hi Admin,
 
             Name: Jack Strong
 
@@ -27,9 +27,22 @@ RSpec.describe RecruitDocuments::MailParserService do
 
             Phone number: 123456789
 
+            Linkedin: https://www.linkedin.com/company/railwaymen
+
+            Github: https://github.com/railwaymen
+
             Accepted future processing data: true
 
             Message: Lorem ipsum ...
+
+            Links:
+            https://www.behance.net/railwaymen
+            https://dribbble.com/Railwaymen_org
+
+            Best wishes,
+            Railwaymen Dev Team
+
+            https://bbc.com
           BODY
         end
 
@@ -55,7 +68,13 @@ RSpec.describe RecruitDocuments::MailParserService do
         accept_current_processing: true,
         accept_future_processing: true,
         received_at: mail_datetime,
-        message_id: 'this_is_test_message_id@example.com'
+        message_id: 'this_is_test_message_id@example.com',
+        social_links: [
+          'https://www.linkedin.com/company/railwaymen',
+          'https://github.com/railwaymen',
+          'https://www.behance.net/railwaymen',
+          'https://dribbble.com/Railwaymen_org'
+        ]
       )
     end
 
@@ -63,7 +82,7 @@ RSpec.describe RecruitDocuments::MailParserService do
       mail_datetime = Time.current.round
 
       mail = Mail.new do
-        to          'jobs_rwm@example.com'
+        to          'evallyrecruitable+rwm@example.com'
         from        'jobs@example.com'
         subject     'Fwd: Notifications: New applicant for RoR Developer.'
         message_id  '<this_is_test_message_id@example.com>'
@@ -71,7 +90,7 @@ RSpec.describe RecruitDocuments::MailParserService do
 
         text_part do
           body <<~BODY
-            Hi,
+            Hi Admin,
 
             Name: Jack Strong
 
@@ -82,6 +101,11 @@ RSpec.describe RecruitDocuments::MailParserService do
             Accepted future processing data: true
 
             Message: Lorem ipsum ...
+
+            Best wishes,
+            Railwaymen Dev Team
+
+            https://bbc.com
           BODY
         end
 
@@ -107,7 +131,7 @@ RSpec.describe RecruitDocuments::MailParserService do
       mail_datetime = Time.current.round
 
       mail = Mail.new do
-        to          'jobs_justjoinit@example.com'
+        to          'evallyrecruitable+justjoinit@example.com'
         from        'jobs@example.com'
         subject     'Fwd: Jan Nowak is applying for Junior RoR Developer'
         message_id  '<this_is_test_message_id@example.com>'
@@ -127,8 +151,9 @@ RSpec.describe RecruitDocuments::MailParserService do
 
             *✓ Processing data in future recruitment*
             I agree to the processing of my personal data by Railwaymen located in
-
             Kraków for the purpose of future recruitment processes.
+
+            Copyright © 2020
           BODY
         end
 
@@ -154,7 +179,10 @@ RSpec.describe RecruitDocuments::MailParserService do
         accept_current_processing: true,
         accept_future_processing: true,
         received_at: mail_datetime,
-        message_id: 'this_is_test_message_id@example.com'
+        message_id: 'this_is_test_message_id@example.com',
+        social_links: [
+          'https://github.com/schodevio'
+        ]
       )
     end
 
@@ -162,7 +190,7 @@ RSpec.describe RecruitDocuments::MailParserService do
       mail_datetime = Time.current.round
 
       mail = Mail.new do
-        to          'jobs_justjoinit@example.com'
+        to          'evallyrecruitable+justjoinit@example.com'
         from        'jobs@example.com'
         subject     'Fwd: Jan Nowak is applying for Junior RoR Developer'
         message_id  '<this_is_test_message_id@example.com>'
@@ -182,8 +210,9 @@ RSpec.describe RecruitDocuments::MailParserService do
 
             *✓ Processing data in future recruitment*
             I agree to the processing of my personal data by Railwaymen located in
-
             Kraków for the purpose of future recruitment processes.
+
+            Copyright © 2020
           BODY
         end
 
@@ -209,7 +238,7 @@ RSpec.describe RecruitDocuments::MailParserService do
       mail_datetime = Time.current.round
 
       mail = Mail.new do
-        to          'jobs_rocketjobs@example.com'
+        to          'evallyrecruitable+rocketjobs@example.com'
         from        'jobs@example.com'
         subject     'Fwd: Will Smith aplikuje na Project Manager'
         message_id  '<this_is_test_message_id@example.com>'
@@ -223,10 +252,12 @@ RSpec.describe RecruitDocuments::MailParserService do
 
             *Email kandydata*: wsmith@example.com
             *Wiadomość od kandydata*:
-            Lorem ipsum ...
+            Lorem ipsum ... https://github.com/railwaymen
 
             *✓ Zgoda na wykorzystanie danych na potrzebę przyszłych rekrutacji*
             Wyrażam zgodę na przetwarzanie moich danych osobowych dla celów przyszłych rekrutacji.
+
+            Copyright © 2020
           BODY
         end
 
@@ -252,7 +283,10 @@ RSpec.describe RecruitDocuments::MailParserService do
         accept_current_processing: true,
         accept_future_processing: true,
         received_at: mail_datetime,
-        message_id: 'this_is_test_message_id@example.com'
+        message_id: 'this_is_test_message_id@example.com',
+        social_links: [
+          'https://github.com/railwaymen'
+        ]
       )
     end
 
@@ -260,7 +294,7 @@ RSpec.describe RecruitDocuments::MailParserService do
       mail_datetime = Time.current.round
 
       mail = Mail.new do
-        to          'jobs_rocketjobs@example.com'
+        to          'evallyrecruitable+rocketjobs@example.com'
         from        'jobs@example.com'
         subject     'Fwd: Will Smith aplikuje na Project Manager'
         message_id  '<this_is_test_message_id@example.com>'
@@ -274,10 +308,12 @@ RSpec.describe RecruitDocuments::MailParserService do
 
             *Email kandydata*: wsmith@example.com
             *Wiadomość od kandydata*:
-            Lorem ipsum ...
+            Lorem ipsum ... https://github.com/railwaymen
 
             *✓ Zgoda na wykorzystanie danych na potrzebę przyszłych rekrutacji*
             Wyrażam zgodę na przetwarzanie moich danych osobowych dla celów przyszłych rekrutacji.
+
+            Copyright © 2020
           BODY
         end
 
@@ -301,7 +337,7 @@ RSpec.describe RecruitDocuments::MailParserService do
   describe 'unknown mails' do
     it 'skips parsing action' do
       mail = Mail.new do
-        to          'jobs_unknown@example.com'
+        to          'evallyrecruitable+unknown@example.com'
         from        'jobs@example.com'
         subject     'Fwd: Notifications: New applicant for RoR Developer.'
         message_id  '<this_is_test_message_id@example.com>'
@@ -345,7 +381,7 @@ RSpec.describe RecruitDocuments::MailParserService do
       )
 
       mail = Mail.new do
-        to          'jobs_rwm@example.com'
+        to          'evallyrecruitable+rwm@example.com'
         from        'jobs@example.com'
         subject     'Fwd: Notifications: New applicant for RoR Developer.'
         message_id  '<this_is_test_message_id@example.com>'
@@ -353,7 +389,7 @@ RSpec.describe RecruitDocuments::MailParserService do
 
         text_part do
           body <<~BODY
-            Hi,
+            Hi Admin,
 
             Name: Jack Strong
 
@@ -361,9 +397,22 @@ RSpec.describe RecruitDocuments::MailParserService do
 
             Phone number: 123456789
 
+            Linkedin: https://www.linkedin.com/company/railwaymen
+
+            Github: https://github.com/railwaymen
+
             Accepted future processing data: true
 
             Message: Lorem ipsum ...
+
+            Links:
+            https://www.behance.net/railwaymen
+            https://dribbble.com/Railwaymen_org
+
+            Best wishes,
+            Railwaymen Dev Team
+
+            https://bbc.com
           BODY
         end
 

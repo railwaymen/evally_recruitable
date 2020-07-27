@@ -9,7 +9,7 @@ RSpec.describe RecruitDocumentsMailbox, type: :mailbox do
 
       receive_inbound_email_from_mail(
         from: 'jobs@example.com',
-        to: 'jobs_rwm@example.com'
+        to: 'evallyrecruitable+rwm@example.com'
       )
     end
 
@@ -18,7 +18,7 @@ RSpec.describe RecruitDocumentsMailbox, type: :mailbox do
 
       receive_inbound_email_from_mail(
         from: 'jobs@example.com',
-        to: 'jobs_justjoinit@example.com'
+        to: 'evallyrecruitable+justjoinit@example.com'
       )
     end
 
@@ -27,7 +27,7 @@ RSpec.describe RecruitDocumentsMailbox, type: :mailbox do
 
       receive_inbound_email_from_mail(
         from: 'jobs@example.com',
-        to: 'jobs_rocketjobs@example.com'
+        to: 'evallyrecruitable+rocketjobs@example.com'
       )
     end
   end
