@@ -3,15 +3,10 @@
 module V2
   class InboundEmailsController < ApplicationController
     def index
-      inbound_emails = inbound_emails_scope.order(created_at: :desc)
+      presenter =
+        V2::InboundEmails::IndexPresenter.new(ActionMailbox::InboundEmail.all, params: params)
 
-      render json: V2::InboundEmails::Serializer.render(inbound_emails), status: :ok
-    end
-
-    private
-
-    def inbound_emails_scope
-      V2::InboundEmails::ExtendedQuery.new(ActionMailbox::InboundEmail.all)
+      render json: V2::InboundEmails::IndexView.render(presenter), status: :ok
     end
   end
 end

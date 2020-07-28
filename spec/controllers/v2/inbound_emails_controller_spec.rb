@@ -23,10 +23,10 @@ RSpec.describe V2::InboundEmailsController, type: :controller do
         )
 
         sign_in admin
-        get :index
+        get :index, params: { sort_by: 'status', sort_dir: 'desc' }
 
         expect(response).to have_http_status 200
-        expect(json_response.length).to eq 1
+        expect(json_response['inbound_emails'].length).to eq 1
       end
     end
   end

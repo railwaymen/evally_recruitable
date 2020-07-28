@@ -5,10 +5,10 @@ module V2
     class Serializer < Blueprinter::Base
       identifier :id
 
-      fields :message_id, :created_at
+      fields :status, :message_id, :created_at
 
-      field :status do |inbound_email|
-        inbound_email.parsed? ? 'parsed' : inbound_email.status
+      field :parsed do |inbound_email|
+        inbound_email.respond_to?(:parsed) ? inbound_email.parsed : nil
       end
 
       field :source do |inbound_email|
