@@ -24,7 +24,11 @@ module RecruitDocuments
         received_at: mail.date,
         accept_current_processing: true,
         accept_future_processing: accept_future_processing,
-        social_links: social_links
+        social_links: social_links,
+        salary: salary,
+        availability: availability,
+        available_since: available_since,
+        message: message
       )
 
       return unless recruit_document.save
@@ -65,18 +69,26 @@ module RecruitDocuments
       encoded_subject.scan(/New applicant for\s+(.+)\./i).flatten.first&.strip
     end
 
+    def salary; end
+
+    def availability; end
+
+    def available_since; end
+
+    def message; end
+
     def accept_future_processing
       value = encoded_body.scan(/future processing data:\s+(true|false)\s/).flatten.first
 
       value == 'true'
     end
 
-    def initial_message_body
-      encoded_body.scan(/Hi\sAdmin,(.+)Railwaymen\sDev\sTeam/).flatten.first
+    def raw_body
+      encoded_body.scan(/Hi\sAdmin,(.+)Railwaymen\sDev\sTeam/).flatten.first&.strip
     end
 
     def social_links
-      URI.extract(initial_message_body, /http(s)?/).uniq
+      URI.extract(raw_body, /http(s)?/).uniq
     end
 
     def save_attachment(attachment)

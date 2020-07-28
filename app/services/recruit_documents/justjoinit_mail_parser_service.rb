@@ -24,7 +24,8 @@ module RecruitDocuments
         received_at: mail.date,
         accept_current_processing: true,
         accept_future_processing: accept_future_processing,
-        social_links: social_links
+        social_links: social_links,
+        message: message_from_candidate
       )
 
       return unless recruit_document.save
@@ -62,7 +63,7 @@ module RecruitDocuments
     end
 
     def message_from_candidate
-      encoded_body.scan(/\*Message\sfrom\scandidate\*:(.+)Copyright\s©/).flatten.first
+      encoded_body.scan(/\*Message\sfrom\scandidate\*:(.+)Copyright\s©/).flatten.first&.strip
     end
 
     def accept_future_processing
