@@ -31,6 +31,12 @@ RSpec.describe RecruitDocuments::MailParserService do
 
             Github: https://github.com/railwaymen
 
+            Salary: 1500PLN
+
+            Working hours: Full time
+
+            Start date: Next month
+
             Accepted future processing data: true
 
             Message: Lorem ipsum ...
@@ -75,7 +81,10 @@ RSpec.describe RecruitDocuments::MailParserService do
           'https://github.com/railwaymen',
           'https://www.behance.net/railwaymen',
           'https://dribbble.com/Railwaymen_org'
-        ]
+        ],
+        salary: '1500PLN',
+        availability: 'Full time',
+        message: 'Lorem ipsum ...'
       )
     end
 
@@ -99,9 +108,23 @@ RSpec.describe RecruitDocuments::MailParserService do
 
             Phone number: 123456789
 
+            Linkedin: https://www.linkedin.com/company/railwaymen
+
+            Github: https://github.com/railwaymen
+
+            Salary: 1500PLN
+
+            Working hours: Full time
+
+            Start date: Next month
+
             Accepted future processing data: true
 
             Message: Lorem ipsum ...
+
+            Links:
+            https://www.behance.net/railwaymen
+            https://dribbble.com/Railwaymen_org
 
             Best wishes,
             Railwaymen Dev Team

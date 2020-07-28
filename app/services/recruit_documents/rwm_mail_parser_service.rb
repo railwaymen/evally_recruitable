@@ -66,25 +66,31 @@ module RecruitDocuments
     end
 
     def position
-      encoded_subject.scan(/New applicant for\s+(.+)\./i).flatten.first&.strip
+      encoded_subject.scan(/New\s+applicant\s+for\s+(.+)\./i).flatten.first&.strip
     end
 
-    def salary; end
+    def salary
+      encoded_body.scan(/Salary:\s+(.+)\s+Working/).flatten.first&.strip
+    end
 
-    def availability; end
+    def availability
+      encoded_body.scan(/Working\s+hours:\s+(.+)\s+Start/).flatten.first&.strip
+    end
 
     def available_since; end
 
-    def message; end
+    def message
+      encoded_body.scan(/Message:\s+(.*?)\s+(?=(Attachment|Portfolio|Links))/).flatten.first&.strip
+    end
 
     def accept_future_processing
-      value = encoded_body.scan(/future processing data:\s+(true|false)\s/).flatten.first
+      value = encoded_body.scan(/future\s+processing\s+data:\s+(true|false)\s/).flatten.first
 
       value == 'true'
     end
 
     def raw_body
-      encoded_body.scan(/Hi\sAdmin,(.+)Railwaymen\sDev\sTeam/).flatten.first&.strip
+      encoded_body.scan(/Hi\s+Admin,(.+)Railwaymen\s+Dev\s+Team/).flatten.first&.strip
     end
 
     def social_links

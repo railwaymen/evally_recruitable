@@ -55,7 +55,10 @@ module V2
     end
 
     def destroy
-      recruit_document.destroy
+      ActiveRecord::Base.transaction do
+        inbound_email.destroy if inbound_email.present?
+        recruit_document.destroy
+      end
 
       head :no_content
     end
@@ -94,6 +97,11 @@ module V2
       raise ErrorResponderService.new(:record_not_found, 404) unless @recruit_document
 
       @recruit_document
+    end
+
+    def inbound_email
+      @inbound_email ||=
+        ActionMailbox::InboundEmail.find_by(message_id: recruit_document.message_id)
     end
 
     def create_form

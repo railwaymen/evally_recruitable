@@ -63,7 +63,7 @@ module RecruitDocuments
     end
 
     def message_from_candidate
-      encoded_body.scan(/\*Message\sfrom\scandidate\*:(.+)Copyright\s©/).flatten.first&.strip
+      encoded_body.scan(/\*Message\s+from\s+candidate\*:(.+)Copyright\s+©/).flatten.first&.strip
     end
 
     def accept_future_processing
