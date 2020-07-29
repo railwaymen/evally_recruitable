@@ -24,7 +24,7 @@ set :repo_url, 'https://github.com/railwaymen/evally_recruitable.git'
 # set :pty, true
 
 # Default value for :linked_files is []
-append :linked_files, 'config/database.yml', 'config/master.key', 'config/env.yml'
+append :linked_files, 'config/database.yml', 'config/env.yml'
 
 # Default value for linked_dirs is []
 append :linked_dirs, 'storage'

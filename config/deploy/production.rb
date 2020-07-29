@@ -6,6 +6,8 @@ server ENV['CAP_PRODUCTION_SERVER'], user: ENV['CAP_PRODUCTION_SSH_USER'], roles
 set :rvm_ruby_version, 'ruby-2.7.0'
 set :branch, :master
 
+append :linked_files, 'config/credentials/production.key'
+
 namespace :deploy do
   after :publishing, :restart do
     on roles :web do
