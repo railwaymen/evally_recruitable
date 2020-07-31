@@ -26,7 +26,7 @@ module V2
 
       def self.statuses # rubocop:disable Metrics/AbcSize
         [
-          ongoing_header, received, documents_review, incomplete_documents, verified, code_review,
+          ongoing_header, received, documents_review, incomplete_documents, code_review, verified,
           recruitment_task, phone_call, office_interview, evaluation, on_hold, supervisor_decision,
           completed_header, send_feedback, hired, consider_in_future, rejected, black_list
         ]
