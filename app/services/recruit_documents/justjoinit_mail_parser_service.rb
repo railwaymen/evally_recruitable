@@ -51,7 +51,11 @@ module RecruitDocuments
     end
 
     def fullname
-      encoded_subject.scan(/^Fwd:\s+(.+)\s+is\s+applying\s+for/i).flatten.first&.strip
+      encoded_subject
+        .scan(/^Fwd:\s+(?:NEW\s+MATCH:)?(.+)\s+is\s+applying\s+for/i)
+        .flatten
+        .first
+        &.strip
     end
 
     def email
