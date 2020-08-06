@@ -1,14 +1,11 @@
 # frozen_string_literal: true
 
 class RecruitDocumentsMailbox < ActionMailbox::Base
-  MATCHER = Regexp.new(
-    Rails
-      .application
-      .config
-      .env
-      .fetch(:recruitable)
-      .fetch(:mailboxes)
-      .fetch(:recruit_documents_matcher)
+  GROUP_EMAIL =
+    Rails.application.config.env.fetch(:recruitable).fetch(:mailbox).fetch(:group_email)
+
+  EMAIL_MATCHER = Regexp.new(
+    Rails.application.config.env.fetch(:recruitable).fetch(:mailbox).fetch(:email_matcher)
   )
 
   def process
@@ -18,10 +15,12 @@ class RecruitDocumentsMailbox < ActionMailbox::Base
   private
 
   def source
+    # case for direct mails to GROUP_EMAIL
     return senders_map[mail.from.first] if original_sender?
 
-    recipient = mail.recipients.find { |r| MATCHER.match?(r) }
-    recipient[MATCHER, 1]
+    # case for forwarded mails
+    recipient = mail.recipients.find { |r| EMAIL_MATCHER.match?(r) }
+    recipient[EMAIL_MATCHER, 1]
   end
 
   def original_sender?
