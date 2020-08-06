@@ -163,7 +163,7 @@ RSpec.describe RecruitDocuments::MailParserService do
 
         text_part do
           body <<~BODY
-            *Jak Nowak* is applying for *Junior RoR Developer
+            *Jan Nowak* is applying for *Junior RoR Developer
             <https://example.com>
             *in* Kraków*
 
