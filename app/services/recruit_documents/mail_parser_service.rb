@@ -4,6 +4,8 @@ module RecruitDocuments
   class MailParserService
     attr_reader :mail, :source, :recruit_document
 
+    delegate :parse, to: :parser
+
     def initialize(mail, source:)
       @mail = mail
       @source = source.to_s.downcase
@@ -19,7 +21,7 @@ module RecruitDocuments
     def perform # rubocop:disable Metrics/AbcSize
       return unless accepted_source? && @recruit_document.new_record?
 
-      @recruit_document.assign_attributes(parser.perform)
+      @recruit_document.assign_attributes(parser.parse)
 
       return unless @recruit_document.save
 

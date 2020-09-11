@@ -8,7 +8,7 @@ module RecruitDocuments
       @context = context
     end
 
-    def perform # rubocop:disable Metrics/MethodLength
+    def parse # rubocop:disable Metrics/MethodLength
       first_name, last_name = fullname.split(' ')
 
       {
