@@ -2,18 +2,16 @@
 
 module RecruitDocuments
   class RocketjobsMailParserService
-    delegate :mail, :source, :recruit_document, to: :@context
+    delegate :mail, :source, to: :@context
 
     def initialize(context)
       @context = context
     end
 
-    def perform # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
-      return unless recruit_document.received_status?
-
+    def perform # rubocop:disable Metrics/MethodLength
       first_name, last_name = fullname.split(' ')
 
-      recruit_document.assign_attributes(
+      {
         first_name: first_name&.strip,
         last_name: last_name&.strip,
         email: email,
@@ -26,14 +24,7 @@ module RecruitDocuments
         accept_future_processing: accept_future_processing,
         social_links: social_links,
         message: message_from_candidate
-      )
-
-      return unless recruit_document.save
-
-      Rails.logger.info("\e[44mRocketJobs Parser  |  Done!  |  #{mail.message_id}\e[0m")
-
-      save_mail_body
-      mail.attachments.each(&method(:save_attachment))
+      }
     end
 
     private
@@ -78,30 +69,6 @@ module RecruitDocuments
 
     def social_links
       URI.extract(message_from_candidate, /http(s)?/).uniq
-    end
-
-    def save_attachment(attachment)
-      Tempfile.open(attachment.filename, '/tmp', encoding: 'ascii-8bit') do |file|
-        file << attachment.decoded
-        file.rewind
-
-        recruit_document.files.attach(io: file, filename: attachment.filename)
-      end
-    rescue StandardError => e
-      Rails.logger.error "\e[31mFile cannot be attached due to error: #{e.message}\e[0m"
-    end
-
-    def save_mail_body
-      filename = 'message.txt'
-
-      Tempfile.open(filename, '/tmp', encoding: 'ascii-8bit') do |file|
-        file << encoded_body
-        file.rewind
-
-        recruit_document.files.attach(io: file, filename: filename, content_type: 'text/plain')
-      end
-    rescue StandardError => e
-      Rails.logger.error "\e[31mMail body cannot be saved due to error: #{e.message}\e[0m"
     end
   end
 end
