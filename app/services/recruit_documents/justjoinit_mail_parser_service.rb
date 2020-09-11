@@ -60,6 +60,8 @@ module RecruitDocuments
     end
 
     def social_links
+      return [] if message_from_candidate.blank?
+
       URI.extract(message_from_candidate, /http(s)?/).uniq
     end
   end

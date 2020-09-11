@@ -85,6 +85,8 @@ module RecruitDocuments
     end
 
     def social_links
+      return [] if raw_body.blank?
+
       URI.extract(raw_body, /http(s)?/).uniq
     end
   end
