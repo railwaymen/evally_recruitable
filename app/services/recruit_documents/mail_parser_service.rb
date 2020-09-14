@@ -35,7 +35,7 @@ module RecruitDocuments
     private
 
     def accepted_source?
-      %w[rwm justjoinit rocketjobs].include? @source
+      %w[rwm justjoinit rocketjobs nofluffjobs].include? @source
     end
 
     def parser_class_name

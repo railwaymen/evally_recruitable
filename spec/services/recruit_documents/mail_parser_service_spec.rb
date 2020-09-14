@@ -360,6 +360,127 @@ RSpec.describe RecruitDocuments::MailParserService do
     end
   end
 
+  describe 'nofluffjobs mail parser' do
+    it 'adds new recruit document' do
+      mail_datetime = Time.current.round
+
+      mail = Mail.new do
+        to          'evallyrecruitable+nofluffjobs@example.com'
+        from        'jobs@example.com'
+        subject     'Fwd: New application for Junior Ruby on Rails Developer @ Company [John Doe]'
+        message_id  '<this_is_test_message_id@example.com>'
+        date        mail_datetime
+
+        html_part do
+          body <<~BODY
+            New application is waiting for you!
+
+            Applied for: Junior Ruby on Rails Developer
+            View in employer Panel
+
+            Name: John Doe
+
+            E-mail: jdoe@example.com
+
+            Linkedin / Online Profile: https://www.linkedin.com/in/johndoe
+
+            GitHub / Website: https://github.com/jdoe
+
+            Message: Lorem ipsum dolor sit amet...
+
+            Consent
+            Processing additional data in recruitment processes: Yes
+            Processing data in future recruitment processes: Yes
+
+            Pro Tip:
+            The sooner you contact the candidates the more likely they are to accept your offer.
+          BODY
+        end
+
+        add_file 'spec/fixtures/sample_file.txt'
+      end
+
+      service = described_class.new(mail, source: 'nofluffjobs')
+
+      expect do
+        service.perform
+      end.to(change { RecruitDocument.count }.by(1))
+
+      recruit_document = RecruitDocument.last
+      expect(recruit_document.files.attachments.count).to eq 2
+
+      expect(recruit_document).to have_attributes(
+        first_name: 'John',
+        last_name: 'Doe',
+        email: 'jdoe@example.com',
+        phone: nil,
+        position: 'Junior Ruby on Rails Developer',
+        group: 'Unknown',
+        source: 'NoFluffJobs',
+        accept_current_processing: true,
+        accept_future_processing: true,
+        received_at: mail_datetime,
+        message_id: 'this_is_test_message_id@example.com',
+        social_links: [
+          'https://www.linkedin.com/in/johndoe',
+          'https://github.com/jdoe'
+        ]
+      )
+    end
+
+    it 'raises an error and do not save attachments' do
+      mail_datetime = Time.current.round
+
+      mail = Mail.new do
+        to          'evallyrecruitable+nofluffjobs@example.com'
+        from        'jobs@example.com'
+        subject     'Fwd: New application for Junior Ruby on Rails Developer @ Company [John Doe]'
+        message_id  '<this_is_test_message_id@example.com>'
+        date        mail_datetime
+
+        html_part do
+          body <<~BODY
+            New application is waiting for you!
+
+            Applied for: Junior Ruby on Rails Developer
+            View in employer Panel
+
+            Name: John Doe
+
+            E-mail: jdoe@example.com
+
+            Linkedin / Online Profile: https://www.linkedin.com/in/johndoe
+
+            GitHub / Website: https://github.com/jdoe
+
+            Message: Lorem ipsum dolor sit amet...
+
+            Consent
+            Processing additional data in recruitment processes: Yes
+            Processing data in future recruitment processes: Yes
+
+            Pro Tip:
+            The sooner you contact the candidates the more likely they are to accept your offer.
+          BODY
+        end
+
+        add_file 'spec/fixtures/sample_file.txt'
+      end
+
+      service = described_class.new(mail, source: 'nofluffjobs')
+
+      allow_any_instance_of(Tempfile).to receive(:rewind).and_raise(StandardError)
+      expect(Rails.logger).to receive(:error).twice.and_call_original
+
+      expect do
+        service.perform
+      end.to(change { RecruitDocument.count }.by(1))
+
+      recruit_document = RecruitDocument.last
+      expect(recruit_document.files.attachments.count).to eq 0
+    end
+  end
+
   describe 'unknown mails' do
     it 'skips parsing action' do
       mail = Mail.new do

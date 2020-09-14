@@ -31,7 +31,8 @@ class RecruitDocumentsMailbox < ActionMailbox::Base
     {
       'info@railwaymen.org' => 'rwm',
       'no-reply@justjoin.it' => 'justjoinit',
-      'no-reply@rocketjobs.pl' => 'rocketjobs'
+      'no-reply@rocketjobs.pl' => 'rocketjobs',
+      'notifications@nofluffjobs.com' => 'nofluffjobs'
     }
   end
 end

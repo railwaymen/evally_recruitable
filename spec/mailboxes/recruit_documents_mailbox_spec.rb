@@ -63,5 +63,25 @@ RSpec.describe RecruitDocumentsMailbox, type: :mailbox do
         to: 'evallyrecruitable@example.com'
       )
     end
+
+    it 'expects to call nofluffjobs mail parser service base on suffix' do
+      expect_any_instance_of(RecruitDocuments::NofluffjobsMailParserService)
+        .to(receive(:parse).and_return(source: 'nofluffjobs'))
+
+      receive_inbound_email_from_mail(
+        from: 'jobs@example.com',
+        to: 'evallyrecruitable+nofluffjobs@example.com'
+      )
+    end
+
+    it 'expects to call nofluffjobs mail parser service based on from attribute' do
+      expect_any_instance_of(RecruitDocuments::NofluffjobsMailParserService)
+        .to(receive(:parse).and_return(source: 'nofluffjobs'))
+
+      receive_inbound_email_from_mail(
+        from: 'notifications@nofluffjobs.com',
+        to: 'evallyrecruitable@example.com'
+      )
+    end
   end
 end
