@@ -27,7 +27,7 @@ module V2
     end
 
     def mailer?
-      true
+      create?
     end
 
     def update?
