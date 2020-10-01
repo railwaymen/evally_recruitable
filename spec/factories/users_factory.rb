@@ -7,5 +7,6 @@ FactoryBot.define do
     last_name           { 'Stevens' }
     role                { 'admin' }
     status              { 'active' }
+    signature           { nil }
   end
 end
