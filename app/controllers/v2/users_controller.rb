@@ -12,7 +12,7 @@ module V2
     private
 
     def webhook_params
-      params.require(:user).permit(:email, :first_name, :last_name, :role, :status)
+      params.require(:user).permit(:email, :first_name, :last_name, :role, :status, :signature)
     end
   end
 end

@@ -26,6 +26,10 @@ module V2
       create?
     end
 
+    def mailer?
+      create?
+    end
+
     def update?
       true
     end

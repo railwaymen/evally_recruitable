@@ -129,6 +129,34 @@ RSpec.describe V2::RecruitDocumentsController, type: :controller do
     end
   end
 
+  describe '#mailer' do
+    context 'when access denied' do
+      it 'responds with 401 error' do
+        get :mailer, params: { id: 1 }
+        expect(response).to have_http_status 401
+      end
+
+      it 'responds with 403 error' do
+        sign_in evaluator
+        get :mailer, params: { id: 1 }
+
+        expect(response).to have_http_status 403
+      end
+    end
+
+    context 'when access granted' do
+      it 'responds with mailer form data' do
+        recruit_document = FactoryBot.create(:recruit_document)
+
+        sign_in admin
+        get :mailer, params: { id: recruit_document.id }
+
+        expect(response).to have_http_status 200
+        expect(response.body).to be_json_eql recruit_document_schema(recruit_document)
+      end
+    end
+  end
+
   describe '#create' do
     context 'when access denied' do
       it 'responds with 401 error' do

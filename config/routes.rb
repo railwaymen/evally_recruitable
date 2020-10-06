@@ -12,6 +12,10 @@ Rails.application.routes.draw do
           get :overview
         end
 
+        member do
+          get :mailer
+        end
+
         resources :attachments, only: %i[create destroy]
       end
 

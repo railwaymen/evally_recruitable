@@ -32,6 +32,10 @@ module V2
       )
     end
 
+    def mailer
+      render json: V2::RecruitDocuments::Serializer.render(recruit_document, user: current_user)
+    end
+
     def create
       create_form.save
 
