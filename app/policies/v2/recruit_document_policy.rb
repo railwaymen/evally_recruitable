@@ -15,27 +15,27 @@ module V2
     end
 
     def show?
-      true
+      admin_or_recruiter? || assigned_evaluator?
     end
 
     def create?
-      user.admin? || user.recruiter?
+      admin_or_recruiter?
     end
 
     def form?
-      create?
+      admin_or_recruiter?
     end
 
     def mailer?
-      create?
+      admin_or_recruiter?
     end
 
     def update?
-      true
+      admin_or_recruiter? || assigned_evaluator?
     end
 
     def destroy?
-      create?
+      admin_or_recruiter?
     end
 
     def search?
@@ -43,7 +43,17 @@ module V2
     end
 
     def overview?
-      create?
+      admin_or_recruiter?
+    end
+
+    private
+
+    def admin_or_recruiter?
+      user.admin? || user.recruiter?
+    end
+
+    def assigned_evaluator?
+      user.email_token == record.evaluator_token
     end
   end
 end

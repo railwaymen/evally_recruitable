@@ -2,7 +2,8 @@
 
 module V2
   class RecruitDocumentsController < ApplicationController
-    before_action :authorize!
+    before_action :authorize_collection!, only: %i[index form mailer create search overview destroy]
+    before_action :authorize_member!, only: %i[show update]
 
     def index
       presenter =
@@ -88,8 +89,12 @@ module V2
 
     private
 
-    def authorize!
+    def authorize_collection!
       authorize([:v2, RecruitDocument])
+    end
+
+    def authorize_member!
+      authorize([:v2, recruit_document])
     end
 
     def recruit_documents_scope
@@ -97,7 +102,7 @@ module V2
     end
 
     def recruit_document
-      @recruit_document ||= recruit_documents_scope.find_by(id: params[:id])
+      @recruit_document ||= RecruitDocument.find_by(id: params[:id])
       raise ErrorResponderService.new(:record_not_found, 404) unless @recruit_document
 
       @recruit_document
