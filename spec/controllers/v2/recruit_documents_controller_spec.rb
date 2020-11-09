@@ -66,6 +66,15 @@ RSpec.describe V2::RecruitDocumentsController, type: :controller do
         get :show, params: { id: 1 }
         expect(response).to have_http_status 401
       end
+
+      it 'responds with 403 error if foreign document' do
+        document = FactoryBot.create(:recruit_document)
+
+        sign_in evaluator
+        get :show, params: { id: document.id }
+
+        expect(response).to have_http_status 403
+      end
     end
 
     context 'when access granted' do
@@ -84,15 +93,6 @@ RSpec.describe V2::RecruitDocumentsController, type: :controller do
       it 'responds with 404 error if document not found' do
         sign_in admin
         get :show, params: { id: 1 }
-
-        expect(response).to have_http_status 404
-      end
-
-      it 'responds with 404 error if foreign document' do
-        document = FactoryBot.create(:recruit_document)
-
-        sign_in evaluator
-        get :show, params: { id: document.id }
 
         expect(response).to have_http_status 404
       end
@@ -255,6 +255,18 @@ RSpec.describe V2::RecruitDocumentsController, type: :controller do
   describe '#update' do
     context 'when access denied' do
       it 'responds with 401 error' do
+        params = {
+          id: 1,
+          recruit_document: {
+            first_name: 'Szczepan'
+          }
+        }
+
+        put :update, params: params
+        expect(response).to have_http_status 401
+      end
+
+      it 'responds with 403 error if foreign recruit document' do
         document = FactoryBot.create(:recruit_document)
 
         params = {
@@ -264,8 +276,10 @@ RSpec.describe V2::RecruitDocumentsController, type: :controller do
           }
         }
 
+        sign_in evaluator
         put :update, params: params
-        expect(response).to have_http_status 401
+
+        expect(response).to have_http_status 403
       end
     end
 
