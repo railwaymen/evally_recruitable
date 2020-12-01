@@ -18,6 +18,7 @@ gem 'redis-namespace', '~> 1.7'
 gem 'sidekiq', '~> 6.0.7'
 gem 'haml', '~> 5.1'
 gem 'kaminari', '~> 1.2'
+gem 'pg_search', '~> 2.3.5'
 gem 'nokogiri', '~> 1.10'
 
 group :development, :test do

@@ -1,6 +1,16 @@
 # frozen_string_literal: true
 
 class RecruitDocument < ApplicationRecord
+  include PgSearch::Model
+
+  pg_search_scope(
+    :search_text,
+    against: %i[first_name last_name email position group status source],
+    using: {
+      tsearch: { prefix: true }
+    }
+  )
+
   # # Associations
   #
   has_many_attached :files
