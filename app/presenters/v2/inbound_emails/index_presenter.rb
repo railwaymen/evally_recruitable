@@ -3,27 +3,30 @@
 module V2
   module InboundEmails
     class IndexPresenter
-      def initialize(scope, params:)
+      delegate :total_count, to: :inbound_emails_table_query
+
+      def initialize(scope, params: {})
         @scope = scope
         @params = params
       end
 
       def inbound_emails
-        V2::InboundEmails::ExtendedQuery
-          .new(@scope.page(@params[:page]).per(@params[:per_page]))
-          .order(order_rule)
-      end
-
-      def total_count
-        @scope.count
+        inbound_emails_table_query.paginated_scope
       end
 
       private
 
-      def order_rule
-        return 'created_at desc' unless %w[status created_at parsed].include?(@params[:sort_by])
+      def inbound_emails_table_query
+        @inbound_emails_table_query ||=
+          V2::Shared::ServerSideTableQuery.new(
+            extended_scope,
+            params: @params,
+            custom_columns: ['parsed']
+          )
+      end
 
-        "#{@params[:sort_by]} #{@params[:sort_dir] == 'asc' ? 'asc' : 'desc'}"
+      def extended_scope
+        V2::InboundEmails::ExtendedQuery.new(@scope)
       end
     end
   end
