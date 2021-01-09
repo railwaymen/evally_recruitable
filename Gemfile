@@ -19,7 +19,7 @@ gem 'sidekiq', '~> 6.0.7'
 gem 'haml', '~> 5.1'
 gem 'kaminari', '~> 1.2'
 gem 'pg_search', '~> 2.3.5'
-gem 'nokogiri', '~> 1.10'
+gem 'nokogiri', '~> 1.11'
 
 group :development, :test do
   gem 'brakeman', '~> 4.3.1', require: false
