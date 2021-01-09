@@ -7,7 +7,7 @@ module V2
 
     def index
       presenter =
-        V2::RecruitDocuments::IndexPresenter.new(recruit_documents_scope, params: filter_params)
+        V2::RecruitDocuments::IndexPresenter.new(recruit_documents_scope, params: table_params)
 
       render(
         json: V2::RecruitDocuments::IndexView.render(presenter, user: current_user),
@@ -98,7 +98,7 @@ module V2
     end
 
     def recruit_documents_scope
-      policy_scope([:v2, RecruitDocument]).order(received_at: :desc)
+      policy_scope([:v2, RecruitDocument])
     end
 
     def recruit_document
@@ -129,10 +129,6 @@ module V2
       )
     end
 
-    def filter_params
-      params.permit(:group, :status, :evaluator_token)
-    end
-
     def recruit_document_params
       params.require(:recruit_document).permit(
         :first_name, :last_name, :gender, :email, :phone, :position, :group, :received_at, :source,
@@ -140,6 +136,12 @@ module V2
         :interview_scheduled_at, :incomplete_details, :rejection_reason, :evaluator_token,
         :social_links, :salary, :availability, :available_since, :location, :contract_type,
         :work_type, :message, status: :value, files: []
+      )
+    end
+
+    def table_params
+      params.permit(
+        :page, :per_page, :sort_by, :sort_dir, :search, filters: %i[group status evaluator_token]
       )
     end
   end

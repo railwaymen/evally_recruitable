@@ -3,7 +3,7 @@
 module V2
   module RecruitDocuments
     class IndexView < Blueprinter::Base
-      fields :groups
+      fields :groups, :total_count
 
       field :recruit_documents, default: [] do |presenter, options|
         next if presenter.recruit_documents.blank?
