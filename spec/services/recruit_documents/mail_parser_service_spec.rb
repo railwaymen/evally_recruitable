@@ -100,7 +100,6 @@ RSpec.describe RecruitDocuments::MailParserService do
         work_type: 'Remotely',
         message: 'Lorem ipsum ...',
         location: 'London'
-
       )
     end
 
