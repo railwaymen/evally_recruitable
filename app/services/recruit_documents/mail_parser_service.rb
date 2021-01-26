@@ -32,6 +32,10 @@ module RecruitDocuments
       @mail.attachments.each(&method(:save_attachment))
     end
 
+    def parser
+      @parser ||= parser_class_name.constantize.new(self)
+    end
+
     private
 
     def accepted_source?
@@ -40,10 +44,6 @@ module RecruitDocuments
 
     def parser_class_name
       "RecruitDocuments::#{@source.to_s.capitalize}MailParserService"
-    end
-
-    def parser
-      @parser ||= parser_class_name.constantize.new(self)
     end
 
     def save_mail_body
