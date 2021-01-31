@@ -64,7 +64,7 @@ module RecruitDocuments
     end
 
     def salary
-      encoded_body.scan(/Salary:\s+(.+)\s+Contract/).flatten.first&.strip
+      encoded_body.scan(/Salary:\s+(.+)\s+Contract\s+type/).flatten.first&.strip
     end
 
     def availability
