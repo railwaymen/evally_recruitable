@@ -26,6 +26,9 @@ module RecruitDocuments
         salary: salary,
         availability: availability,
         available_since: available_since,
+        contract_type: contract_type,
+        work_type: work_type,
+        location: location,
         message: message
       }
     end
@@ -45,49 +48,65 @@ module RecruitDocuments
     end
 
     def fullname
-      encoded_body.scan(/Name:\s+(.+)\s/i).flatten.first&.strip
+      encoded_body.scan(/Name:\s+(.+)\s+Email/i).flatten.first&.strip
     end
 
     def phone
-      encoded_body.scan(/Phone\snumber:\s+(.+)\s+Linkedin/).flatten.first&.strip
+      encoded_body.scan(/Phone\snumber:\s+(.+)\s+Linkedin/i).flatten.first&.strip
     end
 
     def email
-      encoded_body.scan(/Email:\s(\S+@\S+)\s/i).flatten.first&.strip
+      encoded_body.scan(/Email:\s(\S+@\S+)\s+Phone/i).flatten.first&.strip
     end
 
     def position
-      encoded_subject.scan(/New\s+applicant\s+for\s+(.+)\./i).flatten.first&.strip
+      encoded_subject.scan(/New\s+candidate\s+for\s+(.+)\s+\|/i).flatten.first&.strip
     end
 
     def salary
-      encoded_body.scan(/Salary:\s+(.+)\s+Working/).flatten.first&.strip
+      encoded_body.scan(/Salary:\s+(.+)\s+Contract/).flatten.first&.strip
     end
 
     def availability
-      encoded_body.scan(/Working\s+hours:\s+(.+)\s+Start/).flatten.first&.strip
+      encoded_body.scan(/Availability:\s+(.+)\s+job\s+Available/).flatten.first&.strip
     end
 
-    def available_since; end
+    def available_since
+      encoded_body.scan(/Available\s+since:\s+(.+)\s+Salary/).flatten.first&.strip
+    end
+
+    def contract_type
+      encoded_body.scan(/Contract\s+type:\s+(.+)\s+Work\s+type/).flatten.first&.strip
+    end
+
+    def work_type
+      encoded_body.scan(/Work\s+type:\s+(.+)\s+Location/).flatten.first&.strip
+    end
+
+    def location
+      encoded_body.scan(/Location:\s+(.+)\s+Accepts\s+current/).flatten.first&.strip
+    end
 
     def message
-      encoded_body.scan(/Message:\s+(.*?)\s+(?=(Attachment|Portfolio|Links))/).flatten.first&.strip
+      # /Message:\s+(.*?)\s+(?=(Attachment|Portfolio|Links))/
+      encoded_body.scan(/Message:\s+(.+)\s+Availability/).flatten.first&.strip
     end
 
     def accept_future_processing
-      value = encoded_body.scan(/future\s+processing\s+data:\s+(true|false)\s/).flatten.first
+      value = encoded_body.scan(/Accepts\s+future\s+processing:\s+(Yes|No)\s/).flatten.first
 
-      value == 'true'
+      value == 'Yes'
     end
 
     def raw_body
-      encoded_body.scan(/Hi\s+Admin,(.+)Railwaymen\s+Dev\s+Team/).flatten.first&.strip
+      encoded_body.scan(/Hi\s+Admin,(.+)\s+Best\s+wishes/).flatten.first&.strip
     end
 
     def social_links
       return [] if raw_body.blank?
 
-      URI.extract(raw_body, /http(s)?/).uniq
+      # URI.extract(raw_body, /http(s)?/).uniq
+      raw_body.split(/\s+/).find_all { |word| word =~ /^(http|https|www|ftp)/ }
     end
   end
 end

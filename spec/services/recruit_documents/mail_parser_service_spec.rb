@@ -13,13 +13,16 @@ RSpec.describe RecruitDocuments::MailParserService do
       mail = Mail.new do
         to          'evallyrecruitable+rwm@example.com'
         from        'jobs@example.com'
-        subject     'Fwd: Notifications: New applicant for RoR Developer.'
+        subject     'Fwd: New candidate for React Native Developer | RWM Website'
         message_id  '<this_is_test_message_id@example.com>'
         date        mail_datetime
 
         text_part do
           body <<~BODY
             Hi Admin,
+
+            There's a new job application for a position React Native Developer.
+            Please check the details below:
 
             Name: Jack Strong
 
@@ -31,19 +34,27 @@ RSpec.describe RecruitDocuments::MailParserService do
 
             Github: https://github.com/railwaymen
 
-            Salary: 1500PLN
-
-            Working hours: Full time
-
-            Start date: Next month
-
-            Accepted future processing data: true
+            Links:
+            * https://www.behance.net/railwaymen
+            * https://dribbble.com/Railwaymen_org
 
             Message: Lorem ipsum ...
 
-            Links:
-            https://www.behance.net/railwaymen
-            https://dribbble.com/Railwaymen_org
+            Availability: Full time job
+
+            Available since: Now
+
+            Salary: 1500PLN
+
+            Contract type: Civil law contract
+
+            Work type: Remotely
+
+            Location: London
+
+            Accepts current processing: Yes
+
+            Accepts future processing: Yes
 
             Best wishes,
             Railwaymen Dev Team
@@ -69,7 +80,7 @@ RSpec.describe RecruitDocuments::MailParserService do
         last_name: 'Strong',
         email: 'jstrong@example.com',
         phone: '123456789',
-        position: 'RoR Developer',
+        position: 'React Native Developer',
         group: 'Unknown',
         source: 'RWM Website',
         accept_current_processing: true,
@@ -84,7 +95,11 @@ RSpec.describe RecruitDocuments::MailParserService do
         ],
         salary: '1500PLN',
         availability: 'Full time',
-        message: 'Lorem ipsum ...'
+        available_since: nil,
+        contract_type: 'Civil law contract',
+        work_type: 'Remotely',
+        message: 'Lorem ipsum ...',
+        location: 'London'
       )
     end
 
@@ -94,13 +109,16 @@ RSpec.describe RecruitDocuments::MailParserService do
       mail = Mail.new do
         to          'evallyrecruitable+rwm@example.com'
         from        'jobs@example.com'
-        subject     'Fwd: Notifications: New applicant for RoR Developer.'
+        subject     'Fwd: New candidate for React Native Developer | RWM Website'
         message_id  '<this_is_test_message_id@example.com>'
         date        mail_datetime
 
         text_part do
           body <<~BODY
             Hi Admin,
+
+            There's a new job application for a position React Native Developer.
+            Please check the details below:
 
             Name: Jack Strong
 
@@ -112,19 +130,27 @@ RSpec.describe RecruitDocuments::MailParserService do
 
             Github: https://github.com/railwaymen
 
-            Salary: 1500PLN
-
-            Working hours: Full time
-
-            Start date: Next month
-
-            Accepted future processing data: true
+            Links:
+            * https://www.behance.net/railwaymen
+            * https://dribbble.com/Railwaymen_org
 
             Message: Lorem ipsum ...
 
-            Links:
-            https://www.behance.net/railwaymen
-            https://dribbble.com/Railwaymen_org
+            Availability: Full time job
+
+            Available since: Now
+
+            Salary: 1500PLN
+
+            Contract type: Civil law contract
+
+            Work type: Remotely
+
+            Location: London
+
+            Accepts current processing: Yes
+
+            Accepts future processing: Yes
 
             Best wishes,
             Railwaymen Dev Team
