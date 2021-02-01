@@ -12,8 +12,8 @@ module RecruitDocuments
       first_name, last_name = fullname.split(' ')
 
       {
-        first_name: first_name&.strip,
-        last_name: last_name&.strip,
+        first_name: first_name.to_s.strip,
+        last_name: last_name.to_s.strip,
         email: email,
         phone: nil,
         position: position,
