@@ -29,7 +29,7 @@ class RecruitDocumentsMailbox < ActionMailbox::Base
 
   def senders_map
     {
-      'info@railwaymen.org' => 'rwm',
+      'noreply@railwaymen.org' => 'rwm',
       'no-reply@justjoin.it' => 'justjoinit',
       'no-reply@rocketjobs.pl' => 'rocketjobs',
       'notifications@nofluffjobs.com' => 'nofluffjobs'
