@@ -19,7 +19,7 @@ RSpec.describe RecruitDocumentsMailbox, type: :mailbox do
         .to(receive(:parse).and_return(source: 'rwm'))
 
       receive_inbound_email_from_mail(
-        from: 'info@railwaymen.org',
+        from: 'noreply@railwaymen.org',
         to: 'evallyrecruitable@example.com'
       )
     end
