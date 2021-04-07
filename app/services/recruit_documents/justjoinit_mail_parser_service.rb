@@ -62,7 +62,8 @@ module RecruitDocuments
     def social_links
       return [] if message_from_candidate.blank?
 
-      URI.extract(message_from_candidate, /http(s)?/).uniq
+      # URI.extract(message_from_candidate, /http(s)?/).uniq
+      message_from_candidate.split(/\s+/).find_all { |word| word =~ /^(http|https|www|ftp)/ }
     end
   end
 end
