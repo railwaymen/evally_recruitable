@@ -42,7 +42,7 @@ module RecruitDocuments
     end
 
     def fullname
-      encoded_subject.scan(/^Fwd:\s+(.+)\s+aplikuje\s+na/iu).flatten.first&.strip
+      encoded_subject.scan(/(Fwd:\s+)?(.+)\s+aplikuje\s+na/iu).flatten.last&.strip
     end
 
     def email
@@ -70,7 +70,8 @@ module RecruitDocuments
     def social_links
       return [] if message_from_candidate.blank?
 
-      URI.extract(message_from_candidate, /http(s)?/).uniq
+      # URI.extract(message_from_candidate, /http(s)?/).uniq
+      message_from_candidate.split(/\s+/).find_all { |word| word =~ /^(http|https|www|ftp)/ }
     end
   end
 end
