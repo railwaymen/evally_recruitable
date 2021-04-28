@@ -21,6 +21,8 @@ class User < ApplicationRecord
     dependent: :nullify
   )
 
+  has_and_belongs_to_many :recruitments, join_table: 'recruitment_participants'
+
   # # Validation
   #
   validates :email, presence: true, uniqueness: true, format: URI::MailTo::EMAIL_REGEXP

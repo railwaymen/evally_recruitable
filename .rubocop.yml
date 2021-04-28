@@ -51,6 +51,9 @@ Rails/SkipsModelValidations:
 Rails/ApplicationRecord:
   Enabled: false
 
+Rails/HasAndBelongsToMany:
+  Enabled: false
+
 Metrics/AbcSize:
   Exclude:
     - app/controllers/**/*

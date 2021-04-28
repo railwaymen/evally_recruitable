@@ -20,6 +20,7 @@ gem 'haml', '~> 5.1'
 gem 'kaminari', '~> 1.2'
 gem 'pg_search', '~> 2.3.5'
 gem 'nokogiri', '~> 1.10'
+gem 'aasm', '~> 5.1.1'
 
 group :development, :test do
   gem 'brakeman', '~> 4.3.1', require: false

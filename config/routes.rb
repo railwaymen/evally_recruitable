@@ -19,6 +19,15 @@ Rails.application.routes.draw do
         resources :attachments, only: %i[create destroy]
       end
 
+      resources :recruitments do
+        member do
+          put :start
+          put :complete
+          put :add_stage
+          put :drop_stage
+        end
+      end
+
       resources :users, only: [] do
         collection do
           post :webhook
