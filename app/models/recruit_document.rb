@@ -18,7 +18,8 @@ class RecruitDocument < ApplicationRecord
   belongs_to :evaluator, class_name: 'User', optional: true, inverse_of: :recruit_documents,
                          foreign_key: :evaluator_token, primary_key: :email_token
 
-  has_and_belongs_to_many :recruitments, join_table: 'recruitment_candidates'
+  has_many :recruitment_candidates, dependent: :destroy
+  has_many :recruitments, through: :recruitment_candidates
 
   has_many :evaluator_changes, -> { where(context: 'evaluator') },
            as: :changeable, class_name: 'Change', inverse_of: :changeable

@@ -1,6 +1,6 @@
 class CreateJoinTableRecruitmentCandidates < ActiveRecord::Migration[6.0]
   def change
-    create_table :recruitment_candidates, id: false do |t|
+    create_table :recruitment_candidates do |t|
       t.bigint :recruitment_id, null: false
       t.bigint :recruit_document_id, null: false
       t.string :stage, null: false

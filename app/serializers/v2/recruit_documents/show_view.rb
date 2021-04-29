@@ -14,6 +14,10 @@ module V2
       association :statuses, blueprint: V2::RecruitDocuments::StatusSerializer, default: []
 
       association :attachments, blueprint: V2::Attachments::Serializer, default: []
+
+      association :current_recruitments, blueprint: V2::Recruitments::Serializer, default: []
+
+      association :ongoing_recruitments, blueprint: V2::Recruitments::Serializer, default: []
     end
   end
 end

@@ -86,7 +86,8 @@ RSpec.describe V2::RecruitDocumentsController, type: :controller do
 
         expect(response).to have_http_status 200
         expect(json_response.keys).to contain_exactly(
-          'recruit_document', 'attachments', 'positions', 'statuses', 'groups', 'sources'
+          'recruit_document', 'attachments', 'positions', 'statuses', 'groups', 'sources',
+          'current_recruitments', 'ongoing_recruitments'
         )
       end
 
@@ -123,7 +124,8 @@ RSpec.describe V2::RecruitDocumentsController, type: :controller do
 
         expect(response).to have_http_status 200
         expect(json_response.keys).to contain_exactly(
-          'recruit_document', 'attachments', 'positions', 'statuses', 'groups', 'sources'
+          'recruit_document', 'attachments', 'positions', 'statuses', 'groups', 'sources',
+          'current_recruitments', 'ongoing_recruitments'
         )
       end
     end
@@ -380,6 +382,119 @@ RSpec.describe V2::RecruitDocumentsController, type: :controller do
           stub_api_client_service
           put :update, params: params
         end.to(have_enqueued_job(V2::Sync::StatusChangesJob))
+      end
+    end
+  end
+
+  describe '#assign' do
+    context 'when access denied' do
+      it 'responds with 401 error' do
+        post :assign, params: { id: 1 }
+        expect(response).to have_http_status 401
+      end
+    end
+
+    context 'when access granted' do
+      it 'creates candidate assignment' do
+        recruitment = FactoryBot.create(:recruitment, stages: %w[call interview])
+        document = FactoryBot.create(:recruit_document)
+
+        params = {
+          id: document.id,
+          recruitment: {
+            recruitment_id: recruitment.id,
+            stage: 'call'
+          }
+        }
+
+        sign_in admin
+
+        expect do
+          post :assign, params: params
+        end.to(change { document.reload.recruitments.count }.by(1))
+
+        expect(response).to have_http_status 200
+      end
+
+      it 'responds with error if already assigned' do
+        recruitment = FactoryBot.create(:recruitment, stages: %w[call interview])
+        document = FactoryBot.create(:recruit_document)
+
+        FactoryBot.create(
+          :recruitment_candidate,
+          recruitment: recruitment,
+          recruit_document: document,
+          stage: 'call'
+        )
+
+        params = {
+          id: document.id,
+          recruitment: {
+            recruitment_id: recruitment.id,
+            stage: 'call'
+          }
+        }
+
+        sign_in admin
+
+        expect do
+          post :assign, params: params
+        end.not_to(change { document.reload.recruitments.count })
+
+        expect(response).to have_http_status 422
+      end
+
+      it 'responds with error if invalid stage' do
+        recruitment = FactoryBot.create(:recruitment, stages: %w[call interview])
+        document = FactoryBot.create(:recruit_document)
+
+        params = {
+          id: document.id,
+          recruitment: {
+            recruitment_id: recruitment.id,
+            stage: 'unknown'
+          }
+        }
+
+        sign_in admin
+
+        expect do
+          post :assign, params: params
+        end.not_to(change { document.reload.recruitments.count })
+
+        expect(response).to have_http_status 422
+      end
+
+      it 'responds with 404 error if recruitment not found' do
+        document = FactoryBot.create(:recruit_document)
+
+        params = {
+          id: document.id,
+          recruitment: {
+            recruitment_id: 1,
+            stage: 'call'
+          }
+        }
+
+        sign_in admin
+        post :assign, params: params
+
+        expect(response).to have_http_status 404
+      end
+
+      it 'responds with 404 error if document not found' do
+        params = {
+          id: 1,
+          recruitment: {
+            recruitment_id: 1,
+            stage: 'call'
+          }
+        }
+
+        sign_in admin
+        post :assign, params: params
+
+        expect(response).to have_http_status 404
       end
     end
   end

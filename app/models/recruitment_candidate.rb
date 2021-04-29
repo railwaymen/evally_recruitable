@@ -9,4 +9,5 @@ class RecruitmentCandidate < ApplicationRecord
   # # Validations
   #
   validates :stage, presence: true
+  validates :recruit_document_id, uniqueness: { scope: %i[recruitment_id] }
 end

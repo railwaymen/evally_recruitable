@@ -5,7 +5,9 @@ class Recruitment < ApplicationRecord
 
   # # Associations
   #
-  has_and_belongs_to_many :recruit_documents, join_table: 'recruitment_candidates'
+  has_many :recruitment_candidates, dependent: :destroy
+  has_many :recruit_documents, through: :recruitment_candidates
+
   has_and_belongs_to_many :users, join_table: 'recruitment_participants'
 
   # # Validations

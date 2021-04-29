@@ -93,7 +93,7 @@ ActiveRecord::Schema.define(version: 2021_04_27_133431) do
     t.index ["public_recruit_id"], name: "index_recruit_documents_on_public_recruit_id"
   end
 
-  create_table "recruitment_candidates", id: false, force: :cascade do |t|
+  create_table "recruitment_candidates", force: :cascade do |t|
     t.bigint "recruitment_id", null: false
     t.bigint "recruit_document_id", null: false
     t.string "stage", null: false

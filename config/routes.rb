@@ -14,6 +14,7 @@ Rails.application.routes.draw do
 
         member do
           get :mailer
+          post :assign
         end
 
         resources :attachments, only: %i[create destroy]
