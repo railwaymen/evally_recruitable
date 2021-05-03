@@ -12,6 +12,13 @@ module V2
       def users
         @users ||= User.all
       end
+
+      def candidates
+        RecruitmentCandidate
+          .includes(:recruit_document)
+          .where(recruitment_id: @recruitments.ids)
+          .order(priority: :desc, position: :asc)
+      end
     end
   end
 end

@@ -6,6 +6,10 @@ class RecruitmentCandidate < ApplicationRecord
   belongs_to :recruitment
   belongs_to :recruit_document
 
+  # # Extensions
+  #
+  acts_as_list scope: :recruitment
+
   # # Validations
   #
   validates :stage, presence: true

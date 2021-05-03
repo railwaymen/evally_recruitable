@@ -29,6 +29,12 @@ Rails.application.routes.draw do
         end
       end
 
+      resources :recruitment_candidates, only: %i[update destroy] do
+        member do
+          put :move
+        end
+      end
+
       resources :users, only: [] do
         collection do
           post :webhook

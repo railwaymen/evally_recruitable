@@ -58,6 +58,8 @@ GEM
       minitest (~> 5.1)
       tzinfo (~> 1.1)
       zeitwerk (~> 2.2, >= 2.2.2)
+    acts_as_list (1.0.4)
+      activerecord (>= 4.2)
     addressable (2.4.0)
     airbrussh (1.4.0)
       sshkit (>= 1.6.1, != 1.7.0)
@@ -327,6 +329,7 @@ PLATFORMS
 
 DEPENDENCIES
   aasm (~> 5.1.1)
+  acts_as_list (~> 1.0.4)
   blueprinter (~> 0.22.0)
   bootsnap (>= 1.1.0)
   brakeman (~> 4.3.1)
