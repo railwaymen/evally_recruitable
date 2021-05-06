@@ -37,8 +37,16 @@ module RecruitDocuments
       @encoded_body ||= plain_text.body.to_s.force_encoding(Encoding::UTF_8).gsub(/(\r|\n)/, ' ')
     end
 
+    def encoded_subject
+      @encoded_subject ||= mail.subject.to_s.force_encoding(Encoding::UTF_8)
+    end
+
     def fullname
-      encoded_body.scan(/\*(.+)\*\s+is\s+applying\s+for/i).flatten.first&.strip
+      encoded_subject
+        .scan(/(Fwd:\s+)?(NEW\s+MATCH:\s+)?(.+)\s+is\s+applying\s+for/i)
+        .flatten
+        .last
+        &.strip
     end
 
     def email
@@ -46,7 +54,7 @@ module RecruitDocuments
     end
 
     def position
-      encoded_body.scan(/is\s+applying\s+for\s+\*(.+)\s+<http.*>/i).flatten.first&.strip
+      encoded_subject.scan(/is\s+applying\s+for\s+(.+)$/i).flatten.first&.strip
     end
 
     def message_from_candidate
