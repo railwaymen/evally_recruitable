@@ -25,8 +25,9 @@ module V2
     end
 
     def destroy
-      presenter = V2::Recruitments::ShowPresenter.new(candidate.recruitment)
+      V2::RecruitmentCandidates::DeleteForm.new(candidate).validate!
 
+      presenter = V2::Recruitments::ShowPresenter.new(candidate.recruitment)
       candidate.destroy
 
       render(

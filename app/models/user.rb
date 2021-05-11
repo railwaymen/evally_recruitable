@@ -21,7 +21,8 @@ class User < ApplicationRecord
     dependent: :nullify
   )
 
-  has_and_belongs_to_many :recruitments, join_table: 'recruitment_participants'
+  has_many :recruitment_participants, dependent: :destroy
+  has_many :recruitments, through: :recruitment_participants
 
   # # Validation
   #

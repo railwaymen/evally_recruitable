@@ -4,6 +4,7 @@ require 'rails_helper'
 
 RSpec.describe V2::RecruitmentsController, type: :controller do
   let(:admin) { FactoryBot.create(:user, role: :admin) }
+  let(:evaluator) { FactoryBot.create(:user, role: :evaluator) }
 
   describe '#index' do
     context 'when access denied' do
@@ -23,6 +24,16 @@ RSpec.describe V2::RecruitmentsController, type: :controller do
         expect(response).to have_http_status 200
         expect(response.body).to have_json_size(2).at_path('recruitments')
       end
+
+      it 'responds with empty list when evaluator does not participate' do
+        FactoryBot.create_list(:recruitment, 2)
+
+        sign_in evaluator
+        get :index
+
+        expect(response).to have_http_status 200
+        expect(response.body).to have_json_size(0).at_path('recruitments')
+      end
     end
   end
 
@@ -31,6 +42,22 @@ RSpec.describe V2::RecruitmentsController, type: :controller do
       it 'responds with 401 error' do
         post :create, params: {}
         expect(response).to have_http_status 401
+      end
+
+      it 'responds with 403 error to evaluator' do
+        params = {
+          recruitment: {
+            name: 'RoR Developer'
+          }
+        }
+
+        sign_in evaluator
+
+        expect do
+          post :create, params: params
+        end.not_to(change { Recruitment.count })
+
+        expect(response).to have_http_status 403
       end
     end
 
@@ -43,7 +70,10 @@ RSpec.describe V2::RecruitmentsController, type: :controller do
         }
 
         sign_in admin
-        post :create, params: params
+
+        expect do
+          post :create, params: params
+        end.to(change { Recruitment.count }.by(1))
 
         expect(response).to have_http_status 201
         expect(response.body).to be_json_eql recruitment_schema(Recruitment.last)
@@ -72,6 +102,25 @@ RSpec.describe V2::RecruitmentsController, type: :controller do
       it 'responds with 401 error' do
         put :update, params: { id: 1 }
         expect(response).to have_http_status 401
+      end
+
+      it 'responds with 403 error to evaluator' do
+        recruitment = FactoryBot.create(:recruitment, name: 'Old recruitment')
+
+        params = {
+          id: recruitment.id,
+          recruitment: {
+            name: 'New recruitment'
+          }
+        }
+
+        sign_in evaluator
+
+        expect do
+          put :update, params: params
+        end.not_to(change { recruitment.reload.name })
+
+        expect(response).to have_http_status 403
       end
     end
 
@@ -130,6 +179,18 @@ RSpec.describe V2::RecruitmentsController, type: :controller do
         put :start, params: { id: 1 }
         expect(response).to have_http_status 401
       end
+
+      it 'responds with 403 error to evaluator' do
+        recruitment = FactoryBot.create(:recruitment)
+
+        sign_in evaluator
+
+        expect do
+          put :start, params: { id: recruitment.id }
+        end.not_to(change { recruitment.reload.status })
+
+        expect(response).to have_http_status 403
+      end
     end
 
     context 'when access granted' do
@@ -171,6 +232,18 @@ RSpec.describe V2::RecruitmentsController, type: :controller do
       it 'responds with 401 error' do
         put :complete, params: { id: 1 }
         expect(response).to have_http_status 401
+      end
+
+      it 'responds with 403 error to evaluator' do
+        recruitment = FactoryBot.create(:recruitment, :started)
+
+        sign_in evaluator
+
+        expect do
+          put :complete, params: { id: recruitment.id }
+        end.not_to(change { recruitment.reload.status })
+
+        expect(response).to have_http_status 403
       end
     end
 
@@ -214,6 +287,18 @@ RSpec.describe V2::RecruitmentsController, type: :controller do
         put :add_stage, params: { id: 1 }
         expect(response).to have_http_status 401
       end
+
+      it 'responds with 403 error to evaluator' do
+        recruitment = FactoryBot.create(:recruitment, stages: %w[call])
+
+        sign_in evaluator
+
+        expect do
+          put :add_stage, params: { id: recruitment.id, stage: 'interview' }
+        end.not_to(change { recruitment.reload.stages })
+
+        expect(response).to have_http_status 403
+      end
     end
 
     context 'when access granted' do
@@ -255,6 +340,18 @@ RSpec.describe V2::RecruitmentsController, type: :controller do
       it 'responds with 401 error' do
         put :drop_stage, params: { id: 1 }
         expect(response).to have_http_status 401
+      end
+
+      it 'responds with 403 error to evaluator' do
+        recruitment = FactoryBot.create(:recruitment, stages: %w[call interview])
+
+        sign_in evaluator
+
+        expect do
+          put :drop_stage, params: { id: recruitment.id, stage: 'interview' }
+        end.not_to(change { recruitment.reload.stages })
+
+        expect(response).to have_http_status 403
       end
     end
 
@@ -298,6 +395,18 @@ RSpec.describe V2::RecruitmentsController, type: :controller do
       it 'responds with 401 error' do
         delete :destroy, params: { id: 1 }
         expect(response).to have_http_status 401
+      end
+
+      it 'responds with 403 error to evaluator' do
+        recruitment = FactoryBot.create(:recruitment)
+
+        sign_in evaluator
+
+        expect do
+          delete :destroy, params: { id: recruitment.id }
+        end.not_to(change { Recruitment.count })
+
+        expect(response).to have_http_status 403
       end
     end
 

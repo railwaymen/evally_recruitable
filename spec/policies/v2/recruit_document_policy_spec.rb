@@ -9,8 +9,22 @@ RSpec.describe V2::RecruitDocumentPolicy, type: :policy do
       recruiter = FactoryBot.create(:user, role: :recruiter)
       evaluator = FactoryBot.create(:user, role: :evaluator)
 
+      recruitment = FactoryBot.create(:recruitment, :started)
+
       document1 = FactoryBot.create(:recruit_document)
-      document2 = FactoryBot.create(:recruit_document, evaluator_token: evaluator.email_token)
+      document2 = FactoryBot.create(:recruit_document)
+
+      FactoryBot.create(
+        :recruitment_participant,
+        recruitment: recruitment,
+        user: evaluator
+      )
+
+      FactoryBot.create(
+        :recruitment_candidate,
+        recruitment: recruitment,
+        recruit_document: document2
+      )
 
       aggregate_failures 'for admin' do
         scope = Pundit.policy_scope!(admin, [:v2, RecruitDocument])

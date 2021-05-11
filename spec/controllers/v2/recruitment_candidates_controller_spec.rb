@@ -132,7 +132,7 @@ RSpec.describe V2::RecruitmentCandidatesController, type: :controller do
         expect(response).to have_http_status 200
       end
 
-      xit 'responds with 403 error when recruitment completed' do
+      it 'responds with 403 error when recruitment completed' do
         recruitment = FactoryBot.create(:recruitment, :completed)
         candidate = FactoryBot.create(:recruitment_candidate, recruitment: recruitment)
 

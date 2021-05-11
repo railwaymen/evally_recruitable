@@ -2,8 +2,11 @@
 
 module V2
   class RecruitmentsController < ApplicationController
+    before_action :authorize_collection!, only: %i[index create]
+    before_action :authorize_member!, only: %i[update start complete add_stage drop_stage destroy]
+
     def index
-      presenter = V2::Recruitments::IndexPresenter.new(Recruitment.all)
+      presenter = V2::Recruitments::IndexPresenter.new(recruitments_scope)
 
       render(
         json: V2::Recruitments::IndexView.render(presenter),
@@ -66,6 +69,18 @@ module V2
     end
 
     private
+
+    def authorize_collection!
+      authorize([:v2, Recruitment])
+    end
+
+    def authorize_member!
+      authorize([:v2, recruitment])
+    end
+
+    def recruitments_scope
+      policy_scope([:v2, Recruitment])
+    end
 
     def recruitment
       @recruitment ||= Recruitment.find_by(id: params[:id])

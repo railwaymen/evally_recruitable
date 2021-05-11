@@ -5,6 +5,12 @@ Rails.application.routes.draw do
     namespace :v2 do
       resources :inbound_emails, only: :index
 
+      resources :policies, only: [] do
+        collection do
+          get :recruit
+        end
+      end
+
       resources :recruit_documents do
         collection do
           get :form

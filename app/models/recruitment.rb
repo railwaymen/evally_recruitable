@@ -8,7 +8,8 @@ class Recruitment < ApplicationRecord
   has_many :recruitment_candidates, dependent: :destroy
   has_many :recruit_documents, through: :recruitment_candidates
 
-  has_and_belongs_to_many :users, join_table: 'recruitment_participants'
+  has_many :recruitment_participants, dependent: :destroy
+  has_many :users, through: :recruitment_participants
 
   # # Validations
   #
