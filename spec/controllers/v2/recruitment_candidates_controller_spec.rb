@@ -110,6 +110,64 @@ RSpec.describe V2::RecruitmentCandidatesController, type: :controller do
     end
   end
 
+  describe '#update' do
+    context 'when access denied' do
+      it 'responds with 401 error' do
+        put :update, params: { id: 1 }
+        expect(response).to have_http_status 401
+      end
+    end
+
+    context 'when access granted' do
+      it 'updates priority' do
+        recruitment = FactoryBot.create(:recruitment, :started)
+        candidate = FactoryBot.create(:recruitment_candidate, recruitment: recruitment)
+
+        params = {
+          id: candidate.id,
+          candidate: {
+            priority: 3
+          }
+        }
+
+        sign_in admin
+
+        expect do
+          put :update, params: params
+        end.to(change { candidate.reload.priority }.to(3))
+
+        expect(response).to have_http_status 200
+      end
+
+      it 'responds with 422 if recruitment already completed' do
+        recruitment = FactoryBot.create(:recruitment, :completed)
+        candidate = FactoryBot.create(:recruitment_candidate, recruitment: recruitment)
+
+        params = {
+          id: candidate.id,
+          candidate: {
+            priority: 3
+          }
+        }
+
+        sign_in admin
+
+        expect do
+          put :update, params: params
+        end.not_to(change { candidate.reload.priority })
+
+        expect(response).to have_http_status 422
+      end
+
+      it 'responds with 404 error if recruitment not found' do
+        sign_in admin
+        put :update, params: { id: 1 }
+
+        expect(response).to have_http_status 404
+      end
+    end
+  end
+
   describe '#destroy' do
     context 'when access denied' do
       it 'responds with 401 error' do
@@ -132,7 +190,7 @@ RSpec.describe V2::RecruitmentCandidatesController, type: :controller do
         expect(response).to have_http_status 200
       end
 
-      it 'responds with 403 error when recruitment completed' do
+      it 'responds with 422 error when recruitment completed' do
         recruitment = FactoryBot.create(:recruitment, :completed)
         candidate = FactoryBot.create(:recruitment_candidate, recruitment: recruitment)
 
@@ -142,7 +200,7 @@ RSpec.describe V2::RecruitmentCandidatesController, type: :controller do
           delete :destroy, params: { id: candidate.id }
         end.not_to(change { RecruitmentCandidate.count })
 
-        expect(response).to have_http_status 403
+        expect(response).to have_http_status 422
       end
 
       it 'responds with 404 error if candidate not found' do

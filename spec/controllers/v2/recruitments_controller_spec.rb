@@ -16,13 +16,14 @@ RSpec.describe V2::RecruitmentsController, type: :controller do
 
     context 'when access granted' do
       it 'responds with list of recruitments' do
-        FactoryBot.create_list(:recruitment, 2)
+        recruitment = FactoryBot.create(:recruitment, stages: %w[call interview])
+        FactoryBot.create(:recruitment_candidate, recruitment: recruitment, stage: 'call')
 
         sign_in admin
         get :index
 
         expect(response).to have_http_status 200
-        expect(response.body).to have_json_size(2).at_path('recruitments')
+        expect(response.body).to have_json_size(1).at_path('recruitments')
       end
 
       it 'responds with empty list when evaluator does not participate' do
