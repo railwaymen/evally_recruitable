@@ -59,6 +59,15 @@ module V2
       )
     end
 
+    def assign
+      response_status = assign_form.save ? :ok : :unprocessable_entity
+
+      render(
+        json: V2::Recruitments::Serializer.render(recruit_document.recruitments.not_completed),
+        status: response_status
+      )
+    end
+
     def destroy
       ActiveRecord::Base.transaction do
         inbound_email.destroy if inbound_email.present?
@@ -129,6 +138,13 @@ module V2
       )
     end
 
+    def assign_form
+      @assign_form ||= V2::RecruitDocuments::AssignForm.new(
+        recruit_document,
+        params: recruitment_assign_params
+      )
+    end
+
     def recruit_document_params
       params.require(:recruit_document).permit(
         :first_name, :last_name, :gender, :email, :phone, :position, :group, :received_at, :source,
@@ -137,6 +153,10 @@ module V2
         :social_links, :salary, :availability, :available_since, :location, :contract_type,
         :work_type, :message, status: :value, files: []
       )
+    end
+
+    def recruitment_assign_params
+      params.require(:recruitment).permit(:recruitment_id, :stage)
     end
 
     def table_params

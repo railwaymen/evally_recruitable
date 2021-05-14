@@ -28,6 +28,14 @@ module V2
       def attachments
         @recruit_document.files.attachments if @recruit_document.present?
       end
+
+      def current_recruitments
+        @recruit_document.recruitments.not_completed if @recruit_document.present?
+      end
+
+      def ongoing_recruitments
+        Recruitment.not_completed.order(name: :asc)
+      end
     end
   end
 end

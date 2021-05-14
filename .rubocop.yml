@@ -33,7 +33,7 @@ Rails:
   Enabled: true
 
 Metrics/ClassLength:
-  Max: 120
+  Max: 150
 
 Metrics/BlockLength:
   Exclude:
@@ -49,6 +49,9 @@ Rails/SkipsModelValidations:
   Enabled: false
 
 Rails/ApplicationRecord:
+  Enabled: false
+
+Rails/HasAndBelongsToMany:
   Enabled: false
 
 Metrics/AbcSize:

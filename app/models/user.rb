@@ -21,6 +21,9 @@ class User < ApplicationRecord
     dependent: :nullify
   )
 
+  has_many :recruitment_participants, dependent: :destroy
+  has_many :recruitments, through: :recruitment_participants
+
   # # Validation
   #
   validates :email, presence: true, uniqueness: true, format: URI::MailTo::EMAIL_REGEXP

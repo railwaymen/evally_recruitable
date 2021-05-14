@@ -6,7 +6,9 @@ module V2
       def resolve
         return scope.all if user.admin? || user.recruiter?
 
-        scope.where(evaluator_token: user.email_token)
+        scope
+          .joins(recruitment_candidates: :recruitment)
+          .where(recruitments: { id: user.recruitments.ids, status: :started })
       end
     end
 
@@ -15,7 +17,7 @@ module V2
     end
 
     def show?
-      admin_or_recruiter? || assigned_evaluator?
+      admin_or_recruiter? || started_recruitment_participant?
     end
 
     def create?
@@ -31,7 +33,7 @@ module V2
     end
 
     def update?
-      admin_or_recruiter? || assigned_evaluator?
+      admin_or_recruiter? || started_recruitment_participant?
     end
 
     def destroy?
@@ -52,8 +54,8 @@ module V2
       user.admin? || user.recruiter?
     end
 
-    def assigned_evaluator?
-      user.email_token == record.evaluator_token
+    def started_recruitment_participant?
+      (user.recruitments.started.ids & record.recruitments.started.ids).any?
     end
   end
 end

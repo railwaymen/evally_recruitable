@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_10_01_191310) do
+ActiveRecord::Schema.define(version: 2021_04_27_133431) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -91,6 +91,34 @@ ActiveRecord::Schema.define(version: 2020_10_01_191310) do
     t.text "message"
     t.string "evaluator_token"
     t.index ["public_recruit_id"], name: "index_recruit_documents_on_public_recruit_id"
+  end
+
+  create_table "recruitment_candidates", force: :cascade do |t|
+    t.bigint "recruitment_id", null: false
+    t.bigint "recruit_document_id", null: false
+    t.string "stage", null: false
+    t.integer "position", default: 0, null: false
+    t.integer "priority", default: 0, null: false
+    t.index ["recruit_document_id", "recruitment_id"], name: "index_recruit_document_recruitment_on_ids"
+    t.index ["recruitment_id", "recruit_document_id"], name: "index_recruitment_recruit_document_on_ids"
+  end
+
+  create_table "recruitment_participants", force: :cascade do |t|
+    t.bigint "recruitment_id", null: false
+    t.bigint "user_id", null: false
+    t.index ["recruitment_id", "user_id"], name: "index_recruitment_participants_on_recruitment_id_and_user_id"
+    t.index ["user_id", "recruitment_id"], name: "index_recruitment_participants_on_user_id_and_recruitment_id"
+  end
+
+  create_table "recruitments", force: :cascade do |t|
+    t.string "name", null: false
+    t.text "description"
+    t.jsonb "stages", default: [], null: false
+    t.string "status", default: "draft", null: false
+    t.datetime "started_at"
+    t.datetime "completed_at"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "users", force: :cascade do |t|

@@ -66,6 +66,19 @@ module JsonSpecHelpers
       required_fields: status_item.required_fields.map(&method(:required_field_schema))
     }
   end
+
+  def recruitment_schema(recruitment)
+    {
+      id: recruitment.id,
+      name: recruitment.name,
+      description: recruitment.description,
+      stages: recruitment.stages,
+      status: recruitment.status,
+      started_at: recruitment.started_at,
+      completed_at: recruitment.completed_at,
+      user_tokens: recruitment.users.pluck(:email_token)
+    }.to_json
+  end
 end
 
 # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
