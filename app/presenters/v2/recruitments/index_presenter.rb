@@ -13,6 +13,10 @@ module V2
         @users ||= User.all
       end
 
+      def total_pages
+        @recruitments.total_pages
+      end
+
       def candidates
         RecruitmentCandidate
           .includes(:recruit_document)

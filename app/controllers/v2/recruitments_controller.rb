@@ -79,7 +79,7 @@ module V2
     end
 
     def recruitments_scope
-      policy_scope([:v2, Recruitment])
+      policy_scope([:v2, Recruitment]).page(params.fetch(:page, 1)).per(5)
     end
 
     def recruitment

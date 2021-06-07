@@ -3,6 +3,8 @@
 module V2
   module Recruitments
     class IndexView < Blueprinter::Base
+      fields :total_pages
+
       association :recruitments, blueprint: V2::Recruitments::Serializer, default: []
       association :users, blueprint: V2::Users::Serializer, default: []
 
