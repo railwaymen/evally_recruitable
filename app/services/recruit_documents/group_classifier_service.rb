@@ -5,7 +5,7 @@ require 'classifier-reborn'
 module RecruitDocuments
   class GroupClassifierService
     def train
-      RecruitDocument.pluck(:group, :position).each do |training_set|
+      RecruitDocument.where.not(group: 'Unknown').pluck(:group, :position).each do |training_set|
         classifier.train(*training_set)
       end
     end
