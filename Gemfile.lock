@@ -87,6 +87,9 @@ GEM
     capistrano-rvm (0.1.2)
       capistrano (~> 3.0)
       sshkit (~> 1.2)
+    chronic (0.10.2)
+    classifier-reborn (2.2.0)
+      fast-stemmer (~> 1.0)
     coderay (1.1.2)
     concurrent-ruby (1.1.9)
     connection_pool (2.2.2)
@@ -109,6 +112,7 @@ GEM
       multipart-post (>= 1.2, < 3)
     faraday_middleware (0.14.0)
       faraday (>= 0.7.4, < 1.0)
+    fast-stemmer (1.0.2)
     ffi (1.12.2)
     gh (0.15.1)
       addressable (~> 2.4.0)
@@ -322,6 +326,8 @@ GEM
     websocket-driver (0.7.4)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)
+    whenever (1.0.0)
+      chronic (>= 0.6.3)
     zeitwerk (2.4.2)
 
 PLATFORMS
@@ -339,6 +345,7 @@ DEPENDENCIES
   capistrano-bundler
   capistrano-rails
   capistrano-rvm
+  classifier-reborn (~> 2.2.0)
   factory_bot_rails (~> 4.11)
   faker (~> 1.9.1)
   faraday
@@ -366,6 +373,7 @@ DEPENDENCIES
   spring-watcher-listen (~> 2.0.0)
   travis (= 1.8.10)
   webmock
+  whenever (~> 1.0.0)
 
 RUBY VERSION
    ruby 2.7.0p0

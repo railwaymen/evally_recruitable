@@ -22,6 +22,8 @@ gem 'pg_search', '~> 2.3.5'
 gem 'nokogiri', '~> 1.10'
 gem 'aasm', '~> 5.1.1'
 gem 'acts_as_list', '~> 1.0.4'
+gem 'classifier-reborn', '~> 2.2.0', require: false
+gem 'whenever', '~> 1.0.0', require: false
 
 group :development, :test do
   gem 'brakeman', '~> 4.3.1', require: false

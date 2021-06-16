@@ -28,6 +28,8 @@ module RecruitDocuments
       V2::Sync::RecruitSyncService.new(@recruit_document, @user).perform
       Rails.logger.info("\e[44m#{@source}Parser  |  Done!  |  #{mail.message_id}\e[0m")
 
+      GroupClassifierService.new.classify(@recruit_document)
+
       save_mail_body
       @mail.attachments.each(&method(:save_attachment))
     end
