@@ -5,7 +5,7 @@ require 'classifier-reborn'
 module RecruitDocuments
   class GroupClassifierService
     def train
-      RecruitDocument.where.not(group: 'Unknown').pluck(:group, :position).each do |training_set|
+      grouped_documents.pluck(:group, :position).each do |training_set|
         classifier.train(*training_set)
       end
     end
@@ -23,6 +23,7 @@ module RecruitDocuments
     def classifier
       @classifier ||=
         ClassifierReborn::Bayes.new(
+          *grouped_documents.pluck(:group),
           enable_threshold: true, threshold: -10, backend: redis_backend
         )
     end
@@ -33,6 +34,10 @@ module RecruitDocuments
           url: redis_envs.fetch(:url),
           namespace: Rails.env.development? ? basename : redis_envs.fetch(:namespace)
         )
+    end
+
+    def grouped_documents
+      RecruitDocument.where.not(group: 'Unknown')
     end
 
     # :nocov:
