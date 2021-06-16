@@ -4,18 +4,19 @@ require 'classifier-reborn'
 
 module RecruitDocuments
   class GroupClassifierService
+    delegate :reset, to: :classifier
+
     def train
-      grouped_documents.pluck(:group, :position).each do |training_set|
-        classifier.train(*training_set)
+      grouped_documents.pluck(:group, :position).each do |data|
+        classifier.train(data.first.to_sym, data.last)
       end
     end
 
     def classify(recruit_document)
       return if Rails.env.test? || recruit_document&.position.blank?
 
-      recruit_document.update(
-        group: classifier.classify(recruit_document.position).presence || 'Unknown'
-      )
+      result = classifier.classify(recruit_document.position).presence || 'Unknown'
+      recruit_document.update(group: result)
     end
 
     private
@@ -23,7 +24,7 @@ module RecruitDocuments
     def classifier
       @classifier ||=
         ClassifierReborn::Bayes.new(
-          *grouped_documents.pluck(:group),
+          *grouped_documents.pluck(:group).uniq.map(&:to_sym),
           enable_threshold: true, threshold: -10, backend: redis_backend
         )
     end
